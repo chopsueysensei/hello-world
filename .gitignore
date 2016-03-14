@@ -1,0 +1,4 @@
+rebackup/__pycache__/
+rebackup/testdir/
+rebackup/project.sublime-workspace
+*.gz
