@@ -11,8 +11,6 @@ TIMEFORMAT = '%d/%m/%Y %H:%M:%S'
 
 homedir = os.path.expanduser('~/.workhours/')
 runfile = homedir + 'run'
-thread = None
-app = None
 
 
 #
@@ -55,12 +53,22 @@ class ActivityMonitorThread(object):
 
     @property
     def chunkfile(self):
-        return self._chunkfile
+        return self._fnfmt.format(homedir,
+                                  time.strftime('%Y%m%d',
+                                                time.localtime()))
+
+    def quit(self):
+        self._alive = False
+
+        # Block so that the systray app stays alive while the thread does
+        while not self._finished:
+            pass
 
     #
 
     def __init__(self):
         self._alive = True
+        self._fnfmt = '{}blocks_{}.csv'
 
         thread = threading.Thread(target=self._thread_loop, args=())
         thread.start()
@@ -71,9 +79,6 @@ class ActivityMonitorThread(object):
         to an output CSV file.
         '''
         self._finished = False
-        self._chunkfile = '{}blocks_{}.csv'.format(homedir,
-                                                   time.strftime('%Y%m%d',
-                                                                 time.localtime()))
 
         # Touch a file which will serve as run indicator
         open(runfile, 'w').close()
@@ -89,7 +94,7 @@ class ActivityMonitorThread(object):
 
             block_end = GetTickCount()
 
-            with open(self._chunkfile, 'a') as f:
+            with open(self.chunkfile, 'a') as f:
                 duration_secs = (block_end-block_start)//1000
                 f.write('{}, {}\n'.format(block_time, duration_secs))
 
@@ -135,16 +140,12 @@ class ActivityMonitorThread(object):
 
             Sleep(500)
 
-    def quit(self):
-        self._alive = False
 
-        # Block so that the systray app stays alive while the thread does
-        while not self._finished:
-            pass
+def tooltip_updater(app, thread):
+    if (thread.alive and
+        app is not None and
+        os.path.exists(thread.chunkfile)):
 
-
-def tooltip_updater():
-    if os.path.exists(runfile):
         with open(thread.chunkfile, 'r') as f:
             timestr = f.readline().split(',')[0]
 
@@ -153,12 +154,14 @@ def tooltip_updater():
         m, s = divmod(totalsecs, 60)
         h, m = divmod(m, 60)
 
-        tooltip = 'Tracking: {}:{} today'.format(int(h), int(m))
+        tooltip = 'Tracking: {}:{:2.0f} today'.format(int(h), int(m))
         app.update_tooltip(tooltip)
 
     # Repeat ourselves in a minute
     if thread.alive:
-        threading.Timer(60, tooltip_updater).start()
+        t = threading.Timer(60, tooltip_updater, [app, thread])
+        t.daemon = True
+        t.start()
 
 
 if __name__ == '__main__':
@@ -173,18 +176,18 @@ if __name__ == '__main__':
         try:
             # Launch thread
             thread = ActivityMonitorThread()
-            # Start tooltip updater
-            tooltip_updater()
             # Create systray app
             app = trayapp.SysTrayApp((),
                                      'Clock.ico',
                                      'Tracking time...',
                                      on_quit=thread.quit) #, default_menu_action_index=1)
+            # Start tooltip updater
+            tooltip_updater(app, thread)
+
+            app.run()
 
         except:
             thread.quit()
             app.quit()
             raise
-
-
 
