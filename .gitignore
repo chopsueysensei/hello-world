@@ -4,3 +4,4 @@ rebackup/project.sublime-workspace
 *.gz
 workhours/.idea/
 workhours/__pycache__/
+workhours/dist/
