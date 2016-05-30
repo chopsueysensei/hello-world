@@ -1,3 +1,4 @@
+if exist dist\ rd dist
 md dist
 xcopy Clock.ico dist
 xcopy template.mustache dist

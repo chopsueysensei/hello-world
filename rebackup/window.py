@@ -21,7 +21,9 @@ class MainWindow(Gtk.Window):
         self.tree = Gtk.TreeView(model)
         self.box.pack_start(self.tree, True, True, 0)
 
-        self.tree.append_column(Gtk.TreeViewColumn('Path', Gtk.CellRendererText(), text=0))
+        self.tree.append_column(Gtk.TreeViewColumn('Path',
+                                                   Gtk.CellRendererText(),
+                                                   text=0))
 
         # Bottom button
         self.button = Gtk.Button(label='Go!')
