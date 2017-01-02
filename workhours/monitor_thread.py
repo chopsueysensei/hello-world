@@ -75,13 +75,13 @@ class ActivityMonitorThread(object):
         # Touch a file which will serve as run indicator
         open(runfile, 'w').close()
 
+        # TODO Check app death (exceptions) and log them somewhere
         while self._alive:
             # Activity block start time
             block_time = time.localtime()
             block_start = GetTickCount()
 
             # Sleep until user idle
-            # TODO Check app death (logout)
             self._wait_until_idle()
 
             block_end = GetTickCount()
