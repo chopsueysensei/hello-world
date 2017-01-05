@@ -1,9 +1,14 @@
+:: Check permissions
+net session >nul 2>&1
+if NOT %errorlevel% == 0 goto errorNoAdmin
+
 :: Check for git on the command line
 git --version
 if errorlevel 1 goto errorNoGit
 
 :: Link vim config files in home dir
 mklink "%HOMEPATH%\.vimrc" "%~dp0\.vimrc"
+mklink "%HOMEPATH%\.gvimrc" "%~dp0\.gvimrc"
 mklink /d "%HOMEPATH%\.vim" "%~dp0\.vim"
 
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
@@ -17,7 +22,12 @@ vim +PluginInstall
 goto:eof
 
 
-:errorNoGit
-echo.
-echo Error^: Git not available in the command line
+:errorNoAdmin
+echo Error: Admin privileges required. Run this script as administrator.
 @pause
+goto:eof
+
+:errorNoGit
+echo Error^: Git not available in the command line.
+@pause
+goto:eof
