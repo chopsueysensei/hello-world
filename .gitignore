@@ -5,3 +5,5 @@ rebackup/project.sublime-workspace
 workhours/.idea/
 workhours/__pycache__/
 workhours/dist/
+*.swp
+*.un~

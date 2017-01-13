@@ -16,6 +16,17 @@ regedit "%~dp0\remap_capslock.reg"
 
 @echo Please log off from the user session so that the keyboard mapping is applied..
 
+:: Make sure at least Vundle submodule is not empty
+@for /F %%i in ('dir /b "c:\test directory\*.*" 2^>NUL') do (
+  @echo 'Vundle.vim' submodule contains files. Skipping submodule downloading..
+  @goto :skipSUBs
+)
+
+@echo 'Vundle.vim' submodule is empty. Updating..
+git submodule init
+git submodule update
+
+:skipSUBs
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 vim +PluginInstall
 
