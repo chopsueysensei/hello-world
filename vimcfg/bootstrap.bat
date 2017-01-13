@@ -1,10 +1,10 @@
 :: Check permissions
 net session >nul 2>&1
-if NOT %errorlevel% == 0 goto errorNoAdmin
+@if NOT %errorlevel% == 0 goto errorNoAdmin
 
 :: Check for git on the command line
 git --version
-if errorlevel 1 goto errorNoGit
+@if errorlevel 1 goto errorNoGit
 
 :: Link vim config files in home dir
 mklink "%HOMEPATH%\.vimrc" "%~dp0\.vimrc"
@@ -19,15 +19,15 @@ regedit "%~dp0\remap_capslock.reg"
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 vim +PluginInstall
 
-goto:eof
+@goto:eof
 
 
 :errorNoAdmin
-echo Error: Admin privileges required. Run this script as administrator.
+@echo Error: Admin privileges required. Run this script as administrator.
 @pause
-goto:eof
+@goto:eof
 
 :errorNoGit
-echo Error^: Git not available in the command line.
+@echo Error^: Git not available in the command line.
 @pause
-goto:eof
+@goto:eof
