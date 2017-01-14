@@ -24,7 +24,7 @@ mklink "%HOMEPATH%\.gvimrc" "%~dp0\.gvimrc"
 mklink /d "%HOMEPATH%\.vim" "%~dp0\.vim"
 
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
-regedit "%~dp0\remap_capslock.reg"
+regedit "%~dp0\bootstrap\remap_capslock.reg"
 
 echo Please log off from the user session so that the keyboard mapping is applied..
 

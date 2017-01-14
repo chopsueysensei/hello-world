@@ -23,6 +23,18 @@ filetype plugin indent on
 " Add ~/.vim/ in windows too for cross-platform-ness
 if has('win32')
     let &runtimepath='~/.vim/,' . &runtimepath
+    set shellslash  " Not too sure about this..
+endif
+
+" Ctrl-P
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_match_window = 'order:ttb'
+let g:ctrlp_show_hidden = 1
+
+if executable('rg')
+    set grepprg=rg\ --color=never
+    let g:ctrlp_user_command = 'ripgrep %s --files --color=never --glob "*.cs"'
+    let g:ctrlp_use_caching = 0
 endif
 
 
@@ -46,9 +58,9 @@ endif
 syntax enable
 set background=dark
 "colorscheme solarized
-"colorscheme mustang_by_hcalves
+colorscheme mustang_by_hcalves
 "colorscheme distinguished
-colorscheme simple-dark
+"colorscheme simple-dark
 " Airline switches
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
