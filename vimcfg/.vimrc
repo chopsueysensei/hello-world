@@ -1,5 +1,5 @@
 "
-" VUNDLE
+" PLUGINS
 "
 
 set nocompatible
@@ -31,15 +31,15 @@ endif
 "
 
 if has('gui_running')
-    set guioptions-=T  " no toolbar
-    set guioptions-=m  " no menu
-    set guioptions-=r  " no scrollbars
-    set guioptions-=L
-    if has('gui_win32')
-        set guifont=Hack:h10:cANSI:qDRAFT
-"    else
-"        set guifont=
-    endif
+    set guifont=Fira_Mono:h10:cANSI:qDRAFT
+"    set guifont=Anonymous_Pro:h12:cANSI:qDRAFT
+"    set guifont=Consolas:h10:cANSI:qDRAFT
+"    set guifont=Droid_Sans_Mono_Dotted:h10:cANSI:qDRAFT
+"    set guifont=Hack:h10:cANSI:qDRAFT
+"    set guifont=Inconsolata:h10:cANSI:qDRAFT
+"    set guifont=Liberation_Mono:h10:cANSI:qDRAFT
+"    set guifont=Source_Code_Pro:h10:cANSI:qDRAFT
+"    set guifont=Roboto\ Mono:h10:cANSI:qDRAFT "Not working!
 endif
 
 " Syntax and colors
@@ -106,11 +106,11 @@ vnoremap <tab> %
 " Quickly open .vimrc
 nnoremap <leader>rc <C-w><C-v><C-l>:e $MYVIMRC<cr>
 
-" Split navigation
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
+" Split navigation (these probably don't work in a terminal?)
+nnoremap è <C-W><C-H>
+nnoremap ê <C-W><C-J>
+nnoremap ë <C-W><C-K>
+nnoremap ì <C-W><C-L>
 
 " Quickly save
 inoremap <leader>s <Esc>:update<Cr>
@@ -127,6 +127,20 @@ nnoremap <C-S-Left> <C-W><
 nnoremap <C-S-Down> <C-W>-
 nnoremap <C-S-Up> <C-W>+
 nnoremap <C-S-Right> <C-W>>
+
+" Get rid of one keystroke for something soo common
+nnoremap . :
+nnoremap : .
+
+" Quickly join next line at cursor position
+nnoremap <leader>j d$J
+
+" Move lines up/down
+nnoremap K ddkP
+nnoremap J ddp
+
+" Insert blank line (or break current one) without going to insert mode
+nnoremap <CR> i<CR><Esc>
 
 
 "
