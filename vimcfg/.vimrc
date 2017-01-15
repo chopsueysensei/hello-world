@@ -154,6 +154,9 @@ nnoremap J ddp
 " Insert blank line (or break current one) without going to insert mode
 nnoremap <CR> i<CR><Esc>
 
+" Toggle NERDTree
+nnoremap <leader>t :NERDTreeToggle<CR>
+
 
 "
 " EDITING
