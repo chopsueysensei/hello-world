@@ -18,6 +18,13 @@ if %errorlevel% == 0 goto haveGit
 choco install git
 
 :haveGit
+:: Install ripgrep
+rg --version
+if %errorlevel% == 0 goto haveGrep
+
+choco install ripgrep
+
+:haveGrep
 :: Link vim config files in home dir
 mklink "%HOMEPATH%\.vimrc" "%~dp0\.vimrc"
 mklink "%HOMEPATH%\.gvimrc" "%~dp0\.gvimrc"
