@@ -13,9 +13,14 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-" ...
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-dispatch'
+Plugin 'OmniSharp/omnisharp-vim'
+Plugin 'vim-syntastic/syntastic'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -36,6 +41,23 @@ if executable('rg')
     let g:ctrlp_user_command = 'ripgrep %s --files --color=never --glob "*.cs"'
     let g:ctrlp_use_caching = 0
 endif
+
+" UltiSnips
+" Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsEditSplit="vertical"
+
+"Recommended Syntastic settings for n00bs
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 
 "
@@ -205,4 +227,7 @@ augroup vimrc     " Source vim configuration upon save
   autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
   autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
 augroup END
+
+" Folding method needed for OminSharp
+set foldmethod=syntax
 
