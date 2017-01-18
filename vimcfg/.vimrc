@@ -21,25 +21,30 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'vim-syntastic/syntastic'
 
-
 call vundle#end()
 filetype plugin indent on
 
 " Add ~/.vim/ in windows too for cross-platform-ness
 if has('win32')
     let &runtimepath='~/.vim/,' . &runtimepath
-    set shellslash  " Not too sure about this..
+"    set shellslash  " Not too sure about this..
 endif
 
 " Ctrl-P
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window = 'order:ttb'
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_by_filename = 1
 
 if executable('rg')
-    set grepprg=rg\ --color=never
-    let g:ctrlp_user_command = 'ripgrep %s --files --color=never --glob "*.cs"'
-    let g:ctrlp_use_caching = 0
+    " Use ripgrep over grep
+    set grepprg=rg\ --vimgrep\ --color=never
+
+    " Use ripgrep for indexing files in CtrlP
+"    let extglob = '{cs,cpp,h}'
+"    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
+    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml'
+    let g:ctrlp_use_caching = 1    " We'll see..
 endif
 
 " UltiSnips
@@ -80,7 +85,7 @@ endif
 syntax enable
 set background=dark
 "colorscheme solarized
-colorscheme mustang_by_hcalves
+colorscheme Mustang_by_hcalves
 "colorscheme distinguished
 "colorscheme simple-dark
 " Airline switches
@@ -146,6 +151,9 @@ nnoremap ê <C-W><C-J>
 nnoremap ë <C-W><C-K>
 nnoremap ì <C-W><C-L>
 
+" Quickly close window
+nnoremap <leader>q <C-W>q
+
 " Quickly save
 inoremap <leader>s <Esc>:update<Cr>
 nnoremap <leader>s :update<Cr>
@@ -166,7 +174,7 @@ nnoremap <C-S-Right> <C-W>>
 nnoremap . :
 nnoremap : .
 
-" Quickly join next line at cursor position
+" Quickly (destructively) join next line at cursor position
 nnoremap <leader>j d$J
 
 " Move lines up/down
@@ -178,6 +186,10 @@ nnoremap <CR> i<CR><Esc>
 
 " Toggle NERDTree
 nnoremap <leader>t :NERDTreeToggle<CR>
+
+" CtrlP in buffer mode
+nnoremap <leader>b :CtrlPBuffer<CR>
+inoremap <leader>b <Esc>:CtrlPBuffer<CR>
 
 
 "
@@ -229,5 +241,6 @@ augroup vimrc     " Source vim configuration upon save
 augroup END
 
 " Folding method needed for OminSharp
-set foldmethod=syntax
-
+"set foldmethod=syntax
+" Ignore case when autocompleting
+set wildignorecase

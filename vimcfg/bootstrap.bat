@@ -42,10 +42,13 @@ for /F %%i in ('dir /b "c:\test directory\*.*" 2^>NUL') do (
 )
 
 echo 'Vundle.vim' submodule is empty. Updating..
+cd %~dp0
 git submodule init
 git submodule update
 
 :skipSUBs
+echo Now I'll start vim and tell it to install all plugins.
+pause
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 vim +PluginInstall
 
