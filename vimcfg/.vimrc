@@ -54,7 +54,7 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
-"Recommended Syntastic settings for n00bs
+" Recommended Syntastic settings for n00bs
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -63,6 +63,39 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" OmniSharp
+let g:OmniSharp_timeout = 1
+set completeopt=longest,menuone,preview
+set splitbelow
+let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
+"let g:OmniSharp_server_type = 'roslyn'
+
+augroup omnisharp_commands
+    autocmd!
+    " Set autocomplete function to OmniSharp (if not using YouCompleteMe plugin)
+    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
+    " Build asynchronously with vim-dispatch
+    autocmd FileType cs nnoremap <leader>b :wa!<CR>:OmniSharpBuildAsync<CR>
+    " Automatic syntax check
+    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
+    " Show type info when idle
+    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
+    " Key bindings for some contextual commands
+    autocmd FileType cs nnoremap <leader>g  :OmniSharpGotoDefinition<CR>
+    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<CR>
+    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<CR>
+    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<CR>
+    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<CR>
+    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<CR>
+    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<CR>
+    autocmd FileType cs nnoremap <leader>xu :OmniSharpFixUsings<CR>
+    autocmd FileType cs nnoremap <leader>tl :OmniSharpTypeLookup<CR>
+    autocmd FileType cs nnoremap <leader>doc :OmniSharpDocumentation<CR>
+    " Navigate by method/property/field
+    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<CR>
+    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<CR>
+augroup END
 
 
 "
@@ -86,6 +119,7 @@ syntax enable
 set background=dark
 "colorscheme solarized
 colorscheme Mustang_by_hcalves
+highlight ColorColumn guibg=Black   " Get rid of that red horror!
 "colorscheme distinguished
 "colorscheme simple-dark
 " Airline switches
