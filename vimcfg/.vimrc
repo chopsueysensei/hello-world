@@ -43,7 +43,7 @@ if executable('rg')
     " Use ripgrep for indexing files in CtrlP
 "    let extglob = '{cs,cpp,h}'
 "    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
-    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml'
+    let g:ctrlp_user_command = 'rg -F %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml'
     let g:ctrlp_use_caching = 1    " We'll see..
 endif
 
@@ -224,6 +224,11 @@ nnoremap <leader>t :NERDTreeToggle<CR>
 " CtrlP in buffer mode
 nnoremap <leader>b :CtrlPBuffer<CR>
 inoremap <leader>b <Esc>:CtrlPBuffer<CR>
+
+" Hide ^M line endings in mixed-mode files
+nnoremap <leader>cr :match Ignore /\r$/<CR>
+" Convert to DOS line endings
+nnoremap <leader>dos :e ++ff=dos<CR>:w<CR>
 
 
 "
