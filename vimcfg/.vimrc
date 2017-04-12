@@ -2,6 +2,8 @@
 " PLUGINS
 "
 
+set encoding=utf-8
+
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim/
@@ -11,6 +13,8 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'FelikZ/ctrlp-py-matcher'
+Plugin 'jsfaint/gen_tags.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
@@ -37,7 +41,9 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window = 'order:ttb'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_by_filename = 1
-let g:ctrlp_extensions = ['tag', 'buffertag']
+let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix']
+let g:ctrlp_max_files = 0
+let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
 if executable('rg')
     " Use ripgrep over grep
@@ -51,6 +57,10 @@ if executable('rg')
     let g:ctrlp_use_caching = 1    " We'll see..
 endif
 
+if executable('gtags') || executable('gtags.exe')
+    let g:ctrlp_buftag_ctags_bin = 'gtags'
+endif
+
 " UltiSnips
 " Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<c-s>"
@@ -61,6 +71,11 @@ let g:UltiSnipsEditSplit="vertical"
 " YouCompleteMe
 " ctags needs to be run with '--fields=+l' for this to work
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_show_diagnostics_ui = 0
+
+" gen_tags
+let g:gen_tags#verbose = 1
+let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
@@ -110,6 +125,8 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 "
 " LOOK & FEEL
 "
+syntax enable
+set background=dark
 
 if has('gui_running')
     set guifont=Fira_Mono:h10:cANSI:qDRAFT
@@ -121,17 +138,20 @@ if has('gui_running')
 "    set guifont=Liberation_Mono:h10:cANSI:qDRAFT
 "    set guifont=Source_Code_Pro:h10:cANSI:qDRAFT
 "    set guifont=Roboto\ Mono:h10:cANSI:qDRAFT "Not working!
+
+    " Colorschemes
+    colorscheme retro-minimal
+    "colorscheme mustang_sensei_edit
+    "colorscheme solarized
+    "colorscheme distinguished
+    "colorscheme simple-dark
 endif
 
-" Syntax and colors
-syntax enable
-set background=dark
-"colorscheme solarized
-colorscheme Mustang_by_hcalves
-highlight ColorColumn guibg=Black   " Get rid of that red horror!
-"colorscheme distinguished
-"colorscheme simple-dark
 " Airline switches
+"let g:airline_theme='powerlineish'
+let g:airline_theme='molokai'
+"let g:airline_theme='cobalt2'
+"let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
@@ -149,7 +169,7 @@ set scrolloff=3
 set showmode
 set showcmd
 " Line numbers
-set cursorline
+set nocursorline
 set ruler
 set relativenumber
 " Fast scrolling
@@ -159,6 +179,9 @@ set laststatus=2
 " Other
 set colorcolumn=90
 set splitbelow
+set splitright
+set fillchars=vert:\│
+
 
 
 "
@@ -186,13 +209,13 @@ nnoremap <tab> %
 vnoremap <tab> %
 
 " Quickly open .vimrc
-nnoremap <leader>rc <C-w><C-v><C-l>:e $MYVIMRC<cr>
+nnoremap <leader>rc :e $MYVIMRC<cr>
 
-" Split navigation (these probably don't work in a terminal?)
-nnoremap <C-S-H> <C-W><C-H>
-nnoremap <C-S-J> <C-W><C-J>
-nnoremap <C-S-K> <C-W><C-K>
-nnoremap <C-S-L> <C-W><C-L>
+" Split navigation (Ctrl and Ctrl-Shift seems to send the same keystroke)
+nnoremap <C-H> <C-W><C-H>
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
 
 " Quickly close window
 nnoremap <leader>q <C-W>q
@@ -236,16 +259,15 @@ nnoremap <CR> i<CR><Esc>
 " Toggle NERDTree
 nnoremap <leader>t :NERDTreeToggle<CR>
 
+" CtrlP in mixed mode
+nnoremap <leader>p :CtrlPMixed<CR>
+" CtrlP in quickfix mode (close quickfix window if open!)
+nnoremap <leader>qf :ccl<CR>:CtrlPQuickfix<CR>
 " CtrlP in buffer mode
 nnoremap <leader>b :CtrlPBuffer<CR>
-inoremap <leader>b <Esc>:CtrlPBuffer<CR>
-
 " CtrlP in tags mode
 nnoremap <leader>t :CtrlPBufTag<CR>
-inoremap <leader>t <Esc>:CtrlPBufTag<CR>
-
 nnoremap <leader>tt :CtrlPTag<CR>
-inoremap <leader>tt <Esc>:CtrlPTag<CR>
 
 " Hide ^M line endings in mixed-mode files
 nnoremap <leader>cr :match Ignore /\r$/<CR>
@@ -260,9 +282,28 @@ nmap <leader>f gqap
 nnoremap <leader>o :A<CR>
 nnoremap <leader>os :AV<CR>
 
-" Jumping to tags
+" Generate GTAGS (via gen_tags)
+nnoremap <leader>gen :GenGTAGS<CR>
+
+" Gtags
+nnoremap <leader>ts :Gtags<space>
+nnoremap <leader>tf :Gtags -f %<CR>
+
 nnoremap <leader>gt <C-]>
 nnoremap <leader>lt g]
+
+
+
+
+
+" cscope (gtags-cscope via gen_tags) (not working in windows!)
+" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
+" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
+" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
 
 " Terse YcmCompleter commands
 nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
@@ -334,4 +375,9 @@ set wildignorecase
 
 " Sane default tags location
 set tags=./tags;
+" Use cscope db when searching for a tag, and other things
+set cscopetag
+set cscopeverbose
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+set csto=0
 

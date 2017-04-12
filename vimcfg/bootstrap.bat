@@ -55,7 +55,16 @@ if %errorlevel% == 0 goto haveGrep
 choco install ripgrep
 
 :haveGrep
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: GNU Global (http://www.gnu.org/software/global)
+:: FIXME Upload their 'gtags.vim' to github and make it installable via Vundle/NeoBundle
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+global --version
+if %errorlevel% == 0 goto haveGlobal
 
+choco install global
+
+:haveGlobal
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: universal-ctags (https://github.com/universal-ctags/ctags) (no choco..)
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

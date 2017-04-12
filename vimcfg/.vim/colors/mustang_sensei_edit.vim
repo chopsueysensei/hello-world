@@ -1,6 +1,7 @@
-" Maintainer:	Henrique C. Alves (hcarvalhoalves@gmail.com)
-" Version:      1.0
-" Last Change:	September 25 2008
+" Maintainer    :   Oscar Peñas (chopsueysensei@gmail.com)
+" Version       :   1.1
+" Updated       :   2017/07/03
+" Adapted from H.C.Alves (hcarvalhoalves@gmail.com) version 1.0
 
 set background=dark
 
@@ -10,7 +11,7 @@ if exists("syntax_on")
   syntax reset
 endif
 
-let colors_name = "mustang"
+let colors_name = "mustang_sensei_edit"
 
 " Vim >= 7.0 specific colors
 if version >= 700
@@ -28,11 +29,12 @@ hi NonText 		guifg=#808080 guibg=#303030 gui=none ctermfg=244 ctermbg=235
 hi LineNr 		guifg=#808080 guibg=#000000 gui=none ctermfg=244 ctermbg=232
 hi StatusLine 	guifg=#d3d3d5 guibg=#444444 gui=italic ctermfg=253 ctermbg=238 cterm=italic
 hi StatusLineNC guifg=#939395 guibg=#444444 gui=none ctermfg=246 ctermbg=238
-hi VertSplit 	guifg=#444444 guibg=#444444 gui=none ctermfg=238 ctermbg=238
+hi VertSplit 	guifg=#808080 guibg=NONE    gui=none ctermfg=244 ctermbg=NONE
 hi Folded 		guibg=#384048 guifg=#a0a8b0 gui=none ctermbg=4 ctermfg=248
 hi Title		guifg=#f6f3e8 guibg=NONE	gui=bold ctermfg=254 cterm=bold
 hi Visual		guifg=#faf4c6 guibg=#3c414c gui=none ctermfg=254 ctermbg=4
 hi SpecialKey	guifg=#808080 guibg=#343434 gui=none ctermfg=244 ctermbg=236
+hi ColorColumn  guibg=#000000 ctermbg=0
 
 " Syntax highlighting
 hi Comment 		guifg=#808080 gui=italic ctermfg=244
@@ -52,4 +54,3 @@ hi Todo         guifg=#000000 guibg=#e6ea50 gui=italic
 
 " Code-specific colors
 hi pythonOperator guifg=#7e8aa2 gui=none ctermfg=103
-
