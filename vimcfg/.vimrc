@@ -57,8 +57,8 @@ if executable('rg')
     let g:ctrlp_use_caching = 1    " We'll see..
 endif
 
-if executable('gtags') || executable('gtags.exe')
-    let g:ctrlp_buftag_ctags_bin = 'gtags'
+if executable('global') || executable('global.exe')
+    let g:ctrlp_buftag_ctags_bin = 'global -c'
 endif
 
 " UltiSnips
@@ -205,8 +205,8 @@ ino <up> <Nop>
 nnoremap <leader><space> :noh<cr>
 
 " Use tab to move to matching brackets
-nnoremap <tab> %
-vnoremap <tab> %
+"nnoremap <tab> %
+"vnoremap <tab> %
 
 " Quickly open .vimrc
 nnoremap <leader>rc :e $MYVIMRC<cr>
@@ -262,12 +262,12 @@ nnoremap <leader>t :NERDTreeToggle<CR>
 " CtrlP in mixed mode
 nnoremap <leader>p :CtrlPMixed<CR>
 " CtrlP in quickfix mode (close quickfix window if open!)
-nnoremap <leader>qf :ccl<CR>:CtrlPQuickfix<CR>
+nnoremap <leader>qf :QfCP<CR>
 " CtrlP in buffer mode
 nnoremap <leader>b :CtrlPBuffer<CR>
-" CtrlP in tags mode
-nnoremap <leader>t :CtrlPBufTag<CR>
-nnoremap <leader>tt :CtrlPTag<CR>
+
+" Switch to previous buffer
+nnoremap <leader>bb :b#<CR>
 
 " Hide ^M line endings in mixed-mode files
 nnoremap <leader>cr :match Ignore /\r$/<CR>
@@ -287,11 +287,12 @@ nnoremap <leader>gen :GenGTAGS<CR>
 
 " Gtags
 nnoremap <leader>ts :Gtags<space>
-nnoremap <leader>tf :Gtags -f %<CR>
+nnoremap <leader>tf :Gtags -f %<CR>:QfCP<CR>
+nnoremap <F12>      :Gtags<CR><CR>:QfCP<CR>
+nnoremap <S-F12>    :Gtags -r<CR><CR>:QfCP<CR>
 
-nnoremap <leader>gt <C-]>
-nnoremap <leader>lt g]
-
+" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
+nnoremap <leader>tt :CtrlPTag<CR>
 
 
 
@@ -380,4 +381,11 @@ set cscopetag
 set cscopeverbose
 set cscopequickfix=s-,c-,d-,i-,t-,e-
 set csto=0
+
+" CtrlP in quickfix mode (close quickfix window if open!)
+function! SubstQuickfixWithCtrlP()
+    ccl
+    CtrlPQuickfix
+endfunction
+command! QfCP call SubstQuickfixWithCtrlP()
 
