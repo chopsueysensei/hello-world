@@ -38,6 +38,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.
 
 :haveChoco
 ::
+:: Check for cmder on the command line
+::
+if defined CMDER_ROOT goto haveCmder
+
+choco install cmder
+
+:haveCmder
+::
 :: Check for git on the command line
 ::
 git --version

@@ -28,7 +28,10 @@ Plugin 'a.vim'
 "Plugin 'OmniSharp/omnisharp-vim'
 
 call vundle#end()
-filetype plugin indent on
+
+filetype on
+filetype plugin on
+filetype indent on
 
 " Add ~/.vim/ in windows too for cross-platform-ness
 if has('win32')
@@ -122,6 +125,161 @@ let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 "
 
 
+
+"
+" KEY MAPPINGS
+"
+
+" Map <leader> to comma
+let mapleader = ","
+
+" Unmap arrow keys
+no <down> <Nop>
+no <left> <Nop>
+no <right> <Nop>
+no <up> <Nop>
+ino <down> <Nop>
+ino <left> <Nop>
+ino <right> <Nop>
+ino <up> <Nop>
+
+" Easily clear highlights after search
+nnoremap <leader><space> :noh<cr>
+
+" Use tab to move to matching brackets
+"nnoremap <tab> %
+"vnoremap <tab> %
+
+" Quickly open .vimrc
+nnoremap <leader>rc :e $MYVIMRC<cr>
+
+" Quickly close window
+nnoremap <leader>c <C-W>c
+
+" Quickly save
+inoremap <leader>s <Esc>:update<Cr>
+nnoremap <leader>s :update<Cr>
+
+" Split windows easily
+nnoremap <leader>sh  :topleft  vnew<CR>
+nnoremap <leader>sj  :botright new<CR>
+nnoremap <leader>sk  :topleft  new<CR>
+nnoremap <leader>sl  :botright vnew<CR>
+
+" Resize current split (Ctrl and Ctrl-Shift seem to send the same keystroke!)
+nnoremap <C-S-Left>     <C-W><
+nnoremap <C-S-Down>     <C-W>-
+nnoremap <C-S-Up>       <C-W>+
+nnoremap <C-S-Right>    <C-W>>
+
+" Split navigation
+nnoremap <leader>h <C-W><C-H>
+nnoremap <leader>j <C-W><C-J>
+nnoremap <leader>k <C-W><C-K>
+nnoremap <leader>l <C-W><C-L>
+
+" Move lines up/down
+nnoremap ë ddkP
+nnoremap ê ddp
+
+" Move around quickly by whitespace
+nnoremap H Bh
+nnoremap J }
+nnoremap K {
+nnoremap L El
+
+vnoremap H Bh
+vnoremap J }
+vnoremap K {
+vnoremap L El
+
+" Move by half a page 
+nnoremap <C-j> <C-d>
+nnoremap <C-k> <C-u>
+
+vnoremap <C-j> <C-d>
+vnoremap <C-k> <C-u>
+
+" Get rid of one keystroke for something soo common
+nnoremap . :
+nnoremap : .
+
+" Join next line (at the end of current one)
+nnoremap <leader>J J
+
+" Insert blank line (or break current one) without going to insert mode
+nnoremap <CR> i<CR><Esc>
+" Delete in insert mode without using extended keys or chords
+inoremap <C-BS> <C-W>
+inoremap <S-BS> <Del>
+inoremap <C-S-BS> <Esc>ldwi
+
+" Search more quickly!
+nnoremap <Space> /
+" Highlight occurences without moving the cursor
+nnoremap <leader>* :let @/='\<'.expand("<cword>").'\>'<bar>set hls<cr>
+
+" Toggle NERDTree
+nnoremap <leader>t :NERDTreeToggle<CR>
+
+" CtrlP in mixed mode
+nnoremap <leader>p :CtrlPMixed<CR>
+" CtrlP in quickfix mode (close quickfix window if open!)
+nnoremap <leader>qf :QfCP<CR>
+" CtrlP in buffer mode
+nnoremap <leader>b :CtrlPBuffer<CR>
+
+" Switch to previous buffer
+nnoremap <leader>bb :b#<CR>
+
+" Hide ^M line endings in mixed-mode files
+nnoremap <leader>cr :match Ignore /\r$/<CR>
+" Convert to DOS line endings
+nnoremap <leader>dos :e ++ff=dos<CR>:w<CR>
+
+" Format current paragraph or visual selection
+vmap <leader>f gq
+nmap <leader>f gqap
+
+" Switch to .h/cpp
+nnoremap <leader>o :A<CR>
+nnoremap <leader>os :AV<CR>
+
+" Generate GTAGS (via gen_tags)
+nnoremap <leader>gen :GenGTAGS<CR>
+
+" Gtags
+nnoremap <leader>ts :Gtags<space>
+nnoremap <leader>tf :Gtags -f %<CR>:QfCP<CR>
+nnoremap <F12>      :Gtags<CR><CR>:QfCP<CR>
+nnoremap <S-F12>    :Gtags -r<CR><CR>:QfCP<CR>
+
+" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
+nnoremap <leader>tt :CtrlPTag<CR>
+
+
+" cscope (gtags-cscope via gen_tags) (not working in windows!)
+" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
+" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
+" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
+
+" Terse YcmCompleter commands
+nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
+nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
+nnoremap <leader>g      :YcmCompleter GoTo<CR>
+nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
+nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
+nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
+nnoremap <leader>fx     :YcmCompleter FixIt<CR>
+nnoremap <leader>re     :YcmCompleter RefactorRename 
+
+
+
 "
 " LOOK & FEEL
 "
@@ -181,141 +339,9 @@ set colorcolumn=90
 set splitbelow
 set splitright
 set fillchars=vert:\│
+" Timeout for commands, leader key, etc.
+set timeoutlen=750
 
-
-
-"
-" KEY MAPPINGS
-"
-
-" Map <leader> to comma
-let mapleader = ","
-
-" Unmap arrow keys
-no <down> <Nop>
-no <left> <Nop>
-no <right> <Nop>
-no <up> <Nop>
-ino <down> <Nop>
-ino <left> <Nop>
-ino <right> <Nop>
-ino <up> <Nop>
-
-" Easily clear highlights after search
-nnoremap <leader><space> :noh<cr>
-
-" Use tab to move to matching brackets
-"nnoremap <tab> %
-"vnoremap <tab> %
-
-" Quickly open .vimrc
-nnoremap <leader>rc :e $MYVIMRC<cr>
-
-" Split navigation (Ctrl and Ctrl-Shift seems to send the same keystroke)
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-
-" Quickly close window
-nnoremap <leader>q <C-W>q
-
-" Quickly save
-inoremap <leader>s <Esc>:update<Cr>
-nnoremap <leader>s :update<Cr>
-
-" Split windows easily
-nnoremap <leader>sh  :topleft  vnew<CR>
-nnoremap <leader>sj  :botright new<CR>
-nnoremap <leader>sk  :topleft  new<CR>
-nnoremap <leader>sl  :botright vnew<CR>
-
-" Resize current split
-nnoremap <C-S-Left>     <C-W><
-nnoremap <C-S-Down>     <C-W>-
-nnoremap <C-S-Up>       <C-W>+
-nnoremap <C-S-Right>    <C-W>>
-
-" Move lines up/down
-nnoremap ë ddkP
-nnoremap ê ddp
-
-" Move around quickly by whitespace
-nnoremap H Bh
-nnoremap J }
-nnoremap K {
-nnoremap L El
-
-" Get rid of one keystroke for something soo common
-nnoremap . :
-nnoremap : .
-
-" Quickly (destructively) join next line at cursor position
-nnoremap <leader>j d$J
-
-" Insert blank line (or break current one) without going to insert mode
-nnoremap <CR> i<CR><Esc>
-
-" Toggle NERDTree
-nnoremap <leader>t :NERDTreeToggle<CR>
-
-" CtrlP in mixed mode
-nnoremap <leader>p :CtrlPMixed<CR>
-" CtrlP in quickfix mode (close quickfix window if open!)
-nnoremap <leader>qf :QfCP<CR>
-" CtrlP in buffer mode
-nnoremap <leader>b :CtrlPBuffer<CR>
-
-" Switch to previous buffer
-nnoremap <leader>bb :b#<CR>
-
-" Hide ^M line endings in mixed-mode files
-nnoremap <leader>cr :match Ignore /\r$/<CR>
-" Convert to DOS line endings
-nnoremap <leader>dos :e ++ff=dos<CR>:w<CR>
-
-" Format current paragraph or visual selection
-vmap <leader>f gq
-nmap <leader>f gqap
-
-" Switch to .h/cpp
-nnoremap <leader>o :A<CR>
-nnoremap <leader>os :AV<CR>
-
-" Generate GTAGS (via gen_tags)
-nnoremap <leader>gen :GenGTAGS<CR>
-
-" Gtags
-nnoremap <leader>ts :Gtags<space>
-nnoremap <leader>tf :Gtags -f %<CR>:QfCP<CR>
-nnoremap <F12>      :Gtags<CR><CR>:QfCP<CR>
-nnoremap <S-F12>    :Gtags -r<CR><CR>:QfCP<CR>
-
-" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
-nnoremap <leader>tt :CtrlPTag<CR>
-
-
-
-
-" cscope (gtags-cscope via gen_tags) (not working in windows!)
-" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
-" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
-" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
-
-" Terse YcmCompleter commands
-nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
-nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>g      :YcmCompleter GoTo<CR>
-nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
-nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
-nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
-nnoremap <leader>fx     :YcmCompleter FixIt<CR>
-nnoremap <leader>re     :YcmCompleter RefactorRename 
 
 
 "

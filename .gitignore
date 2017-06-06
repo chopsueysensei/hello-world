@@ -7,3 +7,4 @@ workhours/__pycache__/
 workhours/dist/
 *.swp
 *.un~
+vimcfg/.vim/colors/retro-minimal.vim
