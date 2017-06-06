@@ -14,7 +14,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'FelikZ/ctrlp-py-matcher'
-Plugin 'jsfaint/gen_tags.vim'
+"Plugin 'jsfaint/gen_tags.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
@@ -22,7 +22,8 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-dispatch'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'ervandew/supertab'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'a.vim'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'OmniSharp/omnisharp-vim'
@@ -146,10 +147,6 @@ ino <up> <Nop>
 " Easily clear highlights after search
 nnoremap <leader><space> :noh<cr>
 
-" Use tab to move to matching brackets
-"nnoremap <tab> %
-"vnoremap <tab> %
-
 " Quickly open .vimrc
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
@@ -257,7 +254,6 @@ nnoremap <S-F12>    :Gtags -r<CR><CR>:QfCP<CR>
 " CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
 nnoremap <leader>tt :CtrlPTag<CR>
 
-
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
 " nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
@@ -278,6 +274,8 @@ nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
 nnoremap <leader>fx     :YcmCompleter FixIt<CR>
 nnoremap <leader>re     :YcmCompleter RefactorRename 
 
+" Silent make
+nnoremap <leader>m :update<CR>:silent make<CR>:vert botright copen 90<CR>:cc<CR>
 
 
 "
@@ -364,6 +362,11 @@ set textwidth=0
 set wrapmargin=0
 " Formatting options (as autocmd so it overrides filetypes)
 au FileType * set fo+=q fo+=r fo+=n
+" C-specific indentation rules
+set cinoptions=(1=0
+" Naive auto-completion / snippets
+inoremap {<CR> {<CR>}<Esc>O
+inoremap ,t<CR> // TODO 
 
 
 "
@@ -395,7 +398,7 @@ augroup vimrc     " Source vim configuration upon save
   autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
 augroup END
 
-" Folding method needed for OminSharp
+" Folding method needed for OmniSharp
 "set foldmethod=syntax
 " Ignore case when autocompleting
 set wildignorecase
@@ -414,4 +417,6 @@ function! SubstQuickfixWithCtrlP()
     CtrlPQuickfix
 endfunction
 command! QfCP call SubstQuickfixWithCtrlP()
+
+set makeprg=build.bat
 
