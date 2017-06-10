@@ -154,8 +154,8 @@ nnoremap <leader>rc :e $MYVIMRC<cr>
 nnoremap <leader>c <C-W>c
 
 " Quickly save
-inoremap <leader>s <Esc>:update<Cr>
-nnoremap <leader>s :update<Cr>
+inoremap <leader>w <Esc>:update<Cr>
+nnoremap <leader>w :update<Cr>
 
 " Split windows easily
 nnoremap <leader>sh  :topleft  vnew<CR>
@@ -275,8 +275,13 @@ nnoremap <leader>fx     :YcmCompleter FixIt<CR>
 nnoremap <leader>re     :YcmCompleter RefactorRename 
 
 " Silent make
-nnoremap <leader>m :update<CR>:silent make<CR>:vert botright copen 90<CR>:cc<CR>
+nnoremap <leader>m :update<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
+" Easily replace current word
+nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+" Other quick common replacements (from current line on)
+nnoremap <leader>r- :.,$s/->/\./gc<CR>
+nnoremap <leader>r. :.,$s/\./->/gc<CR>
 
 "
 " LOOK & FEEL
@@ -363,7 +368,7 @@ set wrapmargin=0
 " Formatting options (as autocmd so it overrides filetypes)
 au FileType * set fo+=q fo+=r fo+=n
 " C-specific indentation rules
-set cinoptions=(1=0
+set cinoptions=(0=0
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
 inoremap ,t<CR> // TODO 
@@ -420,3 +425,5 @@ command! QfCP call SubstQuickfixWithCtrlP()
 
 set makeprg=build.bat
 
+" Remember last flags used in :substitute
+set nogdefault

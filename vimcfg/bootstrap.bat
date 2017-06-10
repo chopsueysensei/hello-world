@@ -18,16 +18,9 @@ if NOT %errorlevel% == 0 goto errorNoAdmin
 python --version
 if NOT %errorlevel% == 0 goto errorNoPython
 
-::
-:: Link vim config files in home dir
-::
-:: TODO Check if this has already been done (or silence the error)
-mklink "%HOMEPATH%\.vimrc" "%~dp0\.vimrc"
-mklink "%HOMEPATH%\.gvimrc" "%~dp0\.gvimrc"
-mklink /d "%HOMEPATH%\.vim" "%~dp0\.vim"
-
-set VIMDIR=%HOMEPATH%\.vim
-
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: General tools
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
 :: Install chocolatey
 ::
@@ -48,12 +41,39 @@ choco install cmder
 ::
 :: Check for git on the command line
 ::
-git --version
-if %errorlevel% == 0 goto haveGit
+::git --version
+::if %errorlevel% == 0 goto haveGit
 
-choco install git
+::choco install git
 
 :haveGit
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: ViM
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+vim --version
+if %errorlevel% == 0 goto haveVim
+
+choco install vim-tux
+
+::
+:: Link vim config files in home dir
+::
+:: TODO ? Check if this has already been done (or silence the error)
+mklink "%USERPROFILE%\.vimrc" "%~dp0\.vimrc"
+mklink "%USERPROFILE%\.gvimrc" "%~dp0\.gvimrc"
+mklink /d "%USERPROFILE%\.vim" "%~dp0\.vim"
+
+set VIMDIR=%HOMEPATH%\.vim
+
+::
+:: Remap CAPS to ESC and BLOCK-DESP to CAPS
+::
+regedit "%~dp0\bootstrap\remap_capslock.reg"
+
+echo Please log off from the user session after the installation so that the keyboard mapping is applied..
+pause
+
+:haveVim
 ::
 :: Install ripgrep
 ::
@@ -75,6 +95,7 @@ choco install global
 :haveGlobal
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: universal-ctags (https://github.com/universal-ctags/ctags) (no choco..)
+:: TODO Remove?
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Just check it's in the path
@@ -84,7 +105,7 @@ if NOT %errorlevel% == 0 call :ColorText 19 "WARNING: No ctags binary in path!"
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: TODO YouCompleteMe
+:: TODO ? YouCompleteMe
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Check msbuild is in path
@@ -95,7 +116,7 @@ if NOT %errorlevel% == 0 call :ColorText 19 "WARNING: No ctags binary in path!"
 :: Install CMake
 :: Add to path if not in it already
 
-:: Install libclang from http://releases.llvm.org/4.0.0/LLVM-4.0.0-win64.exe (no choco!)
+:: Install libclang from http://releases.llvm.org/4.0.0/LLVM-4.0.0-win64.exe (no choco?)
 
 :: Compile YCM lib
 :: mkdir %VIMDIR%\bundle\YouCompleteMe\build
@@ -112,30 +133,29 @@ if NOT %errorlevel% == 0 call :ColorText 19 "WARNING: No ctags binary in path!"
 
 
 ::
-:: Remap CAPS to ESC and BLOCK-DESP to CAPS
-::
-regedit "%~dp0\bootstrap\remap_capslock.reg"
-
-echo Please log off from the user session so that the keyboard mapping is applied..
-
-::
-:: Make sure at least Vundle submodule is not empty
+:: Make sure at least Vundle submodule is not empty (is this necessary??)
 ::
 for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
   echo 'Vundle.vim' submodule contains files. Skipping submodule downloading..
   goto :skipSUBs
 )
 
+:: FIXME FAILS since git is not yet in PATH!!
+:: -> Print a message with instructions and exit?
+
 echo 'Vundle.vim' submodule is empty. Updating..
 cd %~dp0
 git submodule init
 git submodule update
 
+:: FIXME Some PATHs (git) seem to still be missing after reboot! -> Use cmder from here on
+:: TODO Make another submodule for the retro-minimal color scheme!
+:: TODO Install fonts!
+
+
 :skipSUBs
 echo Now I'll start vim and tell it to install all plugins.
 pause
-
-
 
 ::
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
