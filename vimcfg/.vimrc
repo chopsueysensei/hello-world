@@ -14,7 +14,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'FelikZ/ctrlp-py-matcher'
-"Plugin 'jsfaint/gen_tags.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
@@ -23,8 +22,10 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
-"Plugin 'Valloric/YouCompleteMe'
 Plugin 'a.vim'
+Plugin 'tpope/vim-surround'
+"Plugin 'jsfaint/gen_tags.vim'
+"Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'OmniSharp/omnisharp-vim'
 
@@ -274,6 +275,10 @@ nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
 nnoremap <leader>fx     :YcmCompleter FixIt<CR>
 nnoremap <leader>re     :YcmCompleter RefactorRename 
 
+" Perl/Python compatible regex formatting
+nnoremap / /\v
+vnoremap / /\v
+
 " Silent make
 nnoremap <leader>m :update<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
@@ -282,6 +287,12 @@ nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
 nnoremap <leader>r. :.,$s/\./->/gc<CR>
+
+" Naive auto-completion / snippets
+inoremap {<CR> {<CR>}<Esc>O
+inoremap ,t<CR> // TODO 
+
+
 
 "
 " LOOK & FEEL
@@ -369,9 +380,6 @@ set wrapmargin=0
 au FileType * set fo+=q fo+=r fo+=n
 " C-specific indentation rules
 set cinoptions=(0=0
-" Naive auto-completion / snippets
-inoremap {<CR> {<CR>}<Esc>O
-inoremap ,t<CR> // TODO 
 
 
 "
@@ -386,22 +394,9 @@ set wildmenu
 set wildmode=list:longest,full
 " Undo file
 set undofile
-" Perl/Python compatible regex formatting
-nnoremap / /\v
-vnoremap / /\v
 " Smart case sensitivity in searches
 set ignorecase
-set smartcase
-" Apply substitutions globally on lines
-set gdefault
-" Auto-save on loss of focus
-au FocusLost * :wa
-
-" Auto-reload vimrc upon saving
-augroup vimrc     " Source vim configuration upon save
-  autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
-  autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
-augroup END
+"set smartcase
 
 " Folding method needed for OmniSharp
 "set foldmethod=syntax
@@ -427,3 +422,19 @@ set makeprg=build.bat
 
 " Remember last flags used in :substitute
 set nogdefault
+
+" Auto-save on loss of focus
+au FocusLost * :wa
+
+" Auto-reload vimrc upon saving
+augroup vimrc     " Source vim configuration upon save
+  autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
+  autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+augroup END
+
+" Wrap lines in QF
+augroup File-Type
+    autocmd!
+    autocmd FileType qf setlocal wrap
+augroup END
+
