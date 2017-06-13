@@ -52,14 +52,15 @@ let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
 if executable('rg')
     " Use ripgrep over grep
-    set grepprg=rg\ --vimgrep\ --color=never
+    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
 
     " Use ripgrep for indexing files in CtrlP
 "    let extglob = '{cs,cpp,h}'
 "    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
     let g:ctrlp_user_command = 'rg -F %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml
-                                \ --type-add "xaml:*.{xaml,axml}" -txaml'
-    let g:ctrlp_use_caching = 1    " We'll see..
+                                \ --type-add "xaml:*.{xaml,axml}" -txaml --type-add "bat:*.bat" -tbat'
+    let g:ctrlp_use_caching = 0    " We'll see..
 endif
 
 if executable('global') || executable('global.exe')
@@ -280,7 +281,7 @@ nnoremap / /\v
 vnoremap / /\v
 
 " Silent make
-nnoremap <leader>m :update<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
+nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
 " Easily replace current word
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
@@ -294,6 +295,8 @@ nnoremap <leader>r. :.,$s/\./->/gc<CR>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap ,t<CR> // TODO 
 
+" Swap splits
+nnoremap <leader>wx <C-w>x
 
 
 "
@@ -445,12 +448,22 @@ augroup vimrc     " Source vim configuration upon save
 augroup END
 
 " Wrap lines in QF
-augroup File-Type
+augroup quickfix
     autocmd!
     autocmd FileType qf setlocal wrap
 augroup END
 
 " Simple filetype templates
 augroup templates
+    autocmd!
     autocmd BufNewFile *.{h,hpp} call <SID>InsertInclusionGuards()
 augroup END
+
+" Custom task-comments highlighting (not working!)
+augroup vimrc_todo
+    au!
+    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|HACK):/
+          \ containedin=.*Comment,vimCommentTitle
+augroup END
+hi def link MyTodo Todo
+
