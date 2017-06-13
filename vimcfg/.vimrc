@@ -206,7 +206,7 @@ nnoremap : .
 nnoremap <leader>J J
 
 " Insert blank line (or break current one) without going to insert mode
-nnoremap <CR> i<CR><Esc>
+"nnoremap <CR> i<CR><Esc>
 " Delete in insert mode without using extended keys or chords
 inoremap <C-BS> <C-W>
 inoremap <S-BS> <Del>
@@ -284,6 +284,8 @@ nnoremap <leader>m :update<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
 " Easily replace current word
 nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+" Easily replace last searched term (from current line on)
+nnoremap <leader>rs :.,$s///gc<Left><Left><Left>
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
 nnoremap <leader>r. :.,$s/\./->/gc<CR>
@@ -411,6 +413,12 @@ set cscopeverbose
 set cscopequickfix=s-,c-,d-,i-,t-,e-
 set csto=0
 
+" TODO Customize this per-project
+set makeprg=build.bat
+
+" Remember last flags used in :substitute
+set nogdefault
+
 " CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
     ccl
@@ -418,10 +426,14 @@ function! SubstQuickfixWithCtrlP()
 endfunction
 command! QfCP call SubstQuickfixWithCtrlP()
 
-set makeprg=build.bat
-
-" Remember last flags used in :substitute
-set nogdefault
+" C header files inclusion guards
+function! s:InsertInclusionGuards()
+  let gatename = "__" . substitute(toupper(expand("%:t")), "\\.", "_", "g") . "__"
+  execute "normal! i#ifndef " . gatename
+  execute "normal! o#define " . gatename . " "
+  execute "normal! Go#endif /* " . gatename . " */"
+  normal! ko
+endfunction
 
 " Auto-save on loss of focus
 au FocusLost * :wa
@@ -438,3 +450,7 @@ augroup File-Type
     autocmd FileType qf setlocal wrap
 augroup END
 
+" Simple filetype templates
+augroup templates
+    autocmd BufNewFile *.{h,hpp} call <SID>InsertInclusionGuards()
+augroup END
