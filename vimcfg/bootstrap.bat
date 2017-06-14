@@ -66,6 +66,11 @@ mklink /d "%USERPROFILE%\.vim" "%~dp0\.vim"
 set VIMDIR=%HOMEPATH%\.vim
 
 ::
+:: Create a folder to hold backup & undo files
+::
+mkdir "%USERPROFILE%\.backup"
+
+::
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
 ::
 regedit "%~dp0\bootstrap\remap_capslock.reg"

@@ -422,6 +422,10 @@ set makeprg=build.bat
 " Remember last flags used in :substitute
 set nogdefault
 
+" Group together all backup & undo files
+set backupdir=~/.backup
+set undodir=~/.backup
+
 " CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
     ccl
