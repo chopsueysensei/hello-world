@@ -283,10 +283,15 @@ vnoremap / /\v
 " Silent make
 nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
-" Easily replace current word
-nnoremap <leader>r :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+" Easily replace current word (from current line on)
+nnoremap <leader>r :.,$s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+" Replace current word (whole file)
+nnoremap <leader>rr :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 " Easily replace last searched term (from current line on)
 nnoremap <leader>rs :.,$s///gc<Left><Left><Left>
+" Replace in visual selection
+vnoremap <leader>r :s/\%V//g<Left><Left><Left>
+
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
 nnoremap <leader>r. :.,$s/\./->/gc<CR>
@@ -297,6 +302,11 @@ inoremap ,t<CR> // TODO
 
 " Swap splits
 nnoremap <leader>wx <C-w>x
+
+" Replace-paste without yanking in visual mode
+vnoremap p "_dp
+vnoremap P "_dP
+
 
 
 "
