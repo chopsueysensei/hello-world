@@ -84,7 +84,7 @@ let g:gen_tags#verbose = 1
 let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
-let g:SuperTabNoCompleteAfter = ['^', ',', '\s']
+let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', ';', ':', '"']
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
