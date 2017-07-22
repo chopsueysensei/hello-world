@@ -52,8 +52,8 @@ let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
 if executable('rg')
     " Use ripgrep over grep
-"    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
-"    set grepformat=%f:%l:%c:%m ",%f:%l:%m
+    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
+    set grepformat=%f:%l:%c:%m ",%f:%l:%m
 
     " Use ripgrep for indexing files in CtrlP
 "    let extglob = '{cs,cpp,h}'
@@ -84,7 +84,7 @@ let g:gen_tags#verbose = 1
 let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
-let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{']
+let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
