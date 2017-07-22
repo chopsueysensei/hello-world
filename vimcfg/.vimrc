@@ -52,14 +52,14 @@ let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
 
 if executable('rg')
     " Use ripgrep over grep
-    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
+"    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
+"    set grepformat=%f:%l:%c:%m ",%f:%l:%m
 
     " Use ripgrep for indexing files in CtrlP
 "    let extglob = '{cs,cpp,h}'
 "    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
     let g:ctrlp_user_command = 'rg -F %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml
-                                \ --type-add "xaml:*.{xaml,axml}" -txaml --type-add "bat:*.bat" -tbat'
+                                \ --type-add "xaml:*.{xaml,axml}" -txaml --type-add "bat:*.bat" -tbat --type-add "sl:*.glsl" -tsl'
     let g:ctrlp_use_caching = 0    " We'll see..
 endif
 
@@ -84,7 +84,7 @@ let g:gen_tags#verbose = 1
 let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
-let g:SuperTabNoCompleteAfter = ['^', ',', '\s']
+let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{']
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
