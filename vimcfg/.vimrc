@@ -24,6 +24,7 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
 Plugin 'a.vim'
 Plugin 'tpope/vim-surround'
+Plugin 'jremmen/vim-ripgrep'
 "Plugin 'jsfaint/gen_tags.vim'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
@@ -240,8 +241,8 @@ nnoremap <leader>cr :match Ignore /\r$/<CR>
 nnoremap <leader>dos :e ++ff=dos<CR>:w<CR>
 
 " Format current paragraph or visual selection
-vmap <leader>f gq
-nmap <leader>f gqap
+vmap <leader>= gq
+nmap <leader>= gqap
 
 " Switch to .h/cpp
 nnoremap <leader>o :A<CR>
@@ -309,6 +310,10 @@ nnoremap <leader>wx <C-w>x
 " Replace-paste without yanking in visual mode
 vnoremap p "_dp
 vnoremap P "_dP
+
+" Find in files using ripgrep
+nnoremap <leader>f :Rg<space>
+nnoremap <leader>ff :Rg<CR>
 
 
 
