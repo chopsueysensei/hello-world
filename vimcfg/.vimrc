@@ -25,7 +25,7 @@ Plugin 'ervandew/supertab'
 Plugin 'a.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'jremmen/vim-ripgrep'
-"Plugin 'jsfaint/gen_tags.vim'
+Plugin 'Valloric/ListToggle'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'OmniSharp/omnisharp-vim'
@@ -86,6 +86,9 @@ let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
 let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
+
+" List toggle (since we already use <leader>l)
+let g:lt_location_list_toggle_map = '<leader>wl'
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
@@ -159,9 +162,9 @@ nnoremap <leader>rc :e $MYVIMRC<cr>
 " Quickly close window
 nnoremap <leader>c <C-W>c
 
-" Quickly save
-inoremap <leader>w <Esc>:update<Cr>
-nnoremap <leader>w :update<Cr>
+" Quickly save if needed
+inoremap <leader>u <Esc>:update<Cr>
+nnoremap <leader>u :update<Cr>
 
 " Split windows easily
 nnoremap <leader>sh  :topleft  vnew<CR>
@@ -220,7 +223,7 @@ inoremap <C-S-BS> <Esc>ldwi
 " Search more quickly!
 nnoremap <Space> /
 " Highlight occurences without moving the cursor
-nnoremap <leader>* :let @/='\<'.expand("<cword>").'\>'<bar>set hls<cr>
+nnoremap <leader>* :HLcw<CR>
 
 " Toggle NERDTree
 nnoremap <leader>t :NERDTreeToggle<CR>
@@ -228,7 +231,7 @@ nnoremap <leader>t :NERDTreeToggle<CR>
 " CtrlP in mixed mode
 nnoremap <leader>p :CtrlPMixed<CR>
 " CtrlP in quickfix mode (close quickfix window if open!)
-nnoremap <leader>qf :QfCP<CR>
+nnoremap <leader>pq :CPqf<CR>
 " CtrlP in buffer mode
 nnoremap <leader>b :CtrlPBuffer<CR>
 
@@ -236,9 +239,9 @@ nnoremap <leader>b :CtrlPBuffer<CR>
 nnoremap <leader>bb :b#<CR>
 
 " Hide ^M line endings in mixed-mode files
-nnoremap <leader>cr :match Ignore /\r$/<CR>
+nnoremap <leader><space>cr :match Ignore /\r$/<CR>
 " Convert to DOS line endings
-nnoremap <leader>dos :e ++ff=dos<CR>:w<CR>
+nnoremap <leader><space>dos :e ++ff=dos<CR>:w<CR>
 
 " Format current paragraph or visual selection
 vmap <leader>= gq
@@ -253,9 +256,9 @@ nnoremap <leader>gen :GenGTAGS<CR>
 
 " Gtags
 nnoremap <leader>ts :Gtags<space>
-nnoremap <leader>tf :Gtags -f %<CR>:QfCP<CR>
-nnoremap <F12>      :Gtags<CR><CR>:QfCP<CR>
-nnoremap <S-F12>    :Gtags -r<CR><CR>:QfCP<CR>
+nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
+nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
+nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
 
 " CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
 nnoremap <leader>tt :CtrlPTag<CR>
@@ -313,7 +316,7 @@ vnoremap P "_dP
 
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
-nnoremap <leader>ff :Rg<CR>
+nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 
 
 
@@ -444,12 +447,12 @@ set nogdefault
 set backupdir=~/.backup
 set undodir=~/.backup
 
-" CtrlP in quickfix mode (close quickfix window if open!)
+" Open CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
     ccl
     CtrlPQuickfix
 endfunction
-command! QfCP call SubstQuickfixWithCtrlP()
+command! CPqf call SubstQuickfixWithCtrlP()
 
 " C header files inclusion guards
 function! s:InsertInclusionGuards()
@@ -459,6 +462,9 @@ function! s:InsertInclusionGuards()
   execute "normal! Go#endif /* " . gatename . " */"
   normal! ko
 endfunction
+
+" Highlight word under cursor
+command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
 " Auto-save on loss of focus
 au FocusLost * :wa
