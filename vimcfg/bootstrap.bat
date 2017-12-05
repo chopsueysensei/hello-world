@@ -1,9 +1,4 @@
 @echo off
-:: This must be at the beginning in order to have colors
-SETLOCAL DisableDelayedExpansion
-for /F "tokens=1,2 delims=#" %%a in ('"prompt #$H#$E# & echo on & for %%b in (1) do rem"') do (
-  set "DEL=%%a"
-)
 
 
 ::
@@ -24,6 +19,9 @@ if NOT %errorlevel% == 0 goto errorNoPython
 ::
 :: Install chocolatey
 ::
+echo "Check required software"
+pause
+cls
 choco --version
 if %errorlevel% == 0 goto haveChoco
 
@@ -41,24 +39,29 @@ choco install cmder
 ::
 :: Check for git on the command line
 ::
-::git --version
-::if %errorlevel% == 0 goto haveGit
+git --version
+if %errorlevel% == 0 goto haveGit
 
-::choco install git
+choco install git
 
 :haveGit
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: ViM
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-vim --version
+start vim --version
 if %errorlevel% == 0 goto haveVim
 
 choco install vim-tux
 
+:haveVim
 ::
 :: Link vim config files in home dir
 ::
 :: TODO ? Check if this has already been done (or silence the error)
+echo "Set up vim paths & plugins"
+pause
+cls
+
 mklink "%USERPROFILE%\.vimrc" "%~dp0\.vimrc"
 mklink "%USERPROFILE%\.gvimrc" "%~dp0\.gvimrc"
 mklink /d "%USERPROFILE%\.vim" "%~dp0\.vim"
@@ -75,10 +78,9 @@ mkdir "%USERPROFILE%\.backup"
 ::
 regedit "%~dp0\bootstrap\remap_capslock.reg"
 
-echo Please log off from the user session after the installation so that the keyboard mapping is applied..
+echo "Please log off from the user session after the installation so that the CAPSLOCK mapping is applied.."
 pause
 
-:haveVim
 ::
 :: Install ripgrep
 ::
@@ -105,7 +107,7 @@ choco install global
 
 :: Just check it's in the path
 ctags --version
-if NOT %errorlevel% == 0 call :ColorText 19 "WARNING: No ctags binary in path!"
+if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
 
 
 
@@ -141,14 +143,14 @@ if NOT %errorlevel% == 0 call :ColorText 19 "WARNING: No ctags binary in path!"
 :: Make sure at least Vundle submodule is not empty (is this necessary??)
 ::
 for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
-  echo 'Vundle.vim' submodule contains files. Skipping submodule downloading..
+  echo "'Vundle.vim' submodule contains files. Skipping submodule downloading.."
   goto :skipSUBs
 )
 
 :: FIXME FAILS since git is not yet in PATH!!
 :: -> Print a message with instructions and exit?
 
-echo 'Vundle.vim' submodule is empty. Updating..
+echo "'Vundle.vim' submodule is empty. Updating.."
 cd %~dp0
 git submodule init
 git submodule update
@@ -159,13 +161,14 @@ git submodule update
 
 
 :skipSUBs
-echo Now I'll start vim and tell it to install all plugins.
+echo "Now I'll start vim and tell it to install all plugins."
 pause
+cls
 
 ::
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 ::
-call :ColorText 0a "Starting vim..."
+echo "Starting vim..."
 vim +PluginInstall
 
 goto:eof
@@ -175,28 +178,19 @@ goto:eof
 
 
 :errorNoAdmin
-call :ColorText 0C "ERROR: Admin privileges required. Run this script as administrator."
+echo "ERROR: Admin privileges required. Run this script as administrator."
 pause
 goto:eof
 
 :errorNoPython
-call :ColorText 0C "ERROR: No python available in the command line!"
+echo "ERROR: No python available in the command line!"
 pause
 goto:eof
 
 :errorYCMmake
-call :ColorText 0C "ERROR: YCM compilation failed! libclang.dll is not in third_party\ycmd."
+echo "ERROR: YCM compilation failed! libclang.dll is not in third_party\ycmd."
 pause
 goto:eof
 
 
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: This must be the last thing in the file!
-:ColorText
-echo off
-<nul set /p .=. > "%~2"
-findstr /v /a:%1 /R "^$" "%~2" nul
-echo(%DEL%%DEL%%DEL%
-del "%~2" > nul 2>&1
-goto :eof

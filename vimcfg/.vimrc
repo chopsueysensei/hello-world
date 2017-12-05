@@ -327,7 +327,7 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Fira_Mono:h10:cANSI:qDRAFT
+    set guifont=Fira_Mono:h11:cANSI:qDRAFT
 "    set guifont=Anonymous_Pro:h12:cANSI:qDRAFT
 "    set guifont=Consolas:h10:cANSI:qDRAFT
 "    set guifont=Droid_Sans_Mono_Dotted:h10:cANSI:qDRAFT
