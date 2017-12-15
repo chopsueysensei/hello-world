@@ -327,9 +327,9 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Fira_Mono:h11:cANSI:qDRAFT
+"    set guifont=Fira_Mono:h11:cANSI:qDRAFT
 "    set guifont=Anonymous_Pro:h12:cANSI:qDRAFT
-"    set guifont=Consolas:h10:cANSI:qDRAFT
+    set guifont=Consolas:h12:cANSI:qDRAFT
 "    set guifont=Droid_Sans_Mono_Dotted:h10:cANSI:qDRAFT
 "    set guifont=Hack:h10:cANSI:qDRAFT
 "    set guifont=Inconsolata:h10:cANSI:qDRAFT
@@ -463,7 +463,14 @@ function! s:InsertInclusionGuards()
   normal! ko
 endfunction
 
-" Highlight word under cursor
+" Identify syntax highlighting group under cursor
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+nnoremap <leader>hl :call SynGroup()<CR>
+
+" Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
 " Auto-save on loss of focus
