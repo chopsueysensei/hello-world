@@ -90,6 +90,11 @@ let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
 " List toggle (since we already use <leader>l)
 let g:lt_location_list_toggle_map = '<leader>wl'
 
+" vim-ripgrep
+" Search for literal string
+let g:rg_binary = 'rg'
+let g:rg_command = g:rg_binary . ' --vimgrep -F'
+
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
