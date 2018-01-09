@@ -18,7 +18,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'SirVer/ultisnips'
+"Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
@@ -90,6 +90,11 @@ let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
 " List toggle (since we already use <leader>l)
 let g:lt_location_list_toggle_map = '<leader>wl'
 
+" NERCommenter
+map ,ncl <plug>NERDCommenterAlignLeft
+
+
+
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
@@ -160,7 +165,8 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
 " Quickly close window
-nnoremap <leader>c <C-W>c
+nnoremap <leader>cc <C-W>c
+nnoremap <leader>cl :ccl<CR>
 
 " Quickly save if needed
 inoremap <leader>u <Esc>:update<Cr>
@@ -296,8 +302,8 @@ nnoremap <leader>r :.,$s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 nnoremap <leader>rr :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 " Easily replace last searched term (from current line on)
 nnoremap <leader>rs :.,$s///gc<Left><Left><Left>
-" Replace in visual selection
-vnoremap <leader>r :s/\%V//g<Left><Left><Left>
+" Replace in visual selection FIXME Not working
+vnoremap <leader>r :s/\%V//g<Left><Left>
 
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
