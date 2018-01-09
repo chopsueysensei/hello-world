@@ -90,8 +90,13 @@ let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
 " List toggle (since we already use <leader>l)
 let g:lt_location_list_toggle_map = '<leader>wl'
 
-" NERCommenter
+" NERDCommenter
 map ,ncl <plug>NERDCommenterAlignLeft
+
+" vim-ripgrep
+" Search for literal string
+let g:rg_binary = 'rg'
+let g:rg_command = g:rg_binary . ' --vimgrep -F'
 
 
 
@@ -164,7 +169,7 @@ nnoremap <leader><space> :noh<cr>
 " Quickly open .vimrc
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
-" Quickly close window
+" Quickly close windows
 nnoremap <leader>cc <C-W>c
 nnoremap <leader>cl :ccl<CR>
 
