@@ -241,7 +241,7 @@ nnoremap <leader>* :HLcw<CR>
 nnoremap <leader>t :NERDTreeToggle<CR>
 
 " CtrlP in mixed mode
-nnoremap <leader>p :CtrlPMixed<CR>
+nnoremap <leader>pm :CtrlPMixed<CR>
 " CtrlP in quickfix mode (close quickfix window if open!)
 nnoremap <leader>pq :CPqf<CR>
 " CtrlP in buffer mode
@@ -332,6 +332,14 @@ nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 
 " Built-in explorer
 nnoremap <leader>e :Explore<CR>
+
+" Copy and paste using system's clipboard
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>P "+P
 
 
 "
