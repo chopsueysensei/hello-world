@@ -91,7 +91,8 @@ let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
 let g:lt_location_list_toggle_map = '<leader>wl'
 
 " NERDCommenter
-map ,ncl <plug>NERDCommenterAlignLeft
+map <leader>ncl <plug>NERDCommenterAlignLeft
+map <leader>ncc <plug>NERDCommenterComment
 
 " vim-ripgrep
 " Search for literal string
@@ -329,6 +330,8 @@ vnoremap P "_dP
 nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 
+" Built-in explorer
+nnoremap <leader>e :Explore<CR>
 
 
 "
