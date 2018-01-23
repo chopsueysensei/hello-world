@@ -245,10 +245,10 @@ nnoremap <leader>pm :CtrlPMixed<CR>
 " CtrlP in quickfix mode (close quickfix window if open!)
 nnoremap <leader>pq :CPqf<CR>
 " CtrlP in buffer mode
-nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>bb :CtrlPBuffer<CR>
 
 " Switch to previous buffer
-nnoremap <leader>bb :b#<CR>
+nnoremap <leader>bl :b#<CR>
 
 " Hide ^M line endings in mixed-mode files
 nnoremap <leader><space>cr :match Ignore /\r$/<CR>
@@ -490,7 +490,7 @@ function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
-nnoremap <leader>hl :call SynGroup()<CR>
+nnoremap <leader>shl :call SynGroup()<CR>
 
 " Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
