@@ -42,6 +42,9 @@ if has('win32')
 "    set shellslash  " Not too sure about this..
 endif
 
+set rtp-=~/.vim/after
+set rtp+=~/.vim/after
+
 " Ctrl-P
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window = 'order:ttb'
