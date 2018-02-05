@@ -523,8 +523,11 @@ augroup END
 " Custom task-comments highlighting (not working!)
 augroup vimrc_todo
     au!
-    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|HACK):/
-          \ containedin=.*Comment,vimCommentTitle
+    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|HACK)/
+          \ containedin=.*Comment.*
 augroup END
 hi def link MyTodo Todo
+
+" Insert MIT license at the top
+command! Mit :0r ~/.vim/mit.txt
 
