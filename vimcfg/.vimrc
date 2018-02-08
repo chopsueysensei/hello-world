@@ -43,6 +43,9 @@ if has('win32')
 "    set shellslash  " Not too sure about this..
 endif
 
+" Somewhat hacky way to get '.vim' folder path
+let $VIMHOME=expand('<sfile>:p:h') . '/.vim/'
+
 set rtp-=~/.vim/after
 set rtp+=~/.vim/after
 
@@ -346,6 +349,7 @@ nnoremap <leader>P "+P
 vnoremap <leader>P "+P
 
 
+
 "
 " LOOK & FEEL
 "
@@ -496,6 +500,10 @@ function! SynGroup()
 endfun
 nnoremap <leader>shl :call SynGroup()<CR>
 
+" Toggle fullscreen using external DLL (only works with 'noremap' for some reason!)
+command! CallToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
+noremap <F11> <Esc>:CallToggleFullscreen<CR>
+
 " Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
@@ -503,7 +511,7 @@ command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 au FocusLost * :wa
 
 " Auto-reload vimrc upon saving
-augroup vimrc     " Source vim configuration upon save
+augroup vimrc
   autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
   autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
 augroup END
@@ -520,7 +528,7 @@ augroup templates
     autocmd BufNewFile *.{h,hpp} call <SID>InsertInclusionGuards()
 augroup END
 
-" Custom task-comments highlighting (not working!)
+" Custom task-comments highlighting
 augroup vimrc_todo
     au!
     au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|HACK)/
@@ -530,4 +538,9 @@ hi def link MyTodo Todo
 
 " Insert MIT license at the top
 command! Mit :0r ~/.vim/mit.txt
+
+" Enter fullscreen by default
+augroup fullscreen
+    autocmd! GUIEnter * :CallToggleFullscreen
+augroup END
 
