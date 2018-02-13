@@ -92,7 +92,7 @@ let g:gen_tags#verbose = 1
 let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
-let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', ':', '"']
+let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', '"']
 
 " List toggle (since we already use <leader>l)
 let g:lt_location_list_toggle_map = '<leader>wl'
@@ -191,17 +191,18 @@ nnoremap <leader>sj  :botright new<CR>
 nnoremap <leader>sk  :topleft  new<CR>
 nnoremap <leader>sl  :botright vnew<CR>
 
-" Resize current split (Ctrl and Ctrl-Shift seem to send the same keystroke!)
+" Resize current split
+" ### Ctrl and Ctrl-Shift send the same keystroke! ###
 nnoremap <C-S-Left>     <C-W><
 nnoremap <C-S-Down>     <C-W>-
 nnoremap <C-S-Up>       <C-W>+
 nnoremap <C-S-Right>    <C-W>>
 
 " Split navigation
-nnoremap <leader>h <C-W><C-H>
-nnoremap <leader>j <C-W><C-J>
-nnoremap <leader>k <C-W><C-K>
-nnoremap <leader>l <C-W><C-L>
+nnoremap <C-h> <C-W><C-H>
+nnoremap <C-j> <C-W><C-J>
+nnoremap <C-k> <C-W><C-K>
+nnoremap <C-l> <C-W><C-L>
 
 " Move lines up/down
 nnoremap ë ddkP
@@ -219,11 +220,11 @@ vnoremap K {
 vnoremap L El
 
 " Move by half a page 
-nnoremap <C-j> <C-d>
-nnoremap <C-k> <C-u>
+"nnoremap <C-S-j> <C-d>
+"nnoremap <C-S-k> <C-u>
 
-vnoremap <C-j> <C-d>
-vnoremap <C-k> <C-u>
+"vnoremap <C-S-j> <C-d>
+"vnoremap <C-S-k> <C-u>
 
 " Get rid of one keystroke for something soo common
 nnoremap . :
@@ -348,6 +349,13 @@ vnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>P "+P
 
+" Navigate quickfix and location results
+nnoremap <leader>qn :cn<CR>
+nnoremap <leader>qp :cp<CR>
+nnoremap <C-n> :cn<CR>
+nnoremap <C-b> :cp<CR>
+nnoremap <leader>ln :lne<CR>
+nnoremap <leader>lp :lp<CR>
 
 
 "
@@ -541,6 +549,8 @@ command! Mit :0r ~/.vim/mit.txt
 
 " Enter fullscreen by default
 augroup fullscreen
+    " This causes Vim to start in ex mode with a bogus '/x' in the command
+    " line. No solution found yet!
     autocmd! GUIEnter * :CallToggleFullscreen
 augroup END
 
