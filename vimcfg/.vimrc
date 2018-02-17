@@ -178,7 +178,8 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
 " Quickly close windows
-nnoremap <leader>cc <C-W>c
+nnoremap <leader>cc :bd<CR>
+nnoremap <leader>cw <C-W>c
 nnoremap <leader>cl :ccl<CR>
 
 " Quickly save if needed
@@ -307,7 +308,7 @@ nnoremap <leader>re     :YcmCompleter RefactorRename
 nnoremap / /\v
 vnoremap / /\v
 
-" Silent make
+" Silent make (with result on a right hand split)
 nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
 " Easily replace current word (from current line on)
