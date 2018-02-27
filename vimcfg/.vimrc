@@ -234,8 +234,11 @@ nnoremap : .
 " Join next line (at the end of current one)
 nnoremap <leader>J J
 
-" Insert blank line (or break current one) without going to insert mode
-"nnoremap <CR> i<CR><Esc>
+" Insert blank lines without going to insert mode
+nnoremap <leader><CR> o<Esc>
+nnoremap <leader><S-CR> O<Esc>
+nnoremap <leader><C-CR> O<Esc>
+
 " Delete in insert mode without using extended keys or chords
 inoremap <C-BS> <C-W>
 inoremap <S-BS> <Del>
