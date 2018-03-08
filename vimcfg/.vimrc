@@ -100,6 +100,7 @@ let g:lt_location_list_toggle_map = '<leader>wl'
 " NERDCommenter
 map <leader>ncl <plug>NERDCommenterAlignLeft
 map <leader>ncc <plug>NERDCommenterComment
+map <leader>ncb <plug>NERDCommenterAlignBoth
 
 " vim-ripgrep
 " Search for literal string
@@ -178,8 +179,9 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
 " Quickly close windows
-nnoremap <leader>cc :bd<CR>
+nnoremap <leader>cb :bd<CR>
 nnoremap <leader>cw <C-W>c
+nnoremap <leader>wc <C-W>c
 nnoremap <leader>cl :ccl<CR>
 
 " Quickly save if needed
@@ -193,7 +195,7 @@ nnoremap <leader>sk  :topleft  new<CR>
 nnoremap <leader>sl  :botright vnew<CR>
 
 " Resize current split
-" ### Ctrl and Ctrl-Shift send the same keystroke! ###
+" ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
 nnoremap <C-S-Left>     <C-W><
 nnoremap <C-S-Down>     <C-W>-
 nnoremap <C-S-Up>       <C-W>+
@@ -230,6 +232,10 @@ vnoremap L El
 " Get rid of one keystroke for something soo common
 nnoremap . :
 nnoremap : .
+
+" Change word (this should be the standard mapping!)
+nnoremap <leader>cc cw
+nnoremap <leader>cC cW
 
 " Join next line (at the end of current one)
 nnoremap <leader>J J
@@ -317,11 +323,15 @@ nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 " Easily replace current word (from current line on)
 nnoremap <leader>r :.,$s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 " Replace current word (whole file)
-nnoremap <leader>rr :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
+nnoremap <leader>rf :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
 " Easily replace last searched term (from current line on)
 nnoremap <leader>rs :.,$s///gc<Left><Left><Left>
-" Replace in visual selection FIXME Not working
-vnoremap <leader>r :s/\%V//g<Left><Left>
+" Replace currently selected word (from current line on)
+vnoremap <leader>r y:.,$sno/<C-r>"//gc<Left><Left><Left>
+" Replace currently selected word (whole file)
+vnoremap <leader>rf y:%sno/<C-r>"//gc<Left><Left><Left>
+" Replace _inside_ a visual selection
+vnoremap <leader>rv :sno/\%V//gc<Left><Left><Left><Left>
 
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
@@ -380,6 +390,7 @@ if has('gui_running')
 "    set guifont=Roboto\ Mono:h10:cANSI:qDRAFT "Not working!
 
     " Colorschemes
+    "colorscheme handmade-hero
     colorscheme retro-minimal
     "colorscheme mustang_sensei_edit
     "colorscheme solarized
@@ -388,8 +399,9 @@ if has('gui_running')
 endif
 
 " Airline switches
-"let g:airline_theme='powerlineish'
+"let g:airline_theme='ubaryd'
 let g:airline_theme='molokai'
+"let g:airline_theme='powerlineish'
 "let g:airline_theme='cobalt2'
 "let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
