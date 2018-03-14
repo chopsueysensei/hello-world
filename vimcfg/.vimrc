@@ -103,9 +103,9 @@ map <leader>ncc <plug>NERDCommenterComment
 map <leader>ncb <plug>NERDCommenterAlignBoth
 
 " vim-ripgrep
-" Search for literal string
 let g:rg_binary = 'rg'
-let g:rg_command = g:rg_binary . ' --vimgrep -F'
+" Search for literal string
+let g:rg_command = g:rg_binary . ' --vimgrep -F -w'
 
 
 
@@ -180,8 +180,9 @@ nnoremap <leader>rc :e $MYVIMRC<cr>
 
 " Quickly close windows
 nnoremap <leader>cb :bd<CR>
-nnoremap <leader>cw <C-W>c
-nnoremap <leader>wc <C-W>c
+nnoremap <leader>cw <C-w>c
+nnoremap <leader>wc <C-w>c
+nnoremap <leader>ww <C-w>o
 nnoremap <leader>cl :ccl<CR>
 
 " Quickly save if needed
@@ -337,6 +338,12 @@ vnoremap <leader>rv :sno/\%V//gc<Left><Left><Left><Left>
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
 nnoremap <leader>r. :.,$s/\./->/gc<CR>
 
+" Find in files using ripgrep
+nnoremap <leader>f :Rg<space>
+nnoremap <leader>ff :HLcw<CR>:Rg<CR>
+" Find current word, then replace across all locations
+nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
+
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
 inoremap ,t<CR> // TODO 
@@ -347,10 +354,6 @@ nnoremap <leader>wx <C-w>x
 " Replace-paste without yanking in visual mode
 vnoremap p "_dp
 vnoremap P "_dP
-
-" Find in files using ripgrep
-nnoremap <leader>f :Rg<space>
-nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 
 " Built-in explorer
 nnoremap <leader>e :Explore<CR>
