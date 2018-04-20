@@ -1,5 +1,8 @@
 @echo off
 
+::
+:: MAKE SURE YOU CLONE THE REPO USING GIT OTHERWISE SUBMODULES WON'T WORK!
+::
 
 ::
 :: Check permissions
@@ -8,10 +11,10 @@ net session >nul 2>&1
 if NOT %errorlevel% == 0 goto errorNoAdmin
 
 ::
-:: Check for Python on the command line
+:: Go directly to install stage?
 ::
-python --version
-if NOT %errorlevel% == 0 goto errorNoPython
+if NOT %1.==. goto %1
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: General tools
@@ -29,6 +32,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.
 
 :haveChoco
 ::
+:: Check for Python on the command line
+::
+python --version
+if %errorlevel% == 0 goto havePython
+
+choco install python2 --version 2.7.11
+
+:havePython
+::
 :: Check for cmder on the command line
 ::
 if defined CMDER_ROOT goto haveCmder
@@ -43,6 +55,7 @@ git --version
 if %errorlevel% == 0 goto haveGit
 
 choco install git
+refreshenv
 
 :haveGit
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -51,6 +64,9 @@ choco install git
 start vim --version
 if %errorlevel% == 0 goto haveVim
 
+echo "Now install vim"
+pause
+cls
 choco install vim-tux
 
 :haveVim
@@ -76,6 +92,7 @@ mkdir "%USERPROFILE%\.backup"
 ::
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
 ::
+echo "!! Gonna install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!"
 regedit "%~dp0\bootstrap\remap_capslock.reg"
 
 echo "Please log off from the user session after the installation so that the CAPSLOCK mapping is applied.."
@@ -139,16 +156,14 @@ if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+:setupMods
 ::
 :: Make sure at least Vundle submodule is not empty (is this necessary??)
 ::
 for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
   echo "'Vundle.vim' submodule contains files. Skipping submodule downloading.."
-  goto :skipSUBs
+  goto :skipMods
 )
-
-:: FIXME FAILS since git is not yet in PATH!!
-:: -> Print a message with instructions and exit?
 
 echo "'Vundle.vim' submodule is empty. Updating.."
 cd %~dp0
@@ -160,7 +175,7 @@ git submodule update
 :: TODO Install fonts!
 
 
-:skipSUBs
+:skipMods
 echo "Now I'll start vim and tell it to install all plugins."
 pause
 cls
@@ -179,11 +194,6 @@ goto:eof
 
 :errorNoAdmin
 echo "ERROR: Admin privileges required. Run this script as administrator."
-pause
-goto:eof
-
-:errorNoPython
-echo "ERROR: No python available in the command line!"
 pause
 goto:eof
 
