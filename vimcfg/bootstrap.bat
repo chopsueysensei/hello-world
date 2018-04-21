@@ -37,7 +37,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.
 python --version
 if %errorlevel% == 0 goto havePython
 
-choco install python2 --version 2.7.11
+choco install python2 --version 2.7.14
 
 :havePython
 ::

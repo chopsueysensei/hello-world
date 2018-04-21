@@ -56,7 +56,9 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_by_filename = 1
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix']
 let g:ctrlp_max_files = 0
-let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+if has('python') || has('python3')
+    let g:ctrlp_match_func = { 'match': 'pymatcher#PyMatch' }
+endif
 
 if executable('rg')
     " Use ripgrep over grep
