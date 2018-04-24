@@ -1,0 +1,38 @@
+<html>
+<body>
+    <h1>Today</h1>
+    <table>
+        <tr>
+            <th>Start</th>
+            <th>Current</th>
+            <th>Total</th>
+        </tr>
+        <tr>
+            <td>{{today_start}}</td>
+            <td>{{today_current}}</td>
+            <td>{{today_total}}</td>
+        </tr>
+    </table>
+    
+    <h1>Week</h1>
+    {{#weekday}}
+    <h4>{{dow}}</h4>
+    <table>
+        <tr>
+            <th>Start</th>
+            <th>End</th>
+            <th>Total</th>
+        </tr>
+        <tr>
+            <td>{{start}}</td>
+            <td>{{end}}</td>
+            <td>{{total}}</td>
+        </tr>
+    </table>
+    {{/weekday}}
+    
+    <h1>Total</h1>
+    {{total_hours}}
+
+</body>
+</html>
