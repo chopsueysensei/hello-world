@@ -498,6 +498,10 @@ set csto=0
 
 " TODO Customize this per-project
 set makeprg=build.bat
+" For clang-cl:
+set efm+=%I%f(%l\\,%c):\ \ note:\ %m
+set efm+=%W%f(%l\\,%c):\ \ warning:\ %m
+set efm+=%E%f(%l\\,%c):\ \ error:\ %m,%-C%.%#,%Z
 
 " Remember last flags used in :substitute
 set nogdefault
