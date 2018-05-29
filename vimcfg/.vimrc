@@ -321,6 +321,7 @@ nnoremap / /\v
 vnoremap / /\v
 
 " Silent make (with result on a right hand split)
+" TODO Improve to detect if we're in the right split and show on the left instead
 nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
 " Easily replace current word (from current line on)
