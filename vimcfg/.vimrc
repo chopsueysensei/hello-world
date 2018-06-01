@@ -197,6 +197,11 @@ nnoremap <leader>sj  :botright new<CR>
 nnoremap <leader>sk  :topleft  new<CR>
 nnoremap <leader>sl  :botright vnew<CR>
 
+nnoremap <leader>ws :vert sb %<CR>
+
+" Swap splits
+nnoremap <leader>wx <C-w>x
+
 " Resize current split
 " ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
 nnoremap <C-S-Left>     <C-W><
@@ -350,9 +355,6 @@ nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
 inoremap ,t<CR> // TODO 
-
-" Swap splits
-nnoremap <leader>wx <C-w>x
 
 " Replace-paste without yanking in visual mode
 vnoremap p "_dp
