@@ -69,7 +69,10 @@ if executable('rg')
 "    let extglob = '{cs,cpp,h}'
 "    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
     let g:ctrlp_user_command = 'rg -F %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml
-                                \ --type-add "xaml:*.{xaml,axml}" -txaml --type-add "bat:*.bat" -tbat --type-add "sl:*.glsl" -tsl'
+                                \ --type-add "xaml:*.{xaml,axml}" -txaml
+                                \ --type-add "bat:*.bat" -tbat
+                                \ --type-add "sl:*.glsl" -tsl
+                                \ --type-add "settings:*settings*" -tsettings'
     let g:ctrlp_use_caching = 0    " We'll see..
 endif
 
@@ -260,6 +263,7 @@ inoremap <C-S-BS> <Esc>ldwi
 
 " Search more quickly!
 nnoremap <Space> /
+nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
 nnoremap <leader>* :HLcw<CR>
 
@@ -501,6 +505,10 @@ set csto=0
 
 " TODO Customize this per-project
 set makeprg=build.bat
+" For clang-cl:
+set efm+=%I%f(%l\\,%c):\ \ note:\ %m
+set efm+=%W%f(%l\\,%c):\ \ warning:\ %m
+set efm+=%E%f(%l\\,%c):\ \ error:\ %m,%-C%.%#,%Z
 
 " Remember last flags used in :substitute
 set nogdefault
@@ -532,9 +540,46 @@ function! SynGroup()
 endfun
 nnoremap <leader>shl :call SynGroup()<CR>
 
-" Toggle fullscreen using external DLL (only works with 'noremap' for some reason!)
-command! CallToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
-noremap <F11> <Esc>:CallToggleFullscreen<CR>
+" Toggle fullscreen using external DLL
+command! ToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
+" 'Refresh' fullscreen state (only works with 'noremap' for some reason!)
+noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR>
+
+
+" Enter fullscreen by default
+"augroup fullscreen
+    "" When using CheckAndMaybeLoadLastSession() below this should be turned off or they'll conflict!
+    "if has('gui_running')
+        "autocmd! VimEnter * :ToggleFullscreen
+    "endif
+"augroup END
+
+" Sessions!
+function! CheckAndMaybeLoadLastSession()
+    if argc() == 0 && filereadable("./last_session.vim")
+        source ./last_session.vim
+        if has('gui_running')
+            ToggleFullscreen
+        endif
+    else
+        if has('gui_running')
+            ToggleFullscreen
+        endif
+    endif
+endfun
+
+function! CheckAndMaybeSaveLastSession()
+    if argc() == 0
+        mksession! ./last_session.vim
+    endif
+endfun
+
+augroup sessions
+    autocmd!
+    " Auto save current session in current dir when closing
+    autocmd VimEnter * :call CheckAndMaybeLoadLastSession()
+    autocmd VimLeave * :call CheckAndMaybeSaveLastSession()
+augroup END
 
 " Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
@@ -571,10 +616,8 @@ hi def link MyTodo Todo
 " Insert MIT license at the top
 command! Mit :0r ~/.vim/mit.txt
 
-" Enter fullscreen by default
-augroup fullscreen
-    " This causes Vim to start in ex mode with a bogus '/x' in the command
-    " line. No solution found yet!
-    autocmd! GUIEnter * :CallToggleFullscreen
+" Filetypes for weird files
+augroup filetypedetect
+    au BufRead,BufNewFile wscript set filetype=python
 augroup END
 
