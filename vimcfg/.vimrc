@@ -255,6 +255,7 @@ inoremap <C-S-BS> <Esc>ldwi
 
 " Search more quickly!
 nnoremap <Space> /
+nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
 nnoremap <leader>* :HLcw<CR>
 
