@@ -315,15 +315,15 @@ nnoremap <leader>tt :CtrlPTag<CR>
 " nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
 
 " Terse YcmCompleter commands
-nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
-nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
-nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
-nnoremap <leader>g      :YcmCompleter GoTo<CR>
-nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
-nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
-nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
-nnoremap <leader>fx     :YcmCompleter FixIt<CR>
-nnoremap <leader>re     :YcmCompleter RefactorRename 
+"nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
+"nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
+"nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
+"nnoremap <leader>g      :YcmCompleter GoTo<CR>
+"nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
+"nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
+"nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
+"nnoremap <leader>fx     :YcmCompleter FixIt<CR>
+"nnoremap <leader>re     :YcmCompleter RefactorRename 
 
 " Perl/Python compatible regex formatting
 nnoremap / /\v
@@ -333,18 +333,16 @@ vnoremap / /\v
 " TODO Improve to detect if we're in the right split and show on the left instead
 nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
 
-" Easily replace current word (from current line on)
-nnoremap <leader>r :.,$s/\<<C-r><C-w>\>//gc<Left><Left><Left>
-" Replace current word (whole file)
-nnoremap <leader>rf :%s/\<<C-r><C-w>\>//gc<Left><Left><Left>
-" Easily replace last searched term (from current line on)
-nnoremap <leader>rs :.,$s///gc<Left><Left><Left>
-" Replace currently selected word (from current line on)
-vnoremap <leader>r y:.,$sno/<C-r>"//gc<Left><Left><Left>
-" Replace currently selected word (whole file)
-vnoremap <leader>rf y:%sno/<C-r>"//gc<Left><Left><Left>
+" Replace
+nnoremap <leader>r :call PromptReplace()<CR>
+" Easily replace current word
+nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
+" Easily replace last searched term
+nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
+" Replace currently selected text (in visual mode)
+vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
 " Replace _inside_ a visual selection
-vnoremap <leader>rv :sno/\%V//gc<Left><Left><Left><Left>
+vnoremap <leader>r :call PromptReplace("visual")<CR>
 
 " Other quick common replacements (from current line on)
 nnoremap <leader>r- :.,$s/->/\./gc<CR>
@@ -355,6 +353,7 @@ nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 " Find current word, then replace across all locations
 nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
+nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
@@ -475,7 +474,7 @@ set cinoptions=(0=0
 
 
 "
-" MISC
+" MISC SETTINGS
 "
 
 set encoding=utf-8
@@ -516,6 +515,10 @@ set nogdefault
 " Group together all backup & undo files
 set backupdir=~/.backup
 set undodir=~/.backup
+
+"
+" MISC FUNCTIONS, COMMANDS, AUTOS..
+"
 
 " Open CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
@@ -620,4 +623,60 @@ command! Mit :0r ~/.vim/mit.txt
 augroup filetypedetect
     au BufRead,BufNewFile wscript set filetype=python
 augroup END
+
+" Helper functions to perform substitutions with a prompt
+function! Replace(source, target, ...) range
+    let l:smod = a:0 >= 1 ? a:1 : ''
+    let l:vmod = a:0 >= 2 ? a:2 : ''
+
+    try
+        " FIXME This way of redoing 'wrapping' a subst by redoing it from the start is a bit annoying..
+        let l:searchstring = '.,$s' . l:smod . '/' . l:vmod . a:source . '/' . a:target . '/gcI|1,''''-&&'
+        echom "Search string: " . l:searchstring
+        exe l:searchstring
+    catch
+        redraw
+        echohl ErrorMsg | echomsg "'" . a:source . "' not found." | echohl None
+    endtry
+endfunction
+
+function! PromptReplace(...) range
+    let l:mode = a:0 >= 1 ? a:1 : ''
+    
+    let l:vmod = ''
+    if l:mode == "visual"
+        let l:vmod = '\%V'
+    endif
+
+    call inputsave()
+    let l:source = input("Replace: ")
+    if !empty(l:source)
+        let l:target = input("with: ")
+        if !empty(l:target)
+            call Replace(l:source, l:target, '', l:vmod)
+        endif
+    endif
+    call inputrestore()
+endfunction
+
+function! PromptReplaceCurrent(sourceMode) range
+    if a:sourceMode == "word"
+        let l:source = expand("<cword>")
+    elseif a:sourceMode == "search"
+        let l:source = @/
+    elseif a:sourceMode == "visual"
+        let l:source = @"
+    endif
+    
+    if empty(l:source)
+        return
+    endif
+
+    call inputsave()
+    let l:target = input("Replace '" . l:source . "' with: ")
+    if !empty(l:target)
+        call Replace(l:source, l:target, 'no')
+    endif
+    call inputrestore()
+endfunction
 
