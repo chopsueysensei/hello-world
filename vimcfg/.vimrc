@@ -626,12 +626,12 @@ augroup END
 
 " Helper functions to perform substitutions with a prompt
 function! Replace(source, target, ...) range
-    let l:smod = a:0 >= 1 ? a:1 : ''
+    let l:mmod = a:0 >= 1 ? a:1 : ''
     let l:vmod = a:0 >= 2 ? a:2 : ''
 
     try
         " FIXME This way of redoing 'wrapping' a subst by redoing it from the start is a bit annoying..
-        let l:searchstring = '.,$s' . l:smod . '/' . l:vmod . a:source . '/' . a:target . '/gcI|1,''''-&&'
+        let l:searchstring = '.,$s' . l:mmod . '/' . l:vmod . a:source . '/' . a:target . '/gcI|1,''''-&&'
         echom "Search string: " . l:searchstring
         exe l:searchstring
     catch
@@ -653,7 +653,7 @@ function! PromptReplace(...) range
     if !empty(l:source)
         let l:target = input("with: ")
         if !empty(l:target)
-            call Replace(l:source, l:target, '', l:vmod)
+            call Replace(l:source, l:target, 'm', l:vmod)
         endif
     endif
     call inputrestore()
