@@ -559,8 +559,11 @@ noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR>
 
 " Sessions!
 function! CheckAndMaybeLoadLastSession()
-    if argc() == 0 && filereadable("./last_session.vim")
-        source ./last_session.vim
+    let l:filename = "last_session.vim"
+    if argc() == 0 && filereadable(l:filename)
+        exe 'source ' . fnameescape(l:filename)
+        echom "Loaded session from " . l:filename
+        let g:loaded_session_file = l:filename
         if has('gui_running')
             ToggleFullscreen
         endif
@@ -572,8 +575,9 @@ function! CheckAndMaybeLoadLastSession()
 endfun
 
 function! CheckAndMaybeSaveLastSession()
-    if argc() == 0
-        mksession! ./last_session.vim
+    if exists("g:loaded_session_file")
+        echom "Saving session to " . g:loaded_session_file
+        exe 'mksession! ' . fnameescape(g:loaded_session_file)
     endif
 endfun
 
