@@ -396,9 +396,10 @@ syntax enable
 set background=dark
 
 if has('gui_running')
+    set guifont=Consolas_NF:h11:cANSI:qDRAFT
+"    set guifont=Consolas:h11:cANSI:qDRAFT
 "    set guifont=Fira_Mono:h11:cANSI:qDRAFT
 "    set guifont=Anonymous_Pro:h12:cANSI:qDRAFT
-    set guifont=Consolas:h11:cANSI:qDRAFT
 "    set guifont=Droid_Sans_Mono_Dotted:h10:cANSI:qDRAFT
 "    set guifont=Hack:h10:cANSI:qDRAFT
 "    set guifont=Inconsolata:h10:cANSI:qDRAFT
@@ -407,20 +408,24 @@ if has('gui_running')
 "    set guifont=Roboto\ Mono:h10:cANSI:qDRAFT "Not working!
 
     " Colorschemes
-    "colorscheme handmade-hero
     colorscheme retro-minimal
     "colorscheme mustang_sensei_edit
+    "colorscheme handmade-hero
     "colorscheme solarized
     "colorscheme distinguished
     "colorscheme simple-dark
 endif
 
 " Airline switches
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+"let g:airline_theme='molokai'
+"let g:airline_theme='papercolor'
 "let g:airline_theme='ubaryd'
-let g:airline_theme='molokai'
 "let g:airline_theme='powerlineish'
 "let g:airline_theme='cobalt2'
-"let g:airline_powerline_fonts = 1
+
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
