@@ -61,18 +61,27 @@ if has('python') || has('python3')
 endif
 
 if executable('rg')
-    " Use ripgrep over grep
-    set grepprg=rg\ --vimgrep\ --no-heading " --color=never
-    set grepformat=%f:%l:%c:%m ",%f:%l:%m
-
-    " Use ripgrep for indexing files in CtrlP
-"    let extglob = '{cs,cpp,h}'
-"    let g:ctrlp_user_command = 'ripgrep %s --files --color=never -g "\**\*.'.extglob.'"'
-    let g:ctrlp_user_command = 'rg -F %s --files --color=never -tcpp -tcs -tjava -tjson -tlua -tpy -txml
+    " ripgrep file type flags for use in all variants
+    let g:rg_filetype_flags = '-tcpp -tcs -tjava -tjson -tlua -tpy -txml
                                 \ --type-add "xaml:*.{xaml,axml}" -txaml
                                 \ --type-add "bat:*.bat" -tbat
                                 \ --type-add "sl:*.glsl" -tsl
-                                \ --type-add "settings:*settings*" -tsettings'
+                                \ --type-add "config:{*settings*,*.cfg,*.ini}" -tconfig'
+
+    " Use ripgrep over grep
+    set grepprg=rg\ --vimgrep\ --no-heading
+    set grepformat=%f:%l:%c:%m ",%f:%l:%m
+
+    " vim-ripgrep
+    let g:rg_binary = 'rg'
+    " Search for literal string
+    let g:rg_command = g:rg_binary . ' --vimgrep -F -w ' . g:rg_filetype_flags
+    let g:rg_highlight = 1
+    let g:rg_derive_root = 1
+    let g:rg_root_types = ['.git', '.svn', '.p4ignore']
+
+    " Use ripgrep for indexing files in CtrlP
+    let g:ctrlp_user_command = 'rg -F %s --files --color=never ' . g:rg_filetype_flags
     let g:ctrlp_use_caching = 0    " We'll see..
 endif
 
@@ -106,11 +115,6 @@ let g:lt_location_list_toggle_map = '<leader>wl'
 map <leader>ncl <plug>NERDCommenterAlignLeft
 map <leader>ncc <plug>NERDCommenterComment
 map <leader>ncb <plug>NERDCommenterAlignBoth
-
-" vim-ripgrep
-let g:rg_binary = 'rg'
-" Search for literal string
-let g:rg_command = g:rg_binary . ' --vimgrep -F -w'
 
 
 
@@ -267,8 +271,8 @@ nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
 nnoremap <leader>* :HLcw<CR>
 
-" Toggle NERDTree
-nnoremap <leader>t :NERDTreeToggle<CR>
+" Toggle NERDTree (current path not working it seems)
+nnoremap <leader>t :NERDTreeToggle %<CR>
 
 " CtrlP in mixed mode
 nnoremap <leader>pm :CtrlPMixed<CR>
@@ -351,6 +355,7 @@ nnoremap <leader>r. :.,$s/\./->/gc<CR>
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
+vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
 " Find current word, then replace across all locations
 " FIXME This loops very weirdly through the same places several times
 nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
@@ -365,7 +370,7 @@ vnoremap p "_dp
 vnoremap P "_dP
 
 " Built-in explorer
-nnoremap <leader>e :Explore<CR>
+nnoremap <leader>e :Vex<CR>
 
 " Copy and paste using system's clipboard
 nnoremap <leader>y "+y
