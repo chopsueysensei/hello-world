@@ -271,8 +271,8 @@ nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
 nnoremap <leader>* :HLcw<CR>
 
-" Toggle NERDTree
-nnoremap <leader>t :NERDTreeToggle<CR>
+" Toggle NERDTree (current path not working it seems)
+nnoremap <leader>t :NERDTreeToggle %<CR>
 
 " CtrlP in mixed mode
 nnoremap <leader>pm :CtrlPMixed<CR>
@@ -355,6 +355,7 @@ nnoremap <leader>r. :.,$s/\./->/gc<CR>
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
+vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
 " Find current word, then replace across all locations
 nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
