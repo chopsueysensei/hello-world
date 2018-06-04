@@ -352,6 +352,7 @@ nnoremap <leader>r. :.,$s/\./->/gc<CR>
 nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 " Find current word, then replace across all locations
+" FIXME This loops very weirdly through the same places several times
 nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 
