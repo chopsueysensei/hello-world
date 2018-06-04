@@ -368,7 +368,7 @@ vnoremap p "_dp
 vnoremap P "_dP
 
 " Built-in explorer
-nnoremap <leader>e :Explore<CR>
+nnoremap <leader>e :Vex<CR>
 
 " Copy and paste using system's clipboard
 nnoremap <leader>y "+y
