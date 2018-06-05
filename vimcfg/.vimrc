@@ -294,7 +294,7 @@ vmap <leader>= gq
 nmap <leader>= gqap
 
 " Switch to .h/cpp
-nnoremap <leader>o :A<CR>
+nnoremap <leader>oo :A<CR>
 nnoremap <leader>os :AV<CR>
 
 " Generate GTAGS (via gen_tags)
@@ -571,24 +571,22 @@ noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR>
 " Sessions!
 function! CheckAndMaybeLoadLastSession()
     let l:filename = "last_session.vim"
-    if argc() == 0 && filereadable(l:filename)
-        exe 'source ' . fnameescape(l:filename)
-        echom "Loaded session from " . l:filename
-        let g:loaded_session_file = l:filename
-        if has('gui_running')
-            ToggleFullscreen
+    if argc() == 0
+        if filereadable(l:filename)
+            exe 'source ' . fnameescape(l:filename)
+            echom "Loaded session from " . l:filename
         endif
-    else
-        if has('gui_running')
-            ToggleFullscreen
-        endif
+        let g:current_session_file = l:filename
+    endif
+    if has('gui_running')
+        ToggleFullscreen
     endif
 endfun
 
 function! CheckAndMaybeSaveLastSession()
-    if exists("g:loaded_session_file")
-        echom "Saving session to " . g:loaded_session_file
-        exe 'mksession! ' . fnameescape(g:loaded_session_file)
+    if exists("g:current_session_file")
+        echom "Saving session to " . g:current_session_file
+        exe 'mksession! ' . fnameescape(g:current_session_file)
     endif
 endfun
 
