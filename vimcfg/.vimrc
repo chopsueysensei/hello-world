@@ -26,6 +26,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'jremmen/vim-ripgrep'
 Plugin 'Valloric/ListToggle'
 Plugin 'tikhomirov/vim-glsl'
+Plugin 'junegunn/vim-easy-align'
 "Plugin 'SirVer/ultisnips'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
@@ -240,7 +241,6 @@ vnoremap L El
 " Move by half a page 
 "nnoremap <C-S-j> <C-d>
 "nnoremap <C-S-k> <C-u>
-
 "vnoremap <C-S-j> <C-d>
 "vnoremap <C-S-k> <C-u>
 
@@ -292,6 +292,8 @@ nnoremap <leader><space>dos :e ++ff=dos<CR>:w<CR>
 " Format current paragraph or visual selection
 vmap <leader>= gq
 nmap <leader>= gqap
+" EasyAlign
+vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
 
 " Switch to .h/cpp
 nnoremap <leader>oo :A<CR>
@@ -396,16 +398,17 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Consolas_NF:h11:cANSI:qDRAFT
-"    set guifont=Consolas:h11:cANSI:qDRAFT
-"    set guifont=Fira_Mono:h11:cANSI:qDRAFT
-"    set guifont=Anonymous_Pro:h12:cANSI:qDRAFT
-"    set guifont=Droid_Sans_Mono_Dotted:h10:cANSI:qDRAFT
-"    set guifont=Hack:h10:cANSI:qDRAFT
-"    set guifont=Inconsolata:h10:cANSI:qDRAFT
-"    set guifont=Liberation_Mono:h10:cANSI:qDRAFT
-"    set guifont=Source_Code_Pro:h10:cANSI:qDRAFT
-"    set guifont=Roboto\ Mono:h10:cANSI:qDRAFT "Not working!
+    set guifont=Consolas_NF:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Consolas:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Input:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Fira_Mono:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Source_Code_Pro:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Droid_Sans_Mono_Dotted:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Anonymous_Pro:h12:cDEFAULT:qCLEARTYPE
+"    set guifont=Hack:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Inconsolata:h12:cDEFAULT:qCLEARTYPE
+"    set guifont=Liberation_Mono:h11:cDEFAULT:qCLEARTYPE
+"    set guifont=Roboto_Mono:h10:cDEFAULT:qCLEARTYPE "Not working!
 
     " Colorschemes
     colorscheme retro-minimal
@@ -586,6 +589,7 @@ endfun
 function! CheckAndMaybeSaveLastSession()
     if exists("g:current_session_file")
         echom "Saving session to " . g:current_session_file
+        set sessionoptions=options,curdir,buffers,blank,winsize,tabpages
         exe 'mksession! ' . fnameescape(g:current_session_file)
     endif
 endfun
