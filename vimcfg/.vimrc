@@ -586,6 +586,7 @@ endfun
 function! CheckAndMaybeSaveLastSession()
     if exists("g:current_session_file")
         echom "Saving session to " . g:current_session_file
+        set sessionoptions=blank,buffers,curdir,tabpages,winsize,options
         exe 'mksession! ' . fnameescape(g:current_session_file)
     endif
 endfun
