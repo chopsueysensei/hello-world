@@ -27,6 +27,7 @@ Plugin 'jremmen/vim-ripgrep'
 Plugin 'Valloric/ListToggle'
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'junegunn/vim-easy-align'
+Plugin 'moll/vim-bbye'
 "Plugin 'SirVer/ultisnips'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
@@ -182,6 +183,37 @@ ino <left> <Nop>
 ino <right> <Nop>
 ino <up> <Nop>
 
+" Get rid of one keystroke for something soo common
+nnoremap . :
+nnoremap : .
+
+" Alias change word (still can use S to change whole line)
+nnoremap cc cw
+nnoremap cC cW
+
+" Move around quickly by whitespace
+nnoremap H Bh
+nnoremap J }
+nnoremap K {
+nnoremap L El
+
+vnoremap H Bh
+vnoremap J }
+vnoremap K {
+vnoremap L El
+
+" Move lines up/down
+nnoremap ë ddkP
+nnoremap ê ddp
+
+" Perl/Python compatible regex formatting
+nnoremap / /\v
+vnoremap / /\v
+
+" Replace-paste without yanking in visual mode
+vnoremap p "_dp
+vnoremap P "_dP
+
 " Easily clear highlights after search
 nnoremap <leader><space> :noh<cr>
 
@@ -189,15 +221,18 @@ nnoremap <leader><space> :noh<cr>
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
 " Quickly close windows
-nnoremap <leader>cb :bd<CR>
 nnoremap <leader>cw <C-w>c
 nnoremap <leader>wc <C-w>c
+nnoremap <leader>cc <C-w>c
 nnoremap <leader>ww <C-w>o
 nnoremap <leader>cl :ccl<CR>
 
-" Quickly save if needed
-inoremap <leader>u <Esc>:update<Cr>
-nnoremap <leader>u :update<Cr>
+" Switch to previous buffer
+nnoremap <leader>bl :b#<CR>
+
+" Close buffer without closing windows!
+nnoremap <leader>bd :Bd<CR>
+nnoremap <leader>bc :Bd<CR>
 
 " Split windows easily
 nnoremap <leader>sh  :topleft  vnew<CR>
@@ -206,6 +241,7 @@ nnoremap <leader>sk  :topleft  new<CR>
 nnoremap <leader>sl  :botright vnew<CR>
 
 nnoremap <leader>ws :vert sb %<CR>
+nnoremap <leader>ss :vert sb %<CR>
 
 " Swap splits
 nnoremap <leader>wx <C-w>x
@@ -223,34 +259,11 @@ nnoremap <C-j> <C-W><C-J>
 nnoremap <C-k> <C-W><C-K>
 nnoremap <C-l> <C-W><C-L>
 
-" Move lines up/down
-nnoremap ë ddkP
-nnoremap ê ddp
-
-" Move around quickly by whitespace
-nnoremap H Bh
-nnoremap J }
-nnoremap K {
-nnoremap L El
-
-vnoremap H Bh
-vnoremap J }
-vnoremap K {
-vnoremap L El
-
 " Move by half a page 
 "nnoremap <C-S-j> <C-d>
 "nnoremap <C-S-k> <C-u>
 "vnoremap <C-S-j> <C-d>
 "vnoremap <C-S-k> <C-u>
-
-" Get rid of one keystroke for something soo common
-nnoremap . :
-nnoremap : .
-
-" Change word (this should be the standard mapping!)
-nnoremap <leader>cc cw
-nnoremap <leader>cC cW
 
 " Join next line (at the end of current one)
 nnoremap <leader>J J
@@ -280,9 +293,8 @@ nnoremap <leader>pm :CtrlPMixed<CR>
 nnoremap <leader>pq :CPqf<CR>
 " CtrlP in buffer mode
 nnoremap <leader>bb :CtrlPBuffer<CR>
-
-" Switch to previous buffer
-nnoremap <leader>bl :b#<CR>
+" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
+nnoremap <leader>tt :CtrlPTag<CR>
 
 " Hide ^M line endings in mixed-mode files
 nnoremap <leader><space>cr :match Ignore /\r$/<CR>
@@ -307,33 +319,6 @@ nnoremap <leader>ts :Gtags<space>
 nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
 nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
 nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
-
-" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
-nnoremap <leader>tt :CtrlPTag<CR>
-
-" cscope (gtags-cscope via gen_tags) (not working in windows!)
-" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
-" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
-" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
-
-" Terse YcmCompleter commands
-"nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
-"nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
-"nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
-"nnoremap <leader>g      :YcmCompleter GoTo<CR>
-"nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
-"nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
-"nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
-"nnoremap <leader>fx     :YcmCompleter FixIt<CR>
-"nnoremap <leader>re     :YcmCompleter RefactorRename 
-
-" Perl/Python compatible regex formatting
-nnoremap / /\v
-vnoremap / /\v
 
 " Silent make (with result on a right hand split)
 " TODO Improve to detect if we're in the right split and show on the left instead
@@ -367,12 +352,9 @@ nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap ,t<CR> // TODO 
 
-" Replace-paste without yanking in visual mode
-vnoremap p "_dp
-vnoremap P "_dP
-
 " Built-in explorer
-nnoremap <leader>e :Vex<CR>
+nnoremap <leader>ee :Ex<CR>
+nnoremap <leader>es :Vex<CR>
 
 " Copy and paste using system's clipboard
 nnoremap <leader>y "+y
@@ -389,6 +371,26 @@ nnoremap <C-n> :cn<CR>
 nnoremap <C-b> :cp<CR>
 nnoremap <leader>ln :lne<CR>
 nnoremap <leader>lp :lp<CR>
+
+" cscope (gtags-cscope via gen_tags) (not working in windows!)
+" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
+" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
+" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
+" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
+
+" Terse YcmCompleter commands
+"nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
+"nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
+"nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
+"nnoremap <leader>g      :YcmCompleter GoTo<CR>
+"nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
+"nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
+"nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
+"nnoremap <leader>fx     :YcmCompleter FixIt<CR>
+"nnoremap <leader>re     :YcmCompleter RefactorRename 
 
 
 "
