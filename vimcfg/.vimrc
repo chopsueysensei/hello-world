@@ -562,7 +562,7 @@ nnoremap <leader>shl :call SynGroup()<CR>
 " Toggle fullscreen using external DLL
 command! ToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
 " 'Refresh' fullscreen state (only works with 'noremap' for some reason!)
-noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR>
+noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR><ESC>:windo e<CR>
 
 
 " Enter fullscreen by default
@@ -599,8 +599,9 @@ endfun
 augroup sessions
     autocmd!
     " Auto save current session in current dir when closing
-    autocmd VimEnter * :call CheckAndMaybeLoadLastSession()
-    autocmd VimLeave * :call CheckAndMaybeSaveLastSession()
+    autocmd VimEnter * call CheckAndMaybeLoadLastSession()
+    "autocmd FocusGained * windo e | echom 'Reloaded all windows'
+    autocmd VimLeave * call CheckAndMaybeSaveLastSession()
 augroup END
 
 " Highlight ocurrences of word under cursor
