@@ -505,6 +505,8 @@ set undofile
 set ignorecase
 "set smartcase
 
+set cpoptions+={
+
 " Folding method needed for OmniSharp
 "set foldmethod=syntax
 " Ignore case when autocompleting
