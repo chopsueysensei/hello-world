@@ -22,22 +22,24 @@ if NOT %1.==. goto %1
 ::
 :: Install chocolatey
 ::
-echo "Check required software"
+echo "Let's check required software"
 pause
 cls
-choco --version
+choco --version >nul 2>&1
 if %errorlevel% == 0 goto haveChoco
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+call refreshenv.cmd
 
 :haveChoco
 ::
 :: Check for Python on the command line
 ::
-python --version
+python --version >nul 2>&1
 if %errorlevel% == 0 goto havePython
 
-choco install python2 --version 2.7.14
+choco install python2 --version 2.7.14 -y -r
+call refreshenv.cmd
 
 :havePython
 ::
@@ -45,38 +47,46 @@ choco install python2 --version 2.7.14
 ::
 if defined CMDER_ROOT goto haveCmder
 
-choco install cmder
+choco install cmder -y -r
 
 :haveCmder
+:: Add a context menu for it
+cmder.exe /REGISTER ALL
+
 ::
 :: Check for git on the command line
 ::
-git --version
+git --version >nul 2>&1
 if %errorlevel% == 0 goto haveGit
 
-choco install git
-refreshenv
+choco install git -y -r
+call refreshenv.cmd
 
 :haveGit
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: ViM
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-start vim --version
+start vim --version >nul 2>&1
 if %errorlevel% == 0 goto haveVim
 
-echo "Now install vim"
+echo.
+echo.
+echo.
+echo "Now to the good stuff"
 pause
 cls
-choco install vim-tux
+choco install vim-tux -y -r
 
 :haveVim
 ::
 :: Link vim config files in home dir
 ::
 :: TODO ? Check if this has already been done (or silence the error)
-echo "Set up vim paths & plugins"
+echo.
+echo.
+echo.
+echo "We need some paths & plugins"
 pause
-cls
 
 mklink "%USERPROFILE%\.vimrc" "%~dp0\.vimrc"
 mklink "%USERPROFILE%\.gvimrc" "%~dp0\.gvimrc"
@@ -92,29 +102,35 @@ mkdir "%USERPROFILE%\.backup"
 ::
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
 ::
-echo "!! Gonna install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!"
+echo.
+echo.
+echo.
+echo "Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!"
 regedit "%~dp0\bootstrap\remap_capslock.reg"
 
-echo "Please log off from the user session after the installation so that the CAPSLOCK mapping is applied.."
+echo.
+echo.
+echo.
+echo "Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied.."
 pause
 
 ::
 :: Install ripgrep
 ::
-rg --version
+rg --version >nul 2>&1
 if %errorlevel% == 0 goto haveGrep
 
-choco install ripgrep
+choco install ripgrep -y -r
 
 :haveGrep
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: GNU Global (http://www.gnu.org/software/global)
 :: FIXME Upload their 'gtags.vim' to github and make it installable via Vundle/NeoBundle
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-global --version
+global --version >nul 2>&1
 if %errorlevel% == 0 goto haveGlobal
 
-choco install global
+choco install global -y -r
 
 :haveGlobal
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -123,7 +139,7 @@ choco install global
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Just check it's in the path
-ctags --version
+ctags --version >nul 2>&1
 if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
 
 
@@ -161,10 +177,16 @@ if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
 :: Make sure at least Vundle submodule is not empty (is this necessary??)
 ::
 for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
+  echo.
+  echo.
+  echo.
   echo "'Vundle.vim' submodule contains files. Skipping submodule downloading.."
   goto :skipMods
 )
 
+echo.
+echo.
+echo.
 echo "'Vundle.vim' submodule is empty. Updating.."
 cd %~dp0
 git submodule init
@@ -176,6 +198,9 @@ git submodule update
 
 
 :skipMods
+echo.
+echo.
+echo.
 echo "Now I'll start vim and tell it to install all plugins."
 pause
 cls
@@ -186,6 +211,10 @@ cls
 echo "Starting vim..."
 vim +PluginInstall
 
+echo.
+echo.
+echo.
+All done!
 goto:eof
 
 
