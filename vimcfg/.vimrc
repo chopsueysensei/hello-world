@@ -77,7 +77,7 @@ if executable('rg')
     " vim-ripgrep
     let g:rg_binary = 'rg'
     " Search for literal string
-    let g:rg_command = g:rg_binary . ' --vimgrep -F -w ' . g:rg_filetype_flags
+    let g:rg_command = g:rg_binary . ' --vimgrep -F ' . g:rg_filetype_flags
     let g:rg_highlight = 1
     let g:rg_derive_root = 1
     let g:rg_root_types = ['.git', '.svn', '.p4ignore']
@@ -108,7 +108,7 @@ let g:gen_tags#verbose = 1
 let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
 
 " Supertab
-let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '(', '=', ';', '"']
+let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '}', '(', ')', '=', ';', '"']
 
 " List toggle (since we already use <leader>l)
 let g:lt_location_list_toggle_map = '<leader>wl'
