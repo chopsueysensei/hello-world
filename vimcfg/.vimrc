@@ -306,6 +306,7 @@ vmap <leader>= gq
 nmap <leader>= gqap
 " EasyAlign
 vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
+vnoremap <leader>a= :'<,'>EasyAlign=<CR>
 
 " Switch to .h/cpp
 nnoremap <leader>oo :A<CR>
@@ -400,7 +401,7 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Consolas_NF:h11:cDEFAULT:qCLEARTYPE
+    set guifont=Consolas_NF:h12:cDEFAULT:qCLEARTYPE
 "    set guifont=Consolas:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Input:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Fira_Mono:h11:cDEFAULT:qCLEARTYPE
