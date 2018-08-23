@@ -297,9 +297,9 @@ nnoremap <leader>bb :CtrlPBuffer<CR>
 nnoremap <leader>tt :CtrlPTag<CR>
 
 " Hide ^M line endings in mixed-mode files
-nnoremap <leader><space>cr :match Ignore /\r$/<CR>
+nnoremap <leader><leader>cr :match Ignore /\r$/<CR>
 " Convert to DOS line endings
-nnoremap <leader><space>dos :e ++ff=dos<CR>:w<CR>
+nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
 
 " Format current paragraph or visual selection
 vmap <leader>= gq
@@ -372,6 +372,18 @@ nnoremap <C-n> :cn<CR>
 nnoremap <C-b> :cp<CR>
 nnoremap <leader>ln :lne<CR>
 nnoremap <leader>lp :lp<CR>
+
+" Change font size
+nnoremap <C-kPlus> :silent! let &guifont = substitute(
+ \ &guifont,
+ \ ':h\zs\d\+',
+ \ '\=eval(submatch(0)+1)',
+ \ '')<CR>
+nnoremap <C-kMinus> :silent! let &guifont = substitute(
+ \ &guifont,
+ \ ':h\zs\d\+',
+ \ '\=eval(submatch(0)-1)',
+ \ '')<CR>
 
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
@@ -585,16 +597,18 @@ function! CheckAndMaybeLoadLastSession()
             echom "Loaded session from " . l:filename
         endif
         let g:current_session_file = l:filename
-    endif
-    if has('gui_running')
-        ToggleFullscreen
+        if has('gui_running')
+            ToggleFullscreen
+        endif
+    else
+        simalt ~x
     endif
 endfun
 
 function! CheckAndMaybeSaveLastSession()
     if exists("g:current_session_file")
         echom "Saving session to " . g:current_session_file
-        set sessionoptions=blank,buffers,curdir,tabpages,winsize,options
+        set sessionoptions=blank,buffers,curdir,tabpages,winsize ",options
         exe 'mksession! ' . fnameescape(g:current_session_file)
     endif
 endfun

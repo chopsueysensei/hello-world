@@ -25,7 +25,7 @@ if NOT %1.==. goto %1
 echo "Let's check required software"
 pause
 cls
-choco --version >nul 2>&1
+call choco --version >nul 2>&1
 if %errorlevel% == 0 goto haveChoco
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
@@ -35,7 +35,7 @@ call refreshenv.cmd
 ::
 :: Check for Python on the command line
 ::
-python --version >nul 2>&1
+call python --version >nul 2>&1
 if %errorlevel% == 0 goto havePython
 
 choco install python2 --version 2.7.14 -y -r
@@ -45,7 +45,8 @@ call refreshenv.cmd
 ::
 :: Check for cmder on the command line
 ::
-if defined CMDER_ROOT goto haveCmder
+where cmder >nul 2>&1
+if %errorlevel% == 0 goto haveCmder
 
 choco install cmder -y -r
 
@@ -56,7 +57,7 @@ cmder.exe /REGISTER ALL
 ::
 :: Check for git on the command line
 ::
-git --version >nul 2>&1
+call git --version >nul 2>&1
 if %errorlevel% == 0 goto haveGit
 
 choco install git -y -r
@@ -66,7 +67,7 @@ call refreshenv.cmd
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: ViM
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-start vim --version >nul 2>&1
+call vim --version >nul 2>&1
 if %errorlevel% == 0 goto haveVim
 
 echo.
@@ -117,7 +118,7 @@ pause
 ::
 :: Install ripgrep
 ::
-rg --version >nul 2>&1
+call rg --version >nul 2>&1
 if %errorlevel% == 0 goto haveGrep
 
 choco install ripgrep -y -r
@@ -127,7 +128,7 @@ choco install ripgrep -y -r
 :: GNU Global (http://www.gnu.org/software/global)
 :: FIXME Upload their 'gtags.vim' to github and make it installable via Vundle/NeoBundle
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-global --version >nul 2>&1
+call global --version >nul 2>&1
 if %errorlevel% == 0 goto haveGlobal
 
 choco install global -y -r
@@ -139,7 +140,7 @@ choco install global -y -r
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :: Just check it's in the path
-ctags --version >nul 2>&1
+call ctags --version >nul 2>&1
 if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
 
 
@@ -209,7 +210,7 @@ cls
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 ::
 echo "Starting vim..."
-vim +PluginInstall
+start vim +PluginInstall
 
 echo.
 echo.
