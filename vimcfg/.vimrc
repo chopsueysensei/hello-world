@@ -534,7 +534,8 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 set csto=0
 
 " TODO Customize this per-project
-set makeprg=build.bat
+"set makeprg=build.bat
+set makeprg=build.py
 " For clang-cl:
 set efm+=%I%f(%l\\,%c):\ \ note:\ %m
 set efm+=%W%f(%l\\,%c):\ \ warning:\ %m
@@ -578,6 +579,7 @@ nnoremap <leader>shl :call SynGroup()<CR>
 command! ToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
 " 'Refresh' fullscreen state (only works with 'noremap' for some reason!)
 noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR><ESC>:windo e<CR>
+noremap <S-F11> <Esc>:ToggleFullscreen<CR>
 
 
 " Enter fullscreen by default
