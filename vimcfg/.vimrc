@@ -67,7 +67,7 @@ if executable('rg')
     let g:rg_filetype_flags = '-tcpp -tcs -tjava -tjson -tlua -tpy -txml
                                 \ --type-add "xaml:*.{xaml,axml}" -txaml
                                 \ --type-add "bat:*.bat" -tbat
-                                \ --type-add "sl:*.glsl" -tsl
+                                \ --type-add "sl:*.{glsl,pssl}" -tsl
                                 \ --type-add "config:{*settings*,*.cfg,*.ini}" -tconfig'
 
     " Use ripgrep over grep
@@ -413,7 +413,7 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Consolas_NF:h12:cDEFAULT:qCLEARTYPE
+    set guifont=Consolas_NF:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Consolas:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Input:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Fira_Mono:h11:cDEFAULT:qCLEARTYPE
@@ -426,20 +426,20 @@ if has('gui_running')
 "    set guifont=Roboto_Mono:h10:cDEFAULT:qCLEARTYPE "Not working!
 
     " Colorschemes
-    colorscheme retro-minimal
+    "colorscheme retro-minimal
     "colorscheme mustang_sensei_edit
     "colorscheme handmade-hero
     "colorscheme solarized
     "colorscheme distinguished
-    "colorscheme simple-dark
+    colorscheme simple-dark
 endif
 
 " Airline switches
-let g:airline_theme='solarized'
-let g:airline_solarized_bg='dark'
+"let g:airline_theme='solarized'
+"let g:airline_solarized_bg='dark'
 "let g:airline_theme='molokai'
 "let g:airline_theme='papercolor'
-"let g:airline_theme='ubaryd'
+let g:airline_theme='ubaryd'
 "let g:airline_theme='powerlineish'
 "let g:airline_theme='cobalt2'
 
