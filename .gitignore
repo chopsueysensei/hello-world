@@ -6,5 +6,4 @@ workhours/.idea/
 workhours/__pycache__/
 *.swp
 *.un~
-vimcfg/.vim/colors/retro-minimal.vim
 vimcfg/.vim/.netrwhist
