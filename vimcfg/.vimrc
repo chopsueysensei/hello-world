@@ -211,8 +211,13 @@ nnoremap / /\v
 vnoremap / /\v
 
 " Replace-paste without yanking in visual mode
-vnoremap p "_dp
-vnoremap P "_dP
+" (also, make it behave more intuitively)
+vnoremap p "_c<C-R>0<ESC>
+
+" 'Stamp' over words or visual selections
+nnoremap <leader>s ciw<C-R>0<ESC>
+nnoremap <leader>S ciW<C-R>0<ESC>
+vnoremap <leader>s "_c<C-R>0<ESC>
 
 " Easily clear highlights after search
 nnoremap <leader><space> :noh<cr>
