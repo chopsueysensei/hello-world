@@ -219,9 +219,6 @@ nnoremap <leader>s ciw<C-R>0<ESC>
 nnoremap <leader>S ciW<C-R>0<ESC>
 vnoremap <leader>s "_c<C-R>0<ESC>
 
-" Easily clear highlights after search
-nnoremap <leader><space> :noh<cr>
-
 " Quickly open .vimrc
 nnoremap <leader>rc :e $MYVIMRC<cr>
 
@@ -272,11 +269,13 @@ nnoremap <C-l> <C-W><C-L>
 
 " Join next line (at the end of current one)
 nnoremap <leader>J J
+" Split line at cursor
+nnoremap <leader><CR> i<CR><Esc>
+nnoremap <leader><S-CR> a<CR><Esc>
 
 " Insert blank lines without going to insert mode
-nnoremap <leader><CR> o<Esc>
-nnoremap <leader><S-CR> O<Esc>
-nnoremap <leader><C-CR> O<Esc>
+nnoremap <leader>o o<Esc>
+nnoremap <leader>O O<Esc>
 
 " Delete in insert mode without using extended keys or chords
 inoremap <C-BS> <C-W>
@@ -287,7 +286,9 @@ inoremap <C-S-BS> <Esc>ldwi
 nnoremap <Space> /
 nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
-nnoremap <leader>* :HLcw<CR>
+nnoremap <leader><space> :HLcw<CR>
+" Easily clear highlights after search
+nnoremap <leader>* :noh<cr>
 
 " Toggle NERDTree (current path not working it seems)
 nnoremap <leader>t :NERDTreeToggle %<CR>
@@ -314,8 +315,8 @@ vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
 vnoremap <leader>a= :'<,'>EasyAlign=<CR>
 
 " Switch to .h/cpp
-nnoremap <leader>oo :A<CR>
-nnoremap <leader>os :AV<CR>
+nnoremap <leader>hh :A<CR>
+nnoremap <leader>hs :AV<CR>
 
 " Generate GTAGS (via gen_tags)
 nnoremap <leader>gen :GenGTAGS<CR>
