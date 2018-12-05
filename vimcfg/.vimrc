@@ -616,7 +616,7 @@ endfun
 function! CheckAndMaybeSaveLastSession()
     if exists("g:current_session_file")
         echom "Saving session to " . g:current_session_file
-        set sessionoptions=blank,buffers,curdir,tabpages,winsize ",options
+        "set sessionoptions=blank,buffers,curdir,tabpages,winsize,options
         exe 'mksession! ' . fnameescape(g:current_session_file)
     endif
 endfun
@@ -624,10 +624,12 @@ endfun
 augroup sessions
     autocmd!
     " Auto save current session in current dir when closing
-    autocmd VimEnter * call CheckAndMaybeLoadLastSession()
+    autocmd VimEnter * nested call CheckAndMaybeLoadLastSession()
     "autocmd FocusGained * windo e | echom 'Reloaded all windows'
     autocmd VimLeave * call CheckAndMaybeSaveLastSession()
 augroup END
+
+set sessionoptions-=options
 
 " Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
