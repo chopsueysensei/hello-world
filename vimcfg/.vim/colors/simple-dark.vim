@@ -30,7 +30,7 @@ set background=dark
 hi Normal       guifg=#d7d7d7   guibg=#262626   ctermfg=251    ctermbg=235       gui=none      cterm=none
 hi Comment      guifg=#8a8a8a   guibg=NONE      ctermfg=245    ctermbg=NONE      gui=none      cterm=none
 hi Constant     guifg=#87afd7   guibg=NONE      ctermfg=110    ctermbg=NONE      gui=none      cterm=none
-hi Keyword      guifg=#e0b050   guibg=NONE      ctermfg=220    ctermbg=NONE      gui=none      cterm=none
+hi Keyword      guifg=#c0a080   guibg=NONE      ctermfg=220    ctermbg=NONE      gui=none      cterm=none
 hi PreProc      guifg=#e7e7af   guibg=NONE      ctermfg=187    ctermbg=NONE      gui=bold      cterm=bold
 hi Special      guifg=#87afd7   guibg=NONE      ctermfg=110    ctermbg=NONE      gui=bold      cterm=bold
 hi! def link Operator Normal
