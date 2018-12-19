@@ -327,9 +327,8 @@ nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
 nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
 nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
 
-" Silent make (with result on a right hand split)
-" TODO Improve to detect if we're in the right split and show on the left instead
-nnoremap <leader>m :wa<CR>:silent make<CR>:vert botright cw 90<CR>:cc<CR>
+" Silent make (with result on an opposite split)
+nnoremap <leader>m :wa<CR>:call MakeAndShowQF()<CR>
 
 " Replace
 nnoremap <leader>r :call PromptReplace()<CR>
@@ -390,6 +389,10 @@ nnoremap <C-kMinus> :silent! let &guifont = substitute(
  \ ':h\zs\d\+',
  \ '\=eval(submatch(0)-1)',
  \ '')<CR>
+
+" Insert result of expressions
+inoremap <leader>x <C-R>=
+nnoremap <leader>x i<C-R>=
 
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
@@ -727,3 +730,13 @@ function! PromptReplaceCurrent(sourceMode) range
     call inputrestore()
 endfunction
 
+function! MakeAndShowQF()
+    silent make
+    let l:isLeftSide = (win_screenpos(0)[1] < (&columns / 2))
+    if l:isLeftSide
+        vert botright cw 90
+    else
+        vert topleft cw 90
+    endif
+    cc
+endfunction
