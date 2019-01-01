@@ -272,6 +272,8 @@ nnoremap <leader>J J
 " Split line at cursor
 nnoremap <leader><CR> i<CR><Esc>
 nnoremap <leader><S-CR> a<CR><Esc>
+" Delete after cursor
+nnoremap <leader>D lD
 
 " Insert blank lines without going to insert mode
 nnoremap <leader>o o<Esc>
@@ -328,7 +330,7 @@ nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
 nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
 
 " Silent make (with result on an opposite split)
-nnoremap <leader>m :wa<CR>:call MakeAndShowQF()<CR>
+nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
 
 " Replace
 nnoremap <leader>r :call PromptReplace()<CR>
@@ -341,9 +343,9 @@ vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
 " Replace _inside_ a visual selection
 vnoremap <leader>r :call PromptReplace("visual")<CR>
 
-" Other quick common replacements (from current line on)
-nnoremap <leader>r- :.,$s/->/\./gc<CR>
-nnoremap <leader>r. :.,$s/\./->/gc<CR>
+" Quickly substitute pointer dereferences
+nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
+nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
 
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
@@ -356,7 +358,8 @@ nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
-inoremap ,t<CR> // TODO 
+inoremap {{<CR> {<CR>};<Esc>O
+inoremap <leader>t<CR> // TODO 
 
 " Built-in explorer
 nnoremap <leader>ee :Ex<CR>
