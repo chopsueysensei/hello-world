@@ -510,6 +510,7 @@ set textwidth=0
 set wrapmargin=0
 " Formatting options (as autocmd so it overrides filetypes)
 au FileType * set fo+=q fo+=r fo+=n
+au FileType c,cpp setlocal comments-=:// comments+=f://
 " C-specific indentation rules
 set cinoptions=(0=0
 

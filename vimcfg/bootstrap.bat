@@ -215,7 +215,7 @@ start vim +PluginInstall
 echo.
 echo.
 echo.
-All done!
+echo "All done!"
 goto:eof
 
 
