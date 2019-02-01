@@ -1,10 +1,10 @@
 Windows Registry Editor Version 5.00
 
-[HKEY_CURRENT_USER\Keyboard Layout]
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
 "Scancode Map"=hex:00,00,00,00,00,00,00,00,03,00,00,00,3a,00,46,00,01,00,3a,00,00,00,00,00
 
-; To remap for all users in the machine, uncomment and use this instead:
-;[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layout]
+; To remap for the current user only, uncomment and use this instead (doesn't seem to work in Win10):
+;[HKEY_CURRENT_USER\Keyboard Layout]
 ;"Scancode Map"=hex:00,00,00,00,00,00,00,00,03,00,00,00,3a,00,46,00,01,00,3a,00,00,00,00,00
 
 ; To restore the normal function, simply delete the "Scancode Map" key from the correspoding Registry location
