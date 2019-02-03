@@ -118,6 +118,8 @@ map <leader>ncl <plug>NERDCommenterAlignLeft
 map <leader>ncc <plug>NERDCommenterComment
 map <leader>ncb <plug>NERDCommenterAlignBoth
 
+" Custom text for vim-surround
+let g:surround_48 = "#if 0\n\r\n#endif"
 
 
 " Recommended Syntastic settings for n00bs
@@ -290,7 +292,7 @@ nnoremap <S-Space> ?
 " Highlight occurences without moving the cursor
 nnoremap <leader><space> :HLcw<CR>
 " Easily clear highlights after search
-nnoremap <leader>* :noh<cr>
+nnoremap <leader><S-Space> :noh<cr>
 
 " Toggle NERDTree (current path not working it seems)
 nnoremap <leader>t :NERDTreeToggle %<CR>
@@ -330,6 +332,8 @@ nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
 nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
 
 " Silent make (with result on an opposite split)
+" FIXME The opposite split business depends on where the cursor is on invocation,
+" and not (as it should) on which of the splits the first error will be highlighted
 nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
 
 " Replace
@@ -360,6 +364,7 @@ nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{<CR> {<CR>};<Esc>O
 inoremap <leader>t<CR> // TODO 
+inoremap <leader>b<CR> // @
 
 " Built-in explorer
 nnoremap <leader>ee :Ex<CR>
@@ -396,6 +401,9 @@ nnoremap <C-kMinus> :silent! let &guifont = substitute(
 " Insert result of expressions
 inoremap <leader>x <C-R>=
 nnoremap <leader>x i<C-R>=
+
+" Indent inside current block
+nnoremap <leader>= =i{
 
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
@@ -454,6 +462,7 @@ endif
 let g:airline_theme='ubaryd'
 "let g:airline_theme='powerlineish'
 "let g:airline_theme='cobalt2'
+"let g:airline_theme='minimalist'
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -547,8 +556,8 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 set csto=0
 
 " TODO Customize this per-project
-"set makeprg=build.bat
-set makeprg=build.py
+set makeprg=build.py\ -d
+"set makeprg=build.py
 " For clang-cl:
 set efm+=%I%f(%l\\,%c):\ \ note:\ %m
 set efm+=%W%f(%l\\,%c):\ \ warning:\ %m
@@ -665,11 +674,13 @@ augroup END
 " Custom task-comments highlighting
 augroup vimrc_todo
     au!
-    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|HACK)/
+    au Syntax * syn match MyTodo "\v<(FIXME|NOTE|TODO|HACK)"
+          \ containedin=.*Comment.*
+    au Syntax * syn match Bookmark "\v\@\w+"
           \ containedin=.*Comment.*
 augroup END
 hi def link MyTodo Todo
-
+hi def link Bookmark Todo
 " Insert MIT license at the top
 command! Mit :0r ~/.vim/mit.txt
 
