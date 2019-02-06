@@ -314,7 +314,11 @@ nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
 " Format current paragraph or visual selection
 vmap <leader>= gq
 nmap <leader>= gqap
-" EasyAlign
+
+" EasyAlign interactive
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+" EasyAlign common ones
 vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
 vnoremap <leader>a= :'<,'>EasyAlign=<CR>
 
@@ -457,9 +461,9 @@ endif
 " Airline switches
 "let g:airline_theme='solarized'
 "let g:airline_solarized_bg='dark'
-"let g:airline_theme='molokai'
+let g:airline_theme='molokai'
 "let g:airline_theme='papercolor'
-let g:airline_theme='ubaryd'
+"let g:airline_theme='ubaryd'
 "let g:airline_theme='powerlineish'
 "let g:airline_theme='cobalt2'
 "let g:airline_theme='minimalist'
