@@ -750,6 +750,8 @@ function! PromptReplaceCurrent(sourceMode) range
 endfunction
 
 function! MakeAndShowQF()
+    echom "Building..."
+    redraw
     silent make
     let l:isLeftSide = (win_screenpos(0)[1] < (&columns / 2))
     if l:isLeftSide
