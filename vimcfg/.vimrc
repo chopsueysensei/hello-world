@@ -759,5 +759,8 @@ function! MakeAndShowQF()
     else
         vert topleft cw 90
     endif
-    cc
+    if len(getqflist()) > 0
+        echo
+        cfirst   " Jump to first error
+    endif
 endfunction
