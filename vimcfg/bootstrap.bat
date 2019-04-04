@@ -89,14 +89,15 @@ echo.
 echo "We need some paths & plugins"
 pause
 
-set HOME="%USERPROFILE%"
+set HOME=%USERPROFILE%
+setx HOME %HOME%
+set VIMDIR=%HOME%\.vim
+setx VIMDIR %HOME%\.vim
 
 mklink "%HOME%\.vimrc" "%~dp0\.vimrc"
 mklink "%HOME%\.gvimrc" "%~dp0\.gvimrc"
 mklink /d "%HOME%\.vim" "%~dp0\.vim"
 
-setx HOME "%HOME%"
-setx VIMDIR "%HOME%\.vim"
 
 ::
 :: Create a folder to hold backup & undo files
@@ -192,7 +193,7 @@ echo.
 echo.
 echo.
 echo "'Vundle.vim' submodule is empty. Updating.."
-cd %~dp0
+cd /d %~dp0
 git submodule init
 git submodule update
 
@@ -205,7 +206,7 @@ git submodule update
 echo.
 echo.
 echo.
-echo "Now I'll start vim and tell it to install all plugins."
+echo "Now I'll start vim and tell it to install all plugins (should close itself afterwards)."
 pause
 cls
 
@@ -213,12 +214,25 @@ cls
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 ::
 echo "Starting vim..."
-start vim +PluginInstall
+start vim +PluginInstall +qall
+
+
+:applyPatch
+echo.
+echo.
+echo.
+set vimrgdir=%VIMDIR%\bundle\vim-ripgrep
+set patchfile=vim-ripgrep_fix_derive_root.patch
+echo "Apply %patchfile% into %vimrgdir%.."
+cd /d "%vimrgdir%"
+git apply "%~dp0\bootstrap\%patchfile%"
+
 
 echo.
 echo.
 echo.
 echo "All done!"
+cd %~dp0
 goto:eof
 
 

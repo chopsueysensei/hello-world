@@ -42,7 +42,7 @@ filetype indent on
 " Add ~/.vim/ in windows too for cross-platform-ness
 if has('win32')
     let &runtimepath='~/.vim/,' . &runtimepath
-"    set shellslash  " Not too sure about this..
+    set shellslash  " Required for 'rg_derive_root' to work (without patch)
 endif
 
 " Somewhat hacky way to get '.vim' folder path
@@ -53,6 +53,7 @@ set rtp+=~/.vim/after
 
 " Ctrl-P
 let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_root_markers = ['.git', '.svn', '.p4ignore', 'p4config.txt', 'project.plik']
 let g:ctrlp_match_window = 'order:ttb'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_by_filename = 1
@@ -80,11 +81,11 @@ if executable('rg')
     let g:rg_command = g:rg_binary . ' --vimgrep -F ' . g:rg_filetype_flags
     let g:rg_highlight = 1
     let g:rg_derive_root = 1
-    let g:rg_root_types = ['.git', '.svn', '.p4ignore']
+    let g:rg_root_types = ['.git', '.svn', '.p4ignore', 'p4config.txt', 'project.plik']
 
     " Use ripgrep for indexing files in CtrlP
     let g:ctrlp_user_command = 'rg -F %s --files --color=never ' . g:rg_filetype_flags
-    let g:ctrlp_use_caching = 0    " We'll see..
+    let g:ctrlp_use_caching = 1    " We'll see..
 endif
 
 if executable('global') || executable('global.exe')
