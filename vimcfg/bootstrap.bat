@@ -89,16 +89,19 @@ echo.
 echo "We need some paths & plugins"
 pause
 
-mklink "%USERPROFILE%\.vimrc" "%~dp0\.vimrc"
-mklink "%USERPROFILE%\.gvimrc" "%~dp0\.gvimrc"
-mklink /d "%USERPROFILE%\.vim" "%~dp0\.vim"
+set HOME="%USERPROFILE%"
 
-set VIMDIR=%HOMEPATH%\.vim
+mklink "%HOME%\.vimrc" "%~dp0\.vimrc"
+mklink "%HOME%\.gvimrc" "%~dp0\.gvimrc"
+mklink /d "%HOME%\.vim" "%~dp0\.vim"
+
+setx HOME "%HOME%"
+setx VIMDIR "%HOME%\.vim"
 
 ::
 :: Create a folder to hold backup & undo files
 ::
-mkdir "%USERPROFILE%\.backup"
+mkdir "%HOME%\.backup"
 
 ::
 :: Remap CAPS to ESC and BLOCK-DESP to CAPS
