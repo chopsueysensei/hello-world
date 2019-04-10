@@ -218,6 +218,7 @@ vnoremap / /\v
 vnoremap p "_c<C-R>0<ESC>
 
 " 'Stamp' over words or visual selections
+" TODO Change letter since we may want to use that for searches
 nnoremap <leader>s ciw<C-R>0<ESC>
 nnoremap <leader>S ciW<C-R>0<ESC>
 vnoremap <leader>s "_c<C-R>0<ESC>
@@ -235,7 +236,7 @@ nnoremap <leader>cl :ccl<CR>
 " Switch to previous buffer
 nnoremap <leader>bl :b#<CR>
 
-" Close buffer without closing windows!
+" Close buffer (preserve windows)
 nnoremap <leader>bd :Bd<CR>
 nnoremap <leader>bc :Bd<CR>
 
@@ -312,9 +313,8 @@ nnoremap <leader><leader>cr :match Ignore /\r$/<CR>
 " Convert to DOS line endings
 nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
 
-" Format current paragraph or visual selection
-vmap <leader>= gq
-nmap <leader>= gqap
+" Indent inside current block
+nnoremap <leader>= =i{
 
 " EasyAlign interactive
 xmap ga <Plug>(EasyAlign)
@@ -407,8 +407,6 @@ nnoremap <C-kMinus> :silent! let &guifont = substitute(
 inoremap <leader>x <C-R>=
 nnoremap <leader>x i<C-R>=
 
-" Indent inside current block
-nnoremap <leader>= =i{
 
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
@@ -686,6 +684,7 @@ augroup vimrc_todo
 augroup END
 hi def link MyTodo Todo
 hi def link Bookmark Todo
+
 " Insert MIT license at the top
 command! Mit :0r ~/.vim/mit.txt
 
@@ -750,9 +749,11 @@ function! PromptReplaceCurrent(sourceMode) range
     call inputrestore()
 endfunction
 
+" Custom make function with status message
 function! MakeAndShowQF()
     echom "Building..."
     redraw
+    " TODO Set a mark so we can return to it after examining errors etc
     silent make
     let l:isLeftSide = (win_screenpos(0)[1] < (&columns / 2))
     if l:isLeftSide
