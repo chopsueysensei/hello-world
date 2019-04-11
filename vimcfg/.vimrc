@@ -16,8 +16,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'FelikZ/ctrlp-py-matcher'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'vim-airline/vim-airline'
+"Plugin 'vim-airline/vim-airline-themes'
+Plugin 'itchyny/lightline.vim'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
@@ -224,14 +225,14 @@ nnoremap <leader>S ciW<C-R>0<ESC>
 vnoremap <leader>s "_c<C-R>0<ESC>
 
 " Quickly open .vimrc
-nnoremap <leader>rc :e $MYVIMRC<cr>
+nnoremap <leader>rc :e $MYVIMRC<CR>
 
 " Quickly close windows
 nnoremap <leader>cw <C-w>c
 nnoremap <leader>wc <C-w>c
 nnoremap <leader>cc <C-w>c
 nnoremap <leader>ww <C-w>o
-nnoremap <leader>cl :ccl<CR>
+nnoremap <leader>cl :call CloseQF()<CR>
 
 " Switch to previous buffer
 nnoremap <leader>bl :b#<CR>
@@ -315,6 +316,9 @@ nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
 
 " Indent inside current block
 nnoremap <leader>= =i{
+" Manually indent visual selection
+xnoremap <Tab> >gv
+xnoremap <S-Tab> <gv
 
 " EasyAlign interactive
 xmap ga <Plug>(EasyAlign)
@@ -361,9 +365,8 @@ nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcw<CR>:Rg<CR>
 vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
 " Find current word, then replace across all locations
-" FIXME This loops very weirdly through the same places several times
-nnoremap <leader>fr :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
-nnoremap <leader>rf :HLcw<CR>:Rg<CR>:cdo %s///gc<Left><Left><Left>
+nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
+nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
 
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
@@ -474,6 +477,33 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#whitespace#enabled = 0
 
+" Lightline switches
+let g:lightline = {
+    \ 'colorscheme': 'wombat',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'absolutepath', 'modified' ] ],
+    \ },
+    \ 'component': {
+    \   'readonly': '%{&readonly?"":""}',
+    \ },
+    \ 'separator': { 'left': '', 'right': '' },
+    \ 'subseparator': { 'left': '', 'right': '' }
+\ }
+    "\ 'colorscheme': 'wombat',
+	"\ 'colorscheme': 'OldHope',
+    "\ 'colorscheme': 'nord',
+		"\ 'colorscheme': 'solarized',
+		"\ 'colorscheme': 'jellybeans',
+		"\ 'colorscheme': 'Tomorrow',
+		"\ 'colorscheme': 'Tomorrow_Night',
+		"\ 'colorscheme': 'Tomorrow_Night_Eighties',
+		"\ 'colorscheme': 'PaperColor',
+		"\ 'colorscheme': 'seoul256',
+		"\ 'colorscheme': 'one',
+		"\ 'colorscheme': 'materia',
+		"\ 'colorscheme': 'material',
+		"\ 'colorscheme': 'deus',
+
 " No bell please!
 set visualbell
 " Incremental searches with ocurrences
@@ -483,7 +513,7 @@ set incsearch
 " Keep context around cursor
 set scrolloff=3
 " Show mode & command
-set showmode
+set noshowmode
 set showcmd
 " Line numbers
 set nocursorline
@@ -493,11 +523,15 @@ set relativenumber
 set ttyfast
 " Display status line
 set laststatus=2
+" Customize it
+set statusline+=%F
 " Other
 set colorcolumn= "90
 set splitbelow
 set splitright
-set fillchars=vert:\│
+"set linespace=0     "continuous line
+set fillchars+=vert:│
+
 " Timeout for commands, leader key, etc.
 set timeoutlen=750
 
@@ -660,8 +694,8 @@ au FocusLost * :wa
 
 " Auto-reload vimrc upon saving
 augroup vimrc
-  autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | redraw
-  autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | redraw
+  autocmd! BufWritePost $MYVIMRC source % | echom "Reloaded " . $MYVIMRC | call LightlineReload() | redraw
+  autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | call LightlineReload() | redraw
 augroup END
 
 " Wrap lines in QF
@@ -701,8 +735,7 @@ function! Replace(source, target, ...) range
     let l:vmod = a:0 >= 2 ? a:2 : ''
 
     try
-        " FIXME This way of redoing 'wrapping' a subst by redoing it from the start is a bit annoying..
-        let l:searchstring = '.,$s' . l:mmod . '/' . l:vmod . a:source . '/' . a:target . '/gcI|1,''''-&&'
+        let l:searchstring = '.,$s' . l:mmod . '/' . l:vmod . a:source . '/' . a:target . '/gcI|echo ''Continue at beginning of file? (y/q)''|if getchar()==121|1,''''-&&|else|redraw|echo|en'
         echom "Search string: " . l:searchstring
         exe l:searchstring
     catch
@@ -730,7 +763,9 @@ function! PromptReplace(...) range
     call inputrestore()
 endfunction
 
-function! PromptReplaceCurrent(sourceMode) range
+function! PromptReplaceCurrent(sourceMode, ...) range
+    let l:targetMode = a:0 >= 1 ? a:1 : ''
+
     if a:sourceMode == "word"
         let l:source = expand("<cword>")
     elseif a:sourceMode == "search"
@@ -746,7 +781,23 @@ function! PromptReplaceCurrent(sourceMode) range
     call inputsave()
     let l:target = input("Replace '" . l:source . "' with: ")
     if !empty(l:target)
-        call Replace(l:source, l:target, 'no')
+        if l:targetMode == ""
+            call Replace(l:source, l:target, 'no')
+        elseif l:targetMode == "quickfix"
+            normal! mS
+            HLcw
+            Rg
+            let l:searchstring = 's//' . l:target . '/gcI'
+            "echom "Search string: " . l:searchstring
+            " HACK Somebody is sending spurious input which makes the first 3
+            " entries in the cdo list to be auto-accepted. This seems to work
+            " for now (my current suspect is RgHighlight() calling 'feedkeys')
+            let l:dummy = input("")
+            "redraw
+            "echo
+            execute 'cdo s//' . l:target . '/gcI'
+            normal! `S
+        endif
     endif
     call inputrestore()
 endfunction
@@ -755,7 +806,8 @@ endfunction
 function! MakeAndShowQF()
     echom "Building..."
     redraw
-    " TODO Set a mark so we can return to it after examining errors etc
+    " Set a mark so we can return to it after examining errors etc
+    normal! mM
     silent make
     let l:isLeftSide = (win_screenpos(0)[1] < (&columns / 2))
     if l:isLeftSide
@@ -768,3 +820,21 @@ function! MakeAndShowQF()
         cfirst   " Jump to first error
     endif
 endfunction
+
+" Close QF making sure we return to the previous split
+function! CloseQF()
+    let l:inQF = getwininfo(win_getid())[0]['quickfix']
+    if l:inQF
+        " Only do this if we are _in_ the QF window
+        wincmd p
+    endif
+    ccl
+endfunction
+
+" Reload lightline without exiting
+function! LightlineReload()
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
+
