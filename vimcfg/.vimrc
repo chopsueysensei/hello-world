@@ -260,6 +260,9 @@ nnoremap <C-S-Down>     <C-W>-
 nnoremap <C-S-Up>       <C-W>+
 nnoremap <C-S-Right>    <C-W>>
 
+" Make them equal
+nnoremap <leader>w= <C-w>=
+
 " Split navigation
 nnoremap <C-h> <C-W><C-H>
 nnoremap <C-j> <C-W><C-J>
