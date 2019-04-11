@@ -454,7 +454,8 @@ if has('gui_running')
     "colorscheme handmade-hero
     "colorscheme solarized
     "colorscheme distinguished
-    colorscheme simple-dark
+    "colorscheme simple-dark
+    colorscheme corporation
 endif
 
 " Airline switches
@@ -523,6 +524,7 @@ set wrapmargin=0
 " Formatting options (as autocmd so it overrides filetypes)
 au FileType * set fo+=q fo+=r fo+=n
 au FileType c,cpp setlocal comments-=:// comments+=f://
+au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
 " C-specific indentation rules
 set cinoptions=(0=0
 
@@ -541,7 +543,7 @@ set wildmode=list:longest,full
 set undofile
 " Smart case sensitivity in searches
 set ignorecase
-"set smartcase
+set smartcase
 
 set cpoptions+={
 

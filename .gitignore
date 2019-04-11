@@ -7,3 +7,4 @@ workhours/__pycache__/
 *.swp
 *.un~
 vimcfg/.vim/.netrwhist
+vimcfg/.vim/bundle/
