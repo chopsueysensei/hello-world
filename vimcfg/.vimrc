@@ -784,10 +784,11 @@ function! PromptReplaceCurrent(sourceMode, ...) range
     call inputsave()
     let l:target = input("Replace '" . l:source . "' with: ")
     if !empty(l:target)
+        normal! mS
+
         if l:targetMode == ""
             call Replace(l:source, l:target, 'no')
         elseif l:targetMode == "quickfix"
-            normal! mS
             HLcw
             Rg
             let l:searchstring = 's//' . l:target . '/gcI'
@@ -799,8 +800,9 @@ function! PromptReplaceCurrent(sourceMode, ...) range
             "redraw
             "echo
             execute 'cdo s//' . l:target . '/gcI'
-            normal! `S
         endif
+
+        normal! `S
     endif
     call inputrestore()
 endfunction
