@@ -192,8 +192,8 @@ nnoremap . :
 nnoremap : .
 
 " Alias change word (still can use S to change whole line)
-nnoremap cc cw
-nnoremap cC cW
+nnoremap cc ciw
+nnoremap cC ciW
 
 " Move around quickly by whitespace
 nnoremap H Bh
