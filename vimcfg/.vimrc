@@ -374,8 +374,11 @@ nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{<CR> {<CR>};<Esc>O
-inoremap <leader>t<CR> // TODO 
-inoremap <leader>b<CR> // @
+imap <leader>c<CR> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>) 
+imap <leader>t<CR> <plug>NERDCommenterInsert TODO (<C-R>=strftime('%d/%m/%Y')<CR>) 
+imap <leader>f<CR> <plug>NERDCommenterInsert FIXME (<C-R>=strftime('%d/%m/%Y')<CR>) 
+imap <leader>n<CR> <plug>NERDCommenterInsert NOTE (<C-R>=strftime('%d/%m/%Y')<CR>) 
+imap <leader>b<CR> <plug>NERDCommenterInsert @
 
 " Built-in explorer
 nnoremap <leader>ee :Ex<CR>
@@ -413,6 +416,8 @@ nnoremap <C-kMinus> :silent! let &guifont = substitute(
 inoremap <leader>x <C-R>=
 nnoremap <leader>x i<C-R>=
 
+" Toggle folds
+nnoremap <leader>- za
 
 " cscope (gtags-cscope via gen_tags) (not working in windows!)
 " nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
@@ -562,6 +567,10 @@ set wrapmargin=0
 au FileType * set fo+=q fo+=r fo+=n
 au FileType c,cpp setlocal comments-=:// comments+=f://
 au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
+let g:xml_syntax_folding=1
+au FileType xml setlocal foldmethod=syntax foldlevel=999
+" Wrap lines in QF
+au FileType qf setlocal wrap
 " C-specific indentation rules
 set cinoptions=(0=0
 
@@ -701,16 +710,15 @@ augroup vimrc
   autocmd! BufWritePost $MYGVIMRC if has('gui_running') | so % | echom "Reloaded " . $MYGVIMRC | endif | call LightlineReload() | redraw
 augroup END
 
-" Wrap lines in QF
-augroup quickfix
-    autocmd!
-    autocmd FileType qf setlocal wrap
-augroup END
-
 " Simple filetype templates
 augroup templates
     autocmd!
     autocmd BufNewFile *.{h,hpp} call <SID>InsertInclusionGuards()
+augroup END
+
+" Filetypes for weird files
+augroup filetypedetect
+    au BufRead,BufNewFile wscript set filetype=python
 augroup END
 
 " Custom task-comments highlighting
@@ -726,11 +734,6 @@ hi def link Bookmark Todo
 
 " Insert MIT license at the top
 command! Mit :0r ~/.vim/mit.txt
-
-" Filetypes for weird files
-augroup filetypedetect
-    au BufRead,BufNewFile wscript set filetype=python
-augroup END
 
 " Helper functions to perform substitutions with a prompt
 function! Replace(source, target, ...) range
