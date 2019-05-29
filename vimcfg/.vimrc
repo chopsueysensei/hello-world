@@ -29,6 +29,7 @@ Plugin 'Valloric/ListToggle'
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'moll/vim-bbye'
+Plugin 'junegunn/goyo.vim'
 "Plugin 'SirVer/ultisnips'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'vim-syntastic/syntastic'
@@ -123,6 +124,8 @@ map <leader>ncb <plug>NERDCommenterAlignBoth
 " Custom text for vim-surround
 let g:surround_48 = "#if 0\n\r\n#endif"
 
+" Goyo
+let g:goyo_width = 120
 
 " Recommended Syntastic settings for n00bs
 "set statusline+=%#warningmsg#
@@ -189,7 +192,9 @@ ino <up> <Nop>
 
 " Get rid of one keystroke for something soo common
 nnoremap . :
+vnoremap . :
 nnoremap : .
+vnoremap : .
 
 " Alias change word (still can use S to change whole line)
 nnoremap cc ciw
@@ -233,6 +238,8 @@ nnoremap <leader>wc <C-w>c
 nnoremap <leader>cc <C-w>c
 nnoremap <leader>ww <C-w>o
 nnoremap <leader>cl :call CloseQF()<CR>
+" In-the-zone mode!
+noremap <F10> :Goyo<CR>
 
 " Switch to previous buffer
 nnoremap <leader>bl :b#<CR>
@@ -374,11 +381,13 @@ nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
 " Naive auto-completion / snippets
 inoremap {<CR> {<CR>}<Esc>O
 inoremap {{<CR> {<CR>};<Esc>O
-imap <leader>c<CR> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>) 
-imap <leader>t<CR> <plug>NERDCommenterInsert TODO (<C-R>=strftime('%d/%m/%Y')<CR>) 
-imap <leader>f<CR> <plug>NERDCommenterInsert FIXME (<C-R>=strftime('%d/%m/%Y')<CR>) 
-imap <leader>n<CR> <plug>NERDCommenterInsert NOTE (<C-R>=strftime('%d/%m/%Y')<CR>) 
-imap <leader>b<CR> <plug>NERDCommenterInsert @
+ 
+imap <leader>d<Space> (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <leader>c<Space> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <leader>n<Space> <plug>NERDCommenterInsert NOTE<Space>
+imap <leader>t<Space> <plug>NERDCommenterInsert TODO<Space>
+imap <leader>f<Space> <plug>NERDCommenterInsert FIXME<Space>
+imap <leader>b<Space> <plug>NERDCommenterInsert @
 
 " Built-in explorer
 nnoremap <leader>ee :Ex<CR>
@@ -534,11 +543,13 @@ set laststatus=2
 " Customize it
 set statusline+=%F
 " Other
-set colorcolumn= "90
+set colorcolumn= "110
 set splitbelow
 set splitright
 "set linespace=0     "continuous line
 set fillchars+=vert:│
+" Show < or > when characters are not displayed on the left or right.
+set list listchars=precedes:<,extends:>
 
 " Timeout for commands, leader key, etc.
 set timeoutlen=750
@@ -564,13 +575,20 @@ set nowrap
 set textwidth=0
 set wrapmargin=0
 " Formatting options (as autocmd so it overrides filetypes)
-au FileType * set fo+=q fo+=r fo+=n
-au FileType c,cpp setlocal comments-=:// comments+=f://
-au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
-let g:xml_syntax_folding=1
-au FileType xml setlocal foldmethod=syntax foldlevel=999
-" Wrap lines in QF
-au FileType qf setlocal wrap
+augroup filetypeformat
+    autocmd!
+    " Filetypes for weird files
+    au BufRead,BufNewFile wscript set filetype=python
+    au BufRead,BufNewFile *.state set filetype=json
+
+    au FileType * set fo+=q fo+=r fo+=n
+    au FileType c,cpp setlocal comments-=:// comments+=f://
+    au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
+    let g:xml_syntax_folding=1
+    au FileType xml setlocal foldmethod=syntax foldlevel=999
+    au FileType qf setlocal wrap    " Wrap lines in quickfix window
+    au FileType json setlocal foldmethod=syntax foldlevel=999
+augroup END
 " C-specific indentation rules
 set cinoptions=(0=0
 
@@ -716,11 +734,6 @@ augroup templates
     autocmd BufNewFile *.{h,hpp} call <SID>InsertInclusionGuards()
 augroup END
 
-" Filetypes for weird files
-augroup filetypedetect
-    au BufRead,BufNewFile wscript set filetype=python
-augroup END
-
 " Custom task-comments highlighting
 augroup vimrc_todo
     au!
@@ -846,3 +859,13 @@ function! LightlineReload()
   call lightline#update()
 endfunction
 
+" Customize Goyo
+function! s:goyo_enter()
+    " TODO (25/05/2019) Link these to current Comment highlight group or something
+    hi NonText ctermfg=16 guifg=#4a4a59
+    hi EndOfBuffer ctermfg=bg guifg=bg
+    redraw
+    normal <F11>
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
