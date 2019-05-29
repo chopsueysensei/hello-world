@@ -16,24 +16,16 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'FelikZ/ctrlp-py-matcher'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
-"Plugin 'vim-airline/vim-airline'
-"Plugin 'vim-airline/vim-airline-themes'
 Plugin 'itchyny/lightline.vim'
-Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-dispatch'
 Plugin 'ervandew/supertab'
 Plugin 'a.vim'
 Plugin 'tpope/vim-surround'
 Plugin 'jremmen/vim-ripgrep'
-Plugin 'Valloric/ListToggle'
 Plugin 'tikhomirov/vim-glsl'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'moll/vim-bbye'
 Plugin 'junegunn/goyo.vim'
-"Plugin 'SirVer/ultisnips'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'vim-syntastic/syntastic'
-"Plugin 'OmniSharp/omnisharp-vim'
 
 call vundle#end()
 
@@ -94,363 +86,19 @@ if executable('global') || executable('global.exe')
     let g:ctrlp_buftag_ctags_bin = 'global -c'
 endif
 
-" UltiSnips
-" Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<c-s>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-let g:UltiSnipsEditSplit="vertical"
-
-" YouCompleteMe
-" ctags needs to be run with '--fields=+l' for this to work
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_show_diagnostics_ui = 0
-
-" gen_tags
-let g:gen_tags#verbose = 1
-let g:gen_tags#project_root = 'C:\dev\repo\nova_phd_trunk'
-
 " Supertab
 let g:SuperTabNoCompleteAfter = ['^', ',', '\s', '{', '}', '(', ')', '=', ';', '"']
 
-" List toggle (since we already use <leader>l)
-let g:lt_location_list_toggle_map = '<leader>wl'
-
-" NERDCommenter
-map <leader>ncl <plug>NERDCommenterAlignLeft
-map <leader>ncc <plug>NERDCommenterComment
-map <leader>ncb <plug>NERDCommenterAlignBoth
-
-" Custom text for vim-surround
+" vim-surround
 let g:surround_48 = "#if 0\n\r\n#endif"
 
 " Goyo
 let g:goyo_width = 120
 
-" Recommended Syntastic settings for n00bs
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-
-" OmniSharp
-"let g:OmniSharp_timeout = 1
-"set completeopt=longest,menuone,preview
-"set splitbelow
-"let g:syntastic_cs_checkers = ['syntax', 'semantic', 'issues']
-""let g:OmniSharp_server_type = 'roslyn'
-"
-"augroup omnisharp_commands
-"    autocmd!
-"    " Set autocomplete function to OmniSharp (if not using YouCompleteMe plugin)
-"    autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
-"    " Build asynchronously with vim-dispatch
-"    autocmd FileType cs nnoremap <leader>b :wa!<CR>:OmniSharpBuildAsync<CR>
-"    " Automatic syntax check
-"    autocmd BufEnter,TextChanged,InsertLeave *.cs SyntasticCheck
-"    " Show type info when idle
-"    autocmd CursorHold *.cs call OmniSharp#TypeLookupWithoutDocumentation()
-"    " Key bindings for some contextual commands
-"    autocmd FileType cs nnoremap <leader>g  :OmniSharpGotoDefinition<CR>
-"    autocmd FileType cs nnoremap <leader>fi :OmniSharpFindImplementations<CR>
-"    autocmd FileType cs nnoremap <leader>ft :OmniSharpFindType<CR>
-"    autocmd FileType cs nnoremap <leader>fs :OmniSharpFindSymbol<CR>
-"    autocmd FileType cs nnoremap <leader>fu :OmniSharpFindUsages<CR>
-"    autocmd FileType cs nnoremap <leader>fm :OmniSharpFindMembers<CR>
-"    autocmd FileType cs nnoremap <leader>x  :OmniSharpFixIssue<CR>
-"    autocmd FileType cs nnoremap <leader>xu :OmniSharpFixUsings<CR>
-"    autocmd FileType cs nnoremap <leader>tl :OmniSharpTypeLookup<CR>
-"    autocmd FileType cs nnoremap <leader>doc :OmniSharpDocumentation<CR>
-"    " Navigate by method/property/field
-"    autocmd FileType cs nnoremap <C-K> :OmniSharpNavigateUp<CR>
-"    autocmd FileType cs nnoremap <C-J> :OmniSharpNavigateDown<CR>
-"augroup END
-"
-
 
 
 "
-" KEY MAPPINGS
-"
-
-" Map <leader> to comma
-let mapleader = ","
-
-" Unmap arrow keys
-no <down> <Nop>
-no <left> <Nop>
-no <right> <Nop>
-no <up> <Nop>
-ino <down> <Nop>
-ino <left> <Nop>
-ino <right> <Nop>
-ino <up> <Nop>
-
-" Get rid of one keystroke for something soo common
-nnoremap . :
-vnoremap . :
-nnoremap : .
-vnoremap : .
-
-" Alias change word (still can use S to change whole line)
-nnoremap cc ciw
-nnoremap cC ciW
-
-" Move around quickly by whitespace
-nnoremap H Bh
-nnoremap J }
-nnoremap K {
-nnoremap L El
-
-vnoremap H Bh
-vnoremap J }
-vnoremap K {
-vnoremap L El
-
-" Move lines up/down
-nnoremap ë ddkP
-nnoremap ê ddp
-
-" Perl/Python compatible regex formatting
-nnoremap / /\v
-vnoremap / /\v
-
-" Replace-paste without yanking in visual mode
-" (also, make it behave more intuitively)
-vnoremap p "_c<C-R>0<ESC>
-
-" 'Stamp' over words or visual selections
-" TODO Change letter since we may want to use that for searches
-nnoremap <leader>s ciw<C-R>0<ESC>
-nnoremap <leader>S ciW<C-R>0<ESC>
-vnoremap <leader>s "_c<C-R>0<ESC>
-
-" Quickly open .vimrc
-nnoremap <leader>rc :e $MYVIMRC<CR>
-
-" Quickly close windows
-nnoremap <leader>cw <C-w>c
-nnoremap <leader>wc <C-w>c
-nnoremap <leader>cc <C-w>c
-nnoremap <leader>ww <C-w>o
-nnoremap <leader>cl :call CloseQF()<CR>
-" In-the-zone mode!
-noremap <F10> :Goyo<CR>
-
-" Switch to previous buffer
-nnoremap <leader>bl :b#<CR>
-
-" Close buffer (preserve windows)
-nnoremap <leader>bd :Bd<CR>
-nnoremap <leader>bc :Bd<CR>
-
-" Split windows easily
-nnoremap <leader>sh  :topleft  vnew<CR>
-nnoremap <leader>sj  :botright new<CR>
-nnoremap <leader>sk  :topleft  new<CR>
-nnoremap <leader>sl  :botright vnew<CR>
-
-nnoremap <leader>ws :vert sb %<CR>
-nnoremap <leader>ss :vert sb %<CR>
-
-" Swap splits
-nnoremap <leader>wx <C-w>x
-
-" Resize current split
-" ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
-nnoremap <C-S-Left>     <C-W><
-nnoremap <C-S-Down>     <C-W>-
-nnoremap <C-S-Up>       <C-W>+
-nnoremap <C-S-Right>    <C-W>>
-
-" Make them equal
-nnoremap <leader>w= <C-w>=
-
-" Split navigation
-nnoremap <C-h> <C-W><C-H>
-nnoremap <C-j> <C-W><C-J>
-nnoremap <C-k> <C-W><C-K>
-nnoremap <C-l> <C-W><C-L>
-
-" Move by half a page 
-"nnoremap <C-S-j> <C-d>
-"nnoremap <C-S-k> <C-u>
-"vnoremap <C-S-j> <C-d>
-"vnoremap <C-S-k> <C-u>
-
-" Join next line (at the end of current one)
-nnoremap <leader>J J
-" Split line at cursor
-nnoremap <leader><CR> i<CR><Esc>
-nnoremap <leader><S-CR> a<CR><Esc>
-" Delete after cursor
-nnoremap <leader>D lD
-
-" Insert blank lines without going to insert mode
-nnoremap <leader>o o<Esc>
-nnoremap <leader>O O<Esc>
-
-" Delete in insert mode without using extended keys or chords
-inoremap <C-BS> <C-W>
-inoremap <S-BS> <Del>
-inoremap <C-S-BS> <Esc>ldwi
-
-" Search more quickly!
-nnoremap <Space> /
-nnoremap <S-Space> ?
-" Highlight occurences without moving the cursor
-nnoremap <leader><space> :HLcw<CR>
-" Easily clear highlights after search
-nnoremap <leader><S-Space> :noh<cr>
-
-" Toggle NERDTree (current path not working it seems)
-nnoremap <leader>t :NERDTreeToggle %<CR>
-
-" CtrlP in mixed mode
-nnoremap <leader>pm :CtrlPMixed<CR>
-" CtrlP in quickfix mode (close quickfix window if open!)
-nnoremap <leader>pq :CPqf<CR>
-" CtrlP in buffer mode
-nnoremap <leader>bb :CtrlPBuffer<CR>
-" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
-nnoremap <leader>tt :CtrlPTag<CR>
-
-" Hide ^M line endings in mixed-mode files
-nnoremap <leader><leader>cr :match Ignore /\r$/<CR>
-" Convert to DOS line endings
-nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
-
-" Indent inside current block
-nnoremap <leader>= =i{
-" Manually indent visual selection
-xnoremap <Tab> >gv
-xnoremap <S-Tab> <gv
-
-" EasyAlign interactive
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-" EasyAlign common ones
-vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
-vnoremap <leader>a= :'<,'>EasyAlign=<CR>
-
-" Switch to .h/cpp
-nnoremap <leader>hh :A<CR>
-nnoremap <leader>hs :AV<CR>
-
-" Generate GTAGS (via gen_tags)
-nnoremap <leader>gen :GenGTAGS<CR>
-
-" Gtags
-nnoremap <leader>ts :Gtags<space>
-nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
-nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
-nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
-
-" Silent make (with result on an opposite split)
-" FIXME The opposite split business depends on where the cursor is on invocation,
-" and not (as it should) on which of the splits the first error will be highlighted
-nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
-
-" Replace
-nnoremap <leader>r :call PromptReplace()<CR>
-" Easily replace current word
-nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
-" Easily replace last searched term
-nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
-" Replace currently selected text (in visual mode)
-vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
-" Replace _inside_ a visual selection
-vnoremap <leader>r :call PromptReplace("visual")<CR>
-
-" Quickly substitute pointer dereferences
-nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
-nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
-
-" Find in files using ripgrep
-nnoremap <leader>f :Rg<space>
-nnoremap <leader>ff :HLcw<CR>:Rg<CR>
-vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
-" Find current word, then replace across all locations
-nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
-nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
-
-" Naive auto-completion / snippets
-inoremap {<CR> {<CR>}<Esc>O
-inoremap {{<CR> {<CR>};<Esc>O
- 
-imap <leader>d<Space> (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
-imap <leader>c<Space> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
-imap <leader>n<Space> <plug>NERDCommenterInsert NOTE<Space>
-imap <leader>t<Space> <plug>NERDCommenterInsert TODO<Space>
-imap <leader>f<Space> <plug>NERDCommenterInsert FIXME<Space>
-imap <leader>b<Space> <plug>NERDCommenterInsert @
-
-" Built-in explorer
-nnoremap <leader>ee :Ex<CR>
-nnoremap <leader>es :Vex<CR>
-
-" Copy and paste using system's clipboard
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
-nnoremap <leader>p "+p
-vnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>P "+P
-
-" Navigate quickfix and location results
-nnoremap <leader>qn :cn<CR>
-nnoremap <leader>qp :cp<CR>
-nnoremap <C-n> :cn<CR>
-nnoremap <C-b> :cp<CR>
-nnoremap <leader>ln :lne<CR>
-nnoremap <leader>lp :lp<CR>
-
-" Change font size
-nnoremap <C-kPlus> :silent! let &guifont = substitute(
- \ &guifont,
- \ ':h\zs\d\+',
- \ '\=eval(submatch(0)+1)',
- \ '')<CR>
-nnoremap <C-kMinus> :silent! let &guifont = substitute(
- \ &guifont,
- \ ':h\zs\d\+',
- \ '\=eval(submatch(0)-1)',
- \ '')<CR>
-
-" Insert result of expressions
-inoremap <leader>x <C-R>=
-nnoremap <leader>x i<C-R>=
-
-" Toggle folds
-nnoremap <leader>- za
-
-" cscope (gtags-cscope via gen_tags) (not working in windows!)
-" nmap <leader>tu :scs find c <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>te :scs find e <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tf :scs find f <C-R>=expand("<cfile>")<CR><CR>
-" nmap <leader>td :scs find g <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>ti :scs find i <C-R>=expand('<cfile>')<CR><CR>
-" nmap <leader>ts :scs find s <C-R>=expand('<cword>')<CR><CR>
-" nmap <leader>tx :scs find t <C-R>=expand('<cword>')<CR><CR>
-
-" Terse YcmCompleter commands
-"nnoremap <leader>gi     :YcmCompleter GoToInclude<CR>
-"nnoremap <leader>gd     :YcmCompleter GoToDefinition<CR>
-"nnoremap <leader>gdl    :YcmCompleter GoToDeclaration<CR>
-"nnoremap <leader>g      :YcmCompleter GoTo<CR>
-"nnoremap <leader>gu     :YcmCompleter GoToReferences<CR>
-"nnoremap <leader>gim    :YcmCompleter GoToImplementation<CR>
-"nnoremap <leader>doc    :YcmCompleter GetDoc<CR>
-"nnoremap <leader>fx     :YcmCompleter FixIt<CR>
-"nnoremap <leader>re     :YcmCompleter RefactorRename 
-
-
-"
-" LOOK & FEEL
+" EDITOR SETTINGS
 "
 syntax enable
 set background=dark
@@ -556,10 +204,6 @@ set timeoutlen=750
 
 
 
-"
-" EDITING
-"
-
 " Indentation
 set tabstop=4
 set shiftwidth=4
@@ -574,28 +218,10 @@ set backspace=indent,eol,start
 set nowrap
 set textwidth=0
 set wrapmargin=0
-" Formatting options (as autocmd so it overrides filetypes)
-augroup filetypeformat
-    autocmd!
-    " Filetypes for weird files
-    au BufRead,BufNewFile wscript set filetype=python
-    au BufRead,BufNewFile *.state set filetype=json
-
-    au FileType * set fo+=q fo+=r fo+=n
-    au FileType c,cpp setlocal comments-=:// comments+=f://
-    au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
-    let g:xml_syntax_folding=1
-    au FileType xml setlocal foldmethod=syntax foldlevel=999
-    au FileType qf setlocal wrap    " Wrap lines in quickfix window
-    au FileType json setlocal foldmethod=syntax foldlevel=999
-augroup END
 " C-specific indentation rules
 set cinoptions=(0=0
 
 
-"
-" MISC SETTINGS
-"
 
 set encoding=utf-8
 " Hide buffers instead of closing them
@@ -639,9 +265,27 @@ set nogdefault
 set backupdir=~/.backup
 set undodir=~/.backup
 
+
+
 "
-" MISC FUNCTIONS, COMMANDS, AUTOS..
+" FUNCTIONS, COMMANDS, AUTOS
 "
+
+" Formatting options (as autocmd so it overrides filetypes)
+augroup filetypeformat
+    autocmd!
+    " Filetypes for weird files
+    au BufRead,BufNewFile wscript set filetype=python
+    au BufRead,BufNewFile *.state set filetype=json
+
+    au FileType * set fo+=q fo+=r fo+=n
+    au FileType c,cpp setlocal comments-=:// comments+=f://
+    au FileType python setlocal cindent tabstop=4 shiftwidth=4 softtabstop=4 expandtab cinwords=if,elif,else,for,while,try,except,finally,def,class
+    let g:xml_syntax_folding=1
+    au FileType xml setlocal foldmethod=syntax foldlevel=999
+    au FileType qf setlocal wrap    " Wrap lines in quickfix window
+    au FileType json setlocal foldmethod=syntax foldlevel=999
+augroup END
 
 " Open CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
@@ -667,15 +311,15 @@ endfun
 nnoremap <leader>shl :call SynGroup()<CR>
 
 " Toggle fullscreen using external DLL
+" TODO Keep track of status with a global variable so we can always enable it (for Goyo)
 command! ToggleFullscreen call libcallnr(expand("$VIMHOME") . "gvimfullscreen_64.dll", "ToggleFullScreen", 0)
 " 'Refresh' fullscreen state (only works with 'noremap' for some reason!)
 noremap <F11> <Esc>:ToggleFullscreen<CR><Esc>:ToggleFullscreen<CR><ESC>:windo e<CR>
 noremap <S-F11> <Esc>:ToggleFullscreen<CR>
 
-
 " Enter fullscreen by default
 "augroup fullscreen
-    "" When using CheckAndMaybeLoadLastSession() below this should be turned off or they'll conflict!
+    "" NOTE When using CheckAndMaybeLoadLastSession() below this should be turned off or they'll conflict!
     "if has('gui_running')
         "autocmd! VimEnter * :ToggleFullscreen
     "endif
@@ -720,7 +364,7 @@ set sessionoptions-=options
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
 " Auto-save on loss of focus
-au FocusLost * :wa
+au! FocusLost * :wa
 
 " Auto-reload vimrc upon saving
 augroup vimrc
@@ -861,11 +505,274 @@ endfunction
 
 " Customize Goyo
 function! s:goyo_enter()
-    " TODO (25/05/2019) Link these to current Comment highlight group or something
     hi NonText ctermfg=16 guifg=#4a4a59
+    " TODO (25/05/2019) Link these to current Comment highlight group or something
+    "hi def link NonText Comment
     hi EndOfBuffer ctermfg=bg guifg=bg
-    redraw
-    normal <F11>
+    ToggleFullscreen
+    ToggleFullscreen
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
+
+" In-the-zone mode!
+noremap <F10> :Goyo<CR>
+
+
+"
+" KEY MAPPINGS
+"
+
+" Map <leader> to comma
+let mapleader = "\<Space>"
+
+" Unmap arrow keys
+no <down> <Nop>
+no <left> <Nop>
+no <right> <Nop>
+no <up> <Nop>
+ino <down> <Nop>
+ino <left> <Nop>
+ino <right> <Nop>
+ino <up> <Nop>
+
+" Get rid of one keystroke for something soo common
+nnoremap . :
+vnoremap . :
+nnoremap : .
+vnoremap : .
+
+" Alias change word (still can use S to change whole line)
+nnoremap cc ciw
+nnoremap cC ciW
+
+" Move around quickly by whitespace
+nnoremap H Bh
+nnoremap J }
+nnoremap K {
+nnoremap L El
+
+vnoremap H Bh
+vnoremap J }
+vnoremap K {
+vnoremap L El
+
+" Move lines up/down
+nnoremap ë ddkP
+nnoremap ê ddp
+
+" Perl/Python compatible regex formatting
+nnoremap / /\v
+vnoremap / /\v
+
+" Replace-paste without yanking in visual mode
+" (also, make it behave more intuitively)
+vnoremap p "_c<C-R>0<ESC>
+
+" 'Stamp' over words or visual selections
+" TODO Change letter since we may want to use that for searches
+nnoremap <leader>s ciw<C-R>0<ESC>
+nnoremap <leader>S ciW<C-R>0<ESC>
+vnoremap <leader>s "_c<C-R>0<ESC>
+
+" Quickly open .vimrc
+nnoremap <leader>rc :e $MYVIMRC<CR>
+
+" Quickly close windows
+nnoremap <leader>cw <C-w>c
+nnoremap <leader>wc <C-w>c
+nnoremap <leader>cc <C-w>c
+nnoremap <leader>ww <C-w>o
+nnoremap <leader>cl :call CloseQF()<CR>
+
+" Switch to previous buffer
+nnoremap <leader>bl :b#<CR>
+
+" Close buffer using Bbye (preserve windows)
+nnoremap <leader>bd :Bd<CR>
+nnoremap <leader>bc :Bd<CR>
+
+" Split windows easily
+nnoremap <leader>sh  :topleft  vnew<CR>
+nnoremap <leader>sj  :botright new<CR>
+nnoremap <leader>sk  :topleft  new<CR>
+nnoremap <leader>sl  :botright vnew<CR>
+
+nnoremap <leader>ws :vert sb %<CR>
+nnoremap <leader>ss :vert sb %<CR>
+
+" Swap splits
+nnoremap <leader>wx <C-w>x
+
+" Resize current split
+" ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
+nnoremap <C-S-Left>     <C-W><
+nnoremap <C-S-Down>     <C-W>-
+nnoremap <C-S-Up>       <C-W>+
+nnoremap <C-S-Right>    <C-W>>
+
+" Make them equal
+nnoremap <leader>w= <C-w>=
+
+" Split navigation
+nnoremap <C-h> <C-W><C-H>
+nnoremap <C-j> <C-W><C-J>
+nnoremap <C-k> <C-W><C-K>
+nnoremap <C-l> <C-W><C-L>
+
+" Move by half a page 
+"nnoremap <C-S-j> <C-d>
+"nnoremap <C-S-k> <C-u>
+"vnoremap <C-S-j> <C-d>
+"vnoremap <C-S-k> <C-u>
+
+" Join next line (at the end of current one)
+nnoremap <leader>J J
+" Split line at cursor
+nnoremap <leader><CR> i<CR><Esc>
+nnoremap <leader><S-CR> a<CR><Esc>
+" Delete after cursor
+nnoremap <leader>D lD
+
+" Insert blank lines without going to insert mode
+nnoremap <leader>o o<Esc>
+nnoremap <leader>O O<Esc>
+
+" Delete in insert mode without using extended keys or chords
+inoremap <C-BS> <C-W>
+inoremap <S-BS> <Del>
+inoremap <C-S-BS> <Esc>ldwi
+
+" Search more quickly!
+nnoremap <Space> /
+nnoremap <S-Space> ?
+" Highlight occurences without moving the cursor
+nnoremap <leader><space> :HLcw<CR>
+" Easily clear highlights after search
+nnoremap <leader><S-Space> :noh<cr>
+
+" Toggle NERDTree (current path not working it seems)
+nnoremap <leader>t :NERDTreeToggle %<CR>
+
+" CtrlP in mixed mode
+nnoremap <leader>pm :CtrlPMixed<CR>
+" CtrlP in quickfix mode (close quickfix window if open!)
+nnoremap <leader>pq :CPqf<CR>
+" CtrlP in buffer mode
+nnoremap <leader>bb :CtrlPBuffer<CR>
+" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
+nnoremap <leader>tt :CtrlPTag<CR>
+
+" Hide ^M line endings in mixed-mode files
+nnoremap <leader><leader>cr :match Ignore /\r$/<CR>
+" Convert to DOS line endings
+nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
+
+" Indent inside current block
+nnoremap <leader>= =i{
+" Manually indent visual selection
+xnoremap <Tab> >gv
+xnoremap <S-Tab> <gv
+
+" EasyAlign interactive
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+" EasyAlign common ones
+vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
+vnoremap <leader>a= :'<,'>EasyAlign=<CR>
+
+" Switch to .h/cpp
+nnoremap <leader>hh :A<CR>
+nnoremap <leader>hs :AV<CR>
+
+" Gtags
+nnoremap <leader>ts :Gtags<space>
+nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
+nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
+nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
+
+" Silent make (with result on an opposite split)
+" FIXME The opposite split business depends on where the cursor is on invocation,
+" and not (as it should) on which of the splits the first error will be highlighted
+nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
+
+" Replace
+nnoremap <leader>r :call PromptReplace()<CR>
+" Easily replace current word
+nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
+" Easily replace last searched term
+nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
+" Replace currently selected text (in visual mode)
+vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
+" Replace _inside_ a visual selection
+vnoremap <leader>r :call PromptReplace("visual")<CR>
+
+" Quickly substitute pointer dereferences
+nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
+nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
+
+" Find in files using ripgrep
+nnoremap <leader>f :Rg<space>
+nnoremap <leader>ff :HLcw<CR>:Rg<CR>
+vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
+" Find current word, then replace across all locations
+nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
+nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
+
+" Comments with NERDCommenter (not working?)
+noremap <leader>ncl <plug>NERDCommenterAlignLeft
+noremap <leader>ncc <plug>NERDCommenterComment
+noremap <leader>ncb <plug>NERDCommenterAlignBoth
+
+" Naive auto-completion / snippets
+inoremap {<CR> {<CR>}<Esc>O
+inoremap {{<CR> {<CR>};<Esc>O
+ 
+imap <leader>d<Space> (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <leader>c<Space> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <leader>n<Space> <plug>NERDCommenterInsert NOTE<Space>
+imap <leader>t<Space> <plug>NERDCommenterInsert TODO<Space>
+imap <leader>f<Space> <plug>NERDCommenterInsert FIXME<Space>
+imap <leader>b<Space> <plug>NERDCommenterInsert @
+
+" Built-in explorer
+nnoremap <leader>ee :Ex<CR>
+nnoremap <leader>es :Vex<CR>
+
+" Copy and paste using system's clipboard
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>P "+P
+
+" Navigate quickfix and location results
+nnoremap <leader>qn :cn<CR>
+nnoremap <leader>qp :cp<CR>
+nnoremap <C-n> :cn<CR>
+nnoremap <C-b> :cp<CR>
+nnoremap <leader>ln :lne<CR>
+nnoremap <leader>lp :lp<CR>
+
+" Change font size
+nnoremap <C-kPlus> :silent! let &guifont = substitute(
+ \ &guifont,
+ \ ':h\zs\d\+',
+ \ '\=eval(submatch(0)+1)',
+ \ '')<CR>
+nnoremap <C-kMinus> :silent! let &guifont = substitute(
+ \ &guifont,
+ \ ':h\zs\d\+',
+ \ '\=eval(submatch(0)-1)',
+ \ '')<CR>
+
+" Insert result of expressions
+inoremap <leader>x <C-R>=
+nnoremap <leader>x i<C-R>=
+
+" Toggle folds
+nnoremap <leader>- za
+
+
+
