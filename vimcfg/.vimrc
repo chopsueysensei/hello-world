@@ -287,6 +287,17 @@ augroup filetypeformat
     au FileType json setlocal foldmethod=syntax foldlevel=999
 augroup END
 
+function! DisablePluginMappings()
+    " Remove crappy mappings in A.vim that mess with the leader in insert mode
+    silent! iunmap <leader>ih
+    silent! iunmap <leader>is
+    silent! iunmap <leader>ihn
+endfunction
+
+augroup disabledmappings
+    autocmd! VimEnter * :call DisablePluginMappings()
+augroup END
+
 " Open CtrlP in quickfix mode (close quickfix window if open!)
 function! SubstQuickfixWithCtrlP()
     ccl
@@ -363,6 +374,11 @@ set sessionoptions-=options
 " Highlight ocurrences of word under cursor
 command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
+" Hide ^M line endings in mixed-mode files
+command! HideCR match Ignore /\r$/
+" Convert to DOS line endings
+command! FmtDOS :e ++ff=dos<CR>:w<CR>
+ 
 " Auto-save on loss of focus
 au! FocusLost * :wa
 
@@ -518,6 +534,21 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 " In-the-zone mode!
 noremap <F10> :Goyo<CR>
 
+" Move to split or create anew
+function! WinMoveOrSplit(key)
+  let t:curwin = winnr()
+  exec "wincmd ".a:key
+  if (t:curwin == winnr())
+    if (match(a:key,'[jk]'))
+      wincmd v
+    else
+      wincmd s
+    endif
+    exec "wincmd ".a:key
+  endif
+endfunction
+
+
 
 "
 " KEY MAPPINGS
@@ -525,7 +556,8 @@ noremap <F10> :Goyo<CR>
 
 " Map <leader> to comma
 let mapleader = "\<Space>"
-
+noremap <Space> <Nop>
+ 
 " Unmap arrow keys
 no <down> <Nop>
 no <left> <Nop>
@@ -557,52 +589,28 @@ vnoremap J }
 vnoremap K {
 vnoremap L El
 
+" Move by half a page 
+"nnoremap <C-S-j> <C-d>
+"nnoremap <C-S-k> <C-u>
+"vnoremap <C-S-j> <C-d>
+"vnoremap <C-S-k> <C-u>
+
 " Move lines up/down
-nnoremap ë ddkP
-nnoremap ê ddp
+nnoremap ë :m-2<cr>==
+nnoremap ê :m+<cr>==
+xnoremap ë :m-2<cr>gv=gv
+xnoremap ê :m'>+<cr>gv=gv
 
-" Perl/Python compatible regex formatting
-nnoremap / /\v
-vnoremap / /\v
-
-" Replace-paste without yanking in visual mode
-" (also, make it behave more intuitively)
-vnoremap p "_c<C-R>0<ESC>
-
-" 'Stamp' over words or visual selections
-" TODO Change letter since we may want to use that for searches
-nnoremap <leader>s ciw<C-R>0<ESC>
-nnoremap <leader>S ciW<C-R>0<ESC>
-vnoremap <leader>s "_c<C-R>0<ESC>
-
-" Quickly open .vimrc
-nnoremap <leader>rc :e $MYVIMRC<CR>
-
-" Quickly close windows
-nnoremap <leader>cw <C-w>c
-nnoremap <leader>wc <C-w>c
-nnoremap <leader>cc <C-w>c
-nnoremap <leader>ww <C-w>o
-nnoremap <leader>cl :call CloseQF()<CR>
-
-" Switch to previous buffer
-nnoremap <leader>bl :b#<CR>
-
-" Close buffer using Bbye (preserve windows)
-nnoremap <leader>bd :Bd<CR>
-nnoremap <leader>bc :Bd<CR>
-
-" Split windows easily
-nnoremap <leader>sh  :topleft  vnew<CR>
-nnoremap <leader>sj  :botright new<CR>
-nnoremap <leader>sk  :topleft  new<CR>
-nnoremap <leader>sl  :botright vnew<CR>
-
-nnoremap <leader>ws :vert sb %<CR>
-nnoremap <leader>ss :vert sb %<CR>
-
-" Swap splits
-nnoremap <leader>wx <C-w>x
+" Split navigation
+" (move to the split in the direction shown, or create a new split)
+nnoremap <silent> <C-h> :call WinMoveOrSplit('h')<cr>
+nnoremap <silent> <C-j> :call WinMoveOrSplit('j')<cr>
+nnoremap <silent> <C-k> :call WinMoveOrSplit('k')<cr>
+nnoremap <silent> <C-l> :call WinMoveOrSplit('l')<cr>
+"nnoremap <C-h> <C-W><C-H>
+"nnoremap <C-j> <C-W><C-J>
+"nnoremap <C-k> <C-W><C-K>
+"nnoremap <C-l> <C-W><C-L>
 
 " Resize current split
 " ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
@@ -611,149 +619,29 @@ nnoremap <C-S-Down>     <C-W>-
 nnoremap <C-S-Up>       <C-W>+
 nnoremap <C-S-Right>    <C-W>>
 
-" Make them equal
-nnoremap <leader>w= <C-w>=
+" Perl/Python compatible regex formatting
+nnoremap / /\v
+vnoremap / /\v
 
-" Split navigation
-nnoremap <C-h> <C-W><C-H>
-nnoremap <C-j> <C-W><C-J>
-nnoremap <C-k> <C-W><C-K>
-nnoremap <C-l> <C-W><C-L>
+" Replace-paste without yanking in visual mode
+" (also, make it behave more intuitively)
+vnoremap p "_c<C-R>"<ESC>
 
-" Move by half a page 
-"nnoremap <C-S-j> <C-d>
-"nnoremap <C-S-k> <C-u>
-"vnoremap <C-S-j> <C-d>
-"vnoremap <C-S-k> <C-u>
-
-" Join next line (at the end of current one)
-nnoremap <leader>J J
-" Split line at cursor
-nnoremap <leader><CR> i<CR><Esc>
-nnoremap <leader><S-CR> a<CR><Esc>
-" Delete after cursor
-nnoremap <leader>D lD
-
-" Insert blank lines without going to insert mode
-nnoremap <leader>o o<Esc>
-nnoremap <leader>O O<Esc>
+" Naive auto-completion / snippets
+inoremap {<CR> {<CR>}<Esc>O
+inoremap {{<CR> {<CR>};<Esc>O
+" These need to be 'imap'
+imap <S-Space>d (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <S-Space>c <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
+imap <S-Space>n <plug>NERDCommenterInsert NOTE<Space>
+imap <S-Space>t <plug>NERDCommenterInsert TODO<Space>
+imap <S-Space>f <plug>NERDCommenterInsert FIXME<Space>
+imap <S-Space>b <plug>NERDCommenterInsert @
 
 " Delete in insert mode without using extended keys or chords
 inoremap <C-BS> <C-W>
 inoremap <S-BS> <Del>
 inoremap <C-S-BS> <Esc>ldwi
-
-" Search more quickly!
-nnoremap <Space> /
-nnoremap <S-Space> ?
-" Highlight occurences without moving the cursor
-nnoremap <leader><space> :HLcw<CR>
-" Easily clear highlights after search
-nnoremap <leader><S-Space> :noh<cr>
-
-" Toggle NERDTree (current path not working it seems)
-nnoremap <leader>t :NERDTreeToggle %<CR>
-
-" CtrlP in mixed mode
-nnoremap <leader>pm :CtrlPMixed<CR>
-" CtrlP in quickfix mode (close quickfix window if open!)
-nnoremap <leader>pq :CPqf<CR>
-" CtrlP in buffer mode
-nnoremap <leader>bb :CtrlPBuffer<CR>
-" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
-nnoremap <leader>tt :CtrlPTag<CR>
-
-" Hide ^M line endings in mixed-mode files
-nnoremap <leader><leader>cr :match Ignore /\r$/<CR>
-" Convert to DOS line endings
-nnoremap <leader><leader>dos :e ++ff=dos<CR>:w<CR>
-
-" Indent inside current block
-nnoremap <leader>= =i{
-" Manually indent visual selection
-xnoremap <Tab> >gv
-xnoremap <S-Tab> <gv
-
-" EasyAlign interactive
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
-" EasyAlign common ones
-vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
-vnoremap <leader>a= :'<,'>EasyAlign=<CR>
-
-" Switch to .h/cpp
-nnoremap <leader>hh :A<CR>
-nnoremap <leader>hs :AV<CR>
-
-" Gtags
-nnoremap <leader>ts :Gtags<space>
-nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
-nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
-nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
-
-" Silent make (with result on an opposite split)
-" FIXME The opposite split business depends on where the cursor is on invocation,
-" and not (as it should) on which of the splits the first error will be highlighted
-nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
-
-" Replace
-nnoremap <leader>r :call PromptReplace()<CR>
-" Easily replace current word
-nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
-" Easily replace last searched term
-nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
-" Replace currently selected text (in visual mode)
-vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
-" Replace _inside_ a visual selection
-vnoremap <leader>r :call PromptReplace("visual")<CR>
-
-" Quickly substitute pointer dereferences
-nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
-nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
-
-" Find in files using ripgrep
-nnoremap <leader>f :Rg<space>
-nnoremap <leader>ff :HLcw<CR>:Rg<CR>
-vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
-" Find current word, then replace across all locations
-nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
-nnoremap <leader>rf :call PromptReplaceCurrent("word", "quickfix")<CR>
-
-" Comments with NERDCommenter (not working?)
-noremap <leader>ncl <plug>NERDCommenterAlignLeft
-noremap <leader>ncc <plug>NERDCommenterComment
-noremap <leader>ncb <plug>NERDCommenterAlignBoth
-
-" Naive auto-completion / snippets
-inoremap {<CR> {<CR>}<Esc>O
-inoremap {{<CR> {<CR>};<Esc>O
- 
-imap <leader>d<Space> (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
-imap <leader>c<Space> <plug>NERDCommenterInsert (<C-R>=strftime('%d/%m/%Y')<CR>)<Space>
-imap <leader>n<Space> <plug>NERDCommenterInsert NOTE<Space>
-imap <leader>t<Space> <plug>NERDCommenterInsert TODO<Space>
-imap <leader>f<Space> <plug>NERDCommenterInsert FIXME<Space>
-imap <leader>b<Space> <plug>NERDCommenterInsert @
-
-" Built-in explorer
-nnoremap <leader>ee :Ex<CR>
-nnoremap <leader>es :Vex<CR>
-
-" Copy and paste using system's clipboard
-nnoremap <leader>y "+y
-vnoremap <leader>y "+y
-nnoremap <leader>p "+p
-vnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>P "+P
-
-" Navigate quickfix and location results
-nnoremap <leader>qn :cn<CR>
-nnoremap <leader>qp :cp<CR>
-nnoremap <C-n> :cn<CR>
-nnoremap <C-b> :cp<CR>
-nnoremap <leader>ln :lne<CR>
-nnoremap <leader>lp :lp<CR>
 
 " Change font size
 nnoremap <C-kPlus> :silent! let &guifont = substitute(
@@ -766,13 +654,151 @@ nnoremap <C-kMinus> :silent! let &guifont = substitute(
  \ ':h\zs\d\+',
  \ '\=eval(submatch(0)-1)',
  \ '')<CR>
+ 
 
-" Insert result of expressions
-inoremap <leader>x <C-R>=
-nnoremap <leader>x i<C-R>=
+
+" Search more quickly!
+nnoremap <leader><Space> /
+nnoremap <leader><S-Space> ?
+
+" Split line at cursor
+nnoremap <leader><CR> i<CR><Esc>
+nnoremap <leader><S-CR> a<CR><Esc>
 
 " Toggle folds
 nnoremap <leader>- za
 
+" Indent inside current block
+nnoremap <leader>= =i{
+" Manually indent visual selection
+xnoremap <Tab> >gv
+xnoremap <S-Tab> <gv
 
+" EasyAlign interactive
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+" EasyAlign commonly used
+vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
+vnoremap <leader>a= :'<,'>EasyAlign=<CR>
+
+" Buffers
+" Create new buffer
+nnoremap <leader>B :enew<CR>
+" Switch to previous buffer
+nnoremap <leader>bb :b#<CR>
+" Close buffer using Bbye (preserve windows)
+nnoremap <leader>bc :Bd<CR>
+
+" Delete after cursor
+nnoremap <leader>D lD
+
+" Built-in explorer
+nnoremap <leader>ee :Ex<CR>
+nnoremap <leader>es :Vex<CR>
+
+" Find in files using ripgrep
+nnoremap <leader>f :Rg<space>
+nnoremap <leader>ff :HLcw<CR>:Rg<CR>
+vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
+" Find current word, then replace across all locations
+nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
+
+" Switch to .h/cpp
+nnoremap <leader>hh :A<CR>
+nnoremap <leader>hs :AV<CR>
+
+" Join next line (at the end of current one)
+nnoremap <leader>J J
+
+" Highlight occurences of the word under the cursor without moving
+nnoremap <leader>k :HLcw<CR>
+" Easily clear highlights after search
+nnoremap <leader><S-k> :noh<cr>
+
+" Silent make (with result on an opposite split)
+" FIXME The opposite split business depends on where the cursor is on invocation,
+" and not (as it should) on which of the splits the first error will be highlighted
+nnoremap <silent> <leader>m :wa<CR>:call MakeAndShowQF()<CR>
+
+" Comments with NERDCommenter (not working?)
+nmap <leader>ncl <plug>NERDCommenterAlignLeft
+nmap <leader>ncc <plug>NERDCommenterComment
+nmap <leader>ncb <plug>NERDCommenterAlignBoth
+
+" Insert blank lines without going to insert mode
+nnoremap <leader>o o<Esc>
+nnoremap <leader>O O<Esc>
+
+" CtrlP in mixed mode
+nnoremap <leader>pm :CtrlPMixed<CR>
+" CtrlP in quickfix mode (close quickfix window if open!)
+nnoremap <leader>pq :CPqf<CR>
+" CtrlP in buffer mode
+nnoremap <leader>pb :CtrlPBuffer<CR>
+" CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
+nnoremap <leader>pt :CtrlPTag<CR>
+
+" Navigate quickfix and location results
+nnoremap <leader>qn :cn<CR>
+nnoremap <leader>qp :cp<CR>
+nnoremap <C-n> :cn<CR>
+nnoremap <C-b> :cp<CR>
+nnoremap <leader>ln :lne<CR>
+nnoremap <leader>lp :lp<CR>
+
+" Replace
+nnoremap <leader>r :call PromptReplace()<CR>
+" Interactively replace current word
+nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
+" Interactively replace last searched term
+nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
+" Interactively replace currently selected text (in visual mode)
+vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
+" Replace _inside_ a visual selection
+vnoremap <leader>ri :call PromptReplace("visual")<CR>
+" Quickly substitute pointer dereferences
+nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
+nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
+" Replace-paste over words or visual selections
+nnoremap <leader>rw "_ciw<C-R>"<ESC>
+nnoremap <leader>rW "_ciW<C-R>"<ESC>
+vnoremap <leader>rp "_c<C-R>"<ESC>
+
+" Toggle NERDTree (current path not working it seems)
+nnoremap <leader>t :NERDTreeToggle %<CR>
+
+" Tags using Gtags
+nnoremap <leader>ts :Gtags<space>
+nnoremap <leader>tf :Gtags -f %<CR>:CPqf<CR>
+nnoremap <F12>      :Gtags<CR><CR>:CPqf<CR>
+nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
+
+" Quickly open .vimrc
+nnoremap <leader>vim :e $MYVIMRC<CR>
+
+" Windows
+" Quickly close windows
+nnoremap <leader>wc <C-w>c
+nnoremap <leader>cc <C-w>c
+nnoremap <leader>cl :call CloseQF()<CR>
+" Split current window (show same buffer)
+nnoremap <leader>ws :vert sb %<CR>
+" Swap splits
+nnoremap <leader>wx <C-w>x
+" Make them equal
+nnoremap <leader>w= <C-w>=
+" Maximize
+nnoremap <leader>ww <C-w>o
+
+" Insert result of expressions
+inoremap <C-Space>x <C-R>=
+nnoremap <leader>x i<C-R>=
+
+" Copy and paste using system's clipboard
+nnoremap <leader>y "+y
+vnoremap <leader>y "+y
+nnoremap <leader>p "+p
+vnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>P "+P
 
