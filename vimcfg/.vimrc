@@ -117,13 +117,13 @@ if has('gui_running')
 "    set guifont=Roboto_Mono:h10:cDEFAULT:qCLEARTYPE "Not working!
 
     " Colorschemes
+    colorscheme simple-dark
+    "colorscheme corporation
     "colorscheme retro-minimal
     "colorscheme mustang_sensei_edit
     "colorscheme handmade-hero
-    "colorscheme solarized
     "colorscheme distinguished
-    "colorscheme simple-dark
-    colorscheme corporation
+    "colorscheme solarized
 endif
 
 " Airline switches
@@ -171,6 +171,7 @@ let g:lightline = {
 
 " No bell please!
 set visualbell
+set t_vb=
 " Incremental searches with ocurrences
 set hlsearch
 set showmatch
@@ -688,6 +689,8 @@ nnoremap <leader>B :enew<CR>
 nnoremap <leader>bb :b#<CR>
 " Close buffer using Bbye (preserve windows)
 nnoremap <leader>bc :Bd<CR>
+" List buffers using CtrlP
+nnoremap <leader>bl :CtrlPBuffer<CR>
 
 " Delete after cursor
 nnoremap <leader>D lD
@@ -775,6 +778,7 @@ nnoremap <S-F12>    :Gtags -r<CR><CR>:CPqf<CR>
 
 " Quickly open .vimrc
 nnoremap <leader>vim :e $MYVIMRC<CR>
+nnoremap <leader>gvim :e $MYGVIMRC<CR>
 
 " Windows
 " Quickly close windows
