@@ -608,6 +608,10 @@ nnoremap <silent> <C-h> :call WinMoveOrSplit('h')<cr>
 nnoremap <silent> <C-j> :call WinMoveOrSplit('j')<cr>
 nnoremap <silent> <C-k> :call WinMoveOrSplit('k')<cr>
 nnoremap <silent> <C-l> :call WinMoveOrSplit('l')<cr>
+vnoremap <silent> <C-h> :call WinMoveOrSplit('h')<cr>
+vnoremap <silent> <C-j> :call WinMoveOrSplit('j')<cr>
+vnoremap <silent> <C-k> :call WinMoveOrSplit('k')<cr>
+vnoremap <silent> <C-l> :call WinMoveOrSplit('l')<cr>
 "nnoremap <C-h> <C-W><C-H>
 "nnoremap <C-j> <C-W><C-J>
 "nnoremap <C-k> <C-W><C-K>
@@ -767,6 +771,7 @@ nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
 " Replace-paste over words or visual selections
 nnoremap <leader>rw "_ciw<C-R>"<ESC>
 nnoremap <leader>rW "_ciW<C-R>"<ESC>
+nnoremap <leader>rl "_ddP
 vnoremap <leader>rp "_c<C-R>"<ESC>
 
 " Toggle NERDTree (current path not working it seems)
