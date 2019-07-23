@@ -674,6 +674,8 @@ nnoremap <leader>= =i{
 " Manually indent visual selection
 xnoremap <Tab> >gv
 xnoremap <S-Tab> <gv
+xnoremap > >gv
+xnoremap < <gv
 
 " EasyAlign interactive
 xmap ga <Plug>(EasyAlign)
