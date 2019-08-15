@@ -794,7 +794,7 @@ nnoremap <leader>wc <C-w>c
 nnoremap <leader>cc <C-w>c
 nnoremap <leader>cl :call CloseQF()<CR>
 " Split current window (show same buffer)
-nnoremap <leader>ws :vert sb %<CR>
+nnoremap <leader>ws <C-w>o:vert sb %<CR>
 " Swap splits
 nnoremap <leader>wx <C-w>x
 " Make them equal
