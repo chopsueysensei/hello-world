@@ -252,7 +252,8 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 set csto=0
 
 " TODO Customize this per-project
-set makeprg=build.py\ -d
+set makeprg=build.bat
+"set makeprg=build.py\ -d
 "set makeprg=build.py
 " For clang-cl:
 set efm+=%I%f(%l\\,%c):\ \ note:\ %m
@@ -377,8 +378,8 @@ command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 
 " Hide ^M line endings in mixed-mode files
 command! HideCR match Ignore /\r$/
-" Convert to DOS line endings
-command! FmtDOS :e ++ff=dos<CR>:w<CR>
+" Convert to sane line endings
+command! FixFormat :update<CR>:e ++ff=dos<CR>:setlocal ff=unix<CR>:w<CR>
  
 " Auto-save on loss of focus
 au! FocusLost * :wa
@@ -491,6 +492,7 @@ function! MakeAndShowQF()
     " Set a mark so we can return to it after examining errors etc
     normal! mM
     silent make
+    echo
     let l:isLeftSide = (win_screenpos(0)[1] < (&columns / 2))
     if l:isLeftSide
         vert botright cw 90
@@ -498,7 +500,6 @@ function! MakeAndShowQF()
         vert topleft cw 90
     endif
     if len(getqflist()) > 0
-        echo
         cfirst   " Jump to first error
     endif
 endfunction
@@ -682,8 +683,8 @@ xnoremap > >gv
 xnoremap < <gv
 
 " EasyAlign interactive
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+xmap <leader>aa <Plug>(EasyAlign)
+nmap <leader>aa <Plug>(EasyAlign)
 " EasyAlign commonly used
 vnoremap <leader>a<space> :'<,'>EasyAlign-\ <CR>
 vnoremap <leader>a= :'<,'>EasyAlign=<CR>
