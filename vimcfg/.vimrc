@@ -26,6 +26,7 @@ Plugin 'tikhomirov/vim-glsl'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'moll/vim-bbye'
 Plugin 'junegunn/goyo.vim'
+Plugin 'chaoren/vim-wordmotion'
 
 call vundle#end()
 
@@ -94,6 +95,10 @@ let g:surround_48 = "#if 0\n\r\n#endif"
 
 " Goyo
 let g:goyo_width = 120
+
+" wordmotion
+" TODO Do we want to completely replace w, b, e, etc.?
+"let g:wordmotion_prefix = '-'
 
 
 
@@ -556,7 +561,7 @@ endfunction
 " KEY MAPPINGS
 "
 
-" Map <leader> to comma
+" Map <leader>
 let mapleader = "\<Space>"
 noremap <Space> <Nop>
  
@@ -752,7 +757,7 @@ nnoremap <leader>pt :CtrlPTag<CR>
 nnoremap <leader>qn :cn<CR>
 nnoremap <leader>qp :cp<CR>
 nnoremap <C-n> :cn<CR>
-nnoremap <C-b> :cp<CR>
+nnoremap <C-m> :cp<CR>
 nnoremap <leader>ln :lne<CR>
 nnoremap <leader>lp :lp<CR>
 
@@ -813,4 +818,7 @@ nnoremap <leader>p "+p
 vnoremap <leader>p "+p
 nnoremap <leader>P "+P
 vnoremap <leader>P "+P
+
+" Save all
+nnoremap <leader>ss :wa<CR>
 
