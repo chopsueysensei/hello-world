@@ -98,7 +98,7 @@ let g:goyo_width = 120
 
 " wordmotion
 " TODO Do we want to completely replace w, b, e, etc.?
-"let g:wordmotion_prefix = '-'
+let g:wordmotion_prefix = ','
 
 
 
@@ -757,7 +757,7 @@ nnoremap <leader>pt :CtrlPTag<CR>
 nnoremap <leader>qn :cn<CR>
 nnoremap <leader>qp :cp<CR>
 nnoremap <C-n> :cn<CR>
-nnoremap <C-m> :cp<CR>
+nnoremap <C-b> :cp<CR>
 nnoremap <leader>ln :lne<CR>
 nnoremap <leader>lp :lp<CR>
 
