@@ -22,7 +22,7 @@ if NOT %1.==. goto %1
 ::
 :: Install chocolatey
 ::
-echo "Let's check required software"
+echo Let's check required software
 pause
 cls
 call choco --version >nul 2>&1
@@ -73,7 +73,7 @@ if %errorlevel% == 0 goto haveVim
 echo.
 echo.
 echo.
-echo "Now to the good stuff"
+echo Now to the good stuff
 pause
 cls
 choco install vim-tux -y -r
@@ -86,7 +86,7 @@ choco install vim-tux -y -r
 echo.
 echo.
 echo.
-echo "We need some paths & plugins"
+echo We need some paths & plugins
 pause
 
 set HOME=%USERPROFILE%
@@ -110,13 +110,13 @@ mkdir "%HOME%\.backup"
 echo.
 echo.
 echo.
-echo "Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!"
+echo Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!
 regedit "%~dp0\bootstrap\remap_capslock.reg"
 
 echo.
 echo.
 echo.
-echo "Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied.."
+echo Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied..
 pause
 
 ::
@@ -145,7 +145,7 @@ choco install global -y -r
 
 :: Just check it's in the path
 call ctags --version >nul 2>&1
-if NOT %errorlevel% == 0 echo "WARNING: No ctags binary in path!"
+if NOT %errorlevel% == 0 echo WARNING: No ctags binary in path!
 
 
 
@@ -185,14 +185,14 @@ for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
   echo.
   echo.
   echo.
-  echo "'Vundle.vim' submodule contains files. Skipping submodule downloading.."
+  echo 'Vundle.vim' submodule contains files. Skipping submodule downloading..
   goto :skipMods
 )
 
 echo.
 echo.
 echo.
-echo "'Vundle.vim' submodule is empty. Updating.."
+echo 'Vundle.vim' submodule is empty. Updating..
 cd /d %~dp0
 git submodule init
 git submodule update
@@ -206,14 +206,14 @@ git submodule update
 echo.
 echo.
 echo.
-echo "Now I'll start vim and tell it to install all plugins (should close itself afterwards)."
+echo Now I'll start vim and tell it to install all plugins (should close itself afterwards).
 pause
 cls
 
 ::
 :: Run vim and install all plugins (add '+qall' to make it quit after it's done)
 ::
-echo "Starting vim..."
+echo Starting vim...
 start vim +PluginInstall +qall
 
 
@@ -223,15 +223,21 @@ echo.
 echo.
 set vimrgdir=%VIMDIR%\bundle\vim-ripgrep
 set patchfile=vim-ripgrep_fix_derive_root.patch
-echo "Apply %patchfile% into %vimrgdir%.."
+echo Apply %patchfile% into %vimrgdir%..
 cd /d "%vimrgdir%"
 git apply "%~dp0\bootstrap\%patchfile%"
 
 
+:installFonts
+echo Installing fonts..
+powershell -command "Set-ExecutionPolicy Unrestricted"
+powershell "%~dp0\bootstrap\install_fonts.ps1
+
+
 echo.
 echo.
 echo.
-echo "All done!"
+echo All done!
 cd %~dp0
 goto:eof
 
@@ -240,12 +246,12 @@ goto:eof
 
 
 :errorNoAdmin
-echo "ERROR: Admin privileges required. Run this script as administrator."
+echo ERROR: Admin privileges required. Run this script as administrator.
 pause
 goto:eof
 
 :errorYCMmake
-echo "ERROR: YCM compilation failed! libclang.dll is not in third_party\ycmd."
+echo ERROR: YCM compilation failed! libclang.dll is not in third_party\ycmd.
 pause
 goto:eof
 
