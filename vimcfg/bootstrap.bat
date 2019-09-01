@@ -1,4 +1,5 @@
 @echo off
+setlocal enableextensions
 
 ::
 :: MAKE SURE YOU CLONE THE REPO USING GIT OTHERWISE SUBMODULES WON'T WORK!
@@ -97,27 +98,11 @@ setx VIMDIR %HOME%\.vim
 mklink "%HOME%\.vimrc" "%~dp0\.vimrc"
 mklink "%HOME%\.gvimrc" "%~dp0\.gvimrc"
 mklink /d "%HOME%\.vim" "%~dp0\.vim"
-
-
 ::
 :: Create a folder to hold backup & undo files
 ::
 mkdir "%HOME%\.backup"
 
-::
-:: Remap CAPS to ESC and BLOCK-DESP to CAPS
-::
-echo.
-echo.
-echo.
-echo Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!
-regedit "%~dp0\bootstrap\remap_capslock.reg"
-
-echo.
-echo.
-echo.
-echo Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied..
-pause
 
 ::
 :: Install ripgrep
@@ -231,7 +216,32 @@ git apply "%~dp0\bootstrap\%patchfile%"
 :installFonts
 echo Installing fonts..
 powershell -command "Set-ExecutionPolicy Unrestricted"
-powershell "%~dp0\bootstrap\install_fonts.ps1
+powershell "%~dp0\bootstrap\install_fonts.ps1"
+
+
+:remapCaps
+
+::
+:: Remap CAPS to ESC and BLOCK-DESP to CAPS
+::
+::echo.
+::echo.
+::echo.
+::echo Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!
+::regedit "%~dp0\bootstrap\remap_capslock.reg"
+
+:: Alternative just for the current user (also creates dev\bin dir and adds it to the PATH)
+mkdir C:\dev\bin
+xcopy "%~dp0\bootstrap\uncap.exe" C:\dev\bin\
+:: This is supposed to not need a reboot, but it's not doing it..
+powershell "%~dp0\bootstrap\add_to_path.ps1"
+xcopy "%~dp0\bootstrap\remap_capslock.bat" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"
+
+echo.
+echo.
+echo.
+echo Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied..
+pause
 
 
 echo.
