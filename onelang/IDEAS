@@ -1,0 +1,9 @@
+
+:: ONE LANGUAGE TO RULE THEM ALL ::
+
+- Use the := declaration / assigment syntax from JAI, originally proposed by Sean Barrett.
+
+- Reflection must be very natural like in C#, not conflated with meta language features like in JAI. I must be able to query info about types by just writing type.attribute (i.e: int.size, uservar.type, etc.).
+
+- We do want a Context so that we don't have to drag commonly used stuff across a ton of functions. However we don't want something dynamic and implicit and "hidden" like in JAI, but something more functional-like, and completely explicit and statically checked, and which can be examined at any time in a debugger. I propose a separate arguments section on every function, with a type and a name for each arg, but where the name is _both_ the name that will be used inside the function body and also the name that will be "captured" from the calling scope, similar to lambdas in C++. Very differently from lambdas though, you just specify this in the function declaration, not everytime you call it. The caller _can_ write the Context arguments explicitly if he desires to do so though.
+
