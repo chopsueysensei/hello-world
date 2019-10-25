@@ -122,9 +122,9 @@ if has('gui_running')
 "    set guifont=Roboto_Mono:h10:cDEFAULT:qCLEARTYPE "Not working!
 
     " Colorschemes
-    colorscheme simple-dark
+    "colorscheme simple-dark
     "colorscheme corporation
-    "colorscheme retro-minimal
+    colorscheme retro-minimal
     "colorscheme mustang_sensei_edit
     "colorscheme handmade-hero
     "colorscheme distinguished
@@ -149,7 +149,7 @@ let g:airline#extensions#whitespace#enabled = 0
 
 " Lightline switches
 let g:lightline = {
-    \ 'colorscheme': 'wombat',
+    \ 'colorscheme': 'solarized',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'absolutepath', 'modified' ] ],
     \ },
@@ -379,7 +379,9 @@ augroup END
 set sessionoptions-=options
 
 " Highlight ocurrences of word under cursor
-command! HLcw let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
+command! HLcword let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
+" Highlight ocurrences of visual selection (yanked in the 'v' register)
+command! HLcsel let @/ = '\V\<'.escape(@v, '/\').'\>' | set hls
 
 " Hide ^M line endings in mixed-mode files
 command! HideCR match Ignore /\r$/
@@ -472,7 +474,7 @@ function! PromptReplaceCurrent(sourceMode, ...) range
         if l:targetMode == ""
             call Replace(l:source, l:target, 'no')
         elseif l:targetMode == "quickfix"
-            HLcw
+            HLcword
             Rg
             let l:searchstring = 's//' . l:target . '/gcI'
             "echom "Search string: " . l:searchstring
@@ -713,8 +715,8 @@ nnoremap <leader>es :Vex<CR>
 
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
-nnoremap <leader>ff :HLcw<CR>:Rg<CR>
-vnoremap <leader>ff y:HLcw<CR>:Rg <C-R>"<CR>
+nnoremap <leader>ff :HLcword<CR>:Rg<CR>
+vnoremap <leader>ff y:HLcword<CR>:Rg <C-R>"<CR>
 " Find current word, then replace across all locations
 nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
 
@@ -726,7 +728,9 @@ nnoremap <leader>hs :AV<CR>
 nnoremap <leader>J J
 
 " Highlight occurences of the word under the cursor without moving
-nnoremap <leader>k :HLcw<CR>
+nnoremap <leader>k :HLcword<CR>
+" Highlight occurences of the current visual selection without moving
+vnoremap <leader>k "vy:HLcsel<CR>
 " Easily clear highlights after search
 nnoremap <leader><S-k> :noh<cr>
 
