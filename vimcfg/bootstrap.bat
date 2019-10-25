@@ -36,7 +36,7 @@ call refreshenv.cmd
 ::
 :: Check for Python on the command line
 ::
-call python --version >nul 2>&1
+call py -2 --version >nul 2>&1
 if %errorlevel% == 0 goto havePython
 
 choco install python2 --version 2.7.14 -y -r
@@ -229,19 +229,21 @@ powershell "%~dp0\bootstrap\install_fonts.ps1"
 ::echo.
 ::echo Now I'll install the CAPSLOCK mapping into the registry. Please answer yes to the prompt !!
 ::regedit "%~dp0\bootstrap\remap_capslock.reg"
+::echo.
+::echo.
+::echo.
+::echo Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied..
+::pause
 
 :: Alternative just for the current user (also creates dev\bin dir and adds it to the PATH)
 mkdir C:\dev\bin
 xcopy "%~dp0\bootstrap\uncap.exe" C:\dev\bin\
-:: This is supposed to not need a reboot, but it's not doing it..
+:: TODO This is supposed to not need a reboot, but it's not doing it..
 powershell "%~dp0\bootstrap\add_to_path.ps1"
 xcopy "%~dp0\bootstrap\remap_capslock.bat" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"
 
-echo.
-echo.
-echo.
-echo Please log off from the user session _after the installation_ so that the CAPSLOCK mapping is applied..
-pause
+call refreshenv.cmd
+"%~dp0\bootstrap\remap_capslock.bat"
 
 
 echo.

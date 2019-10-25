@@ -64,6 +64,7 @@ if executable('rg')
                                 \ --type-add "xaml:*.{xaml,axml}" -txaml
                                 \ --type-add "bat:*.bat" -tbat
                                 \ --type-add "sl:*.{glsl,pssl}" -tsl
+                                \ --type-add "pyx:*.pyx" -tpyx
                                 \ --type-add "config:{*settings*,*.cfg,*.ini}" -tconfig'
 
     " Use ripgrep over grep
@@ -109,7 +110,7 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Consolas_NF:h11:cDEFAULT:qCLEARTYPE
+    set guifont=Consolas_NF:h10:cDEFAULT:qCLEARTYPE
 "    set guifont=Consolas:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Input:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Fira_Mono:h11:cDEFAULT:qCLEARTYPE
