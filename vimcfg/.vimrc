@@ -110,7 +110,7 @@ syntax enable
 set background=dark
 
 if has('gui_running')
-    set guifont=Consolas_NF:h10:cDEFAULT:qCLEARTYPE
+    set guifont=Consolas_NF:h12:cDEFAULT:qCLEARTYPE
 "    set guifont=Consolas:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Input:h11:cDEFAULT:qCLEARTYPE
 "    set guifont=Fira_Mono:h11:cDEFAULT:qCLEARTYPE
@@ -150,7 +150,7 @@ let g:airline#extensions#whitespace#enabled = 0
 
 " Lightline switches
 let g:lightline = {
-    \ 'colorscheme': 'solarized',
+    \ 'colorscheme': 'nord',
     \ 'active': {
     \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'absolutepath', 'modified' ] ],
     \ },
@@ -327,7 +327,8 @@ function! SynGroup()
     let l:s = synID(line('.'), col('.'), 1)
     echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
 endfun
-nnoremap <leader>shl :call SynGroup()<CR>
+" FIXME For some obscure reason this mapping never works after restarting!
+nnoremap <leader>syn :call SynGroup()<CR>
 
 " Toggle fullscreen using external DLL
 " TODO Keep track of status with a global variable so we can always enable it (for Goyo)
