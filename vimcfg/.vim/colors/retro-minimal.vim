@@ -17,7 +17,7 @@ hi Normal       guifg=#EEE8D5 guibg=#1A3A5C gui=none
 hi Visual       guifg=#1C3B59 guibg=#B8C4D2 gui=none
 hi ColorColumn  guibg=#3F5A6F
 hi VertSplit    guifg=#20405F guibg=NONE    gui=none
-hi LineNr       guifg=#3F5A6F guibg=NONE    gui=bold
+hi LineNr       guifg=#3F5A6F guibg=NONE    gui=none
 hi Cursor       guifg=#000000 guibg=#D3D3D5
 hi Search       guifg=#000000 guibg=#FFFFFF
 hi IncSearch    guifg=#FFFF00 guibg=#000000
