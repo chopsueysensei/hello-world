@@ -531,16 +531,16 @@ function! LightlineReload()
 endfunction
 
 " Customize Goyo
-function! s:goyo_enter()
-    hi NonText ctermfg=16 guifg=#4a4a59
-    " TODO (25/05/2019) Link these to current Comment highlight group or something
-    "hi def link NonText Comment
-    hi EndOfBuffer ctermfg=bg guifg=bg
+function! s:goyo_toggle()
+    "if version >= 800
+        "hi EndOfBuffer guifg=BG guibg=NONE ctermfg=BG ctermbg=NONE
+    "endif
     ToggleFullscreen
     ToggleFullscreen
 endfunction
 
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoEnter nested call <SID>goyo_toggle()
+autocmd! User GoyoExit nested call <SID>goyo_toggle()
 
 " In-the-zone mode!
 noremap <F10> :Goyo<CR>

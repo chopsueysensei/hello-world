@@ -15,12 +15,13 @@ let g:colors_name = "retro-minimal"
 " General colors
 hi Normal       guifg=#EEE8D5 guibg=#1A3A5C gui=none
 hi Visual       guifg=#1C3B59 guibg=#B8C4D2 gui=none
-hi ColorColumn  guibg=#3F5A6F
 hi VertSplit    guifg=#20405F guibg=NONE    gui=none
-hi LineNr       guifg=#3F5A6F guibg=NONE    gui=none
 hi Cursor       guifg=#000000 guibg=#D3D3D5
 hi Search       guifg=#000000 guibg=#FFFFFF
 hi IncSearch    guifg=#FFFF00 guibg=#000000
+hi NonText      guifg=#3F5A6F guibg=NONE    gui=none
+hi! def link ColorColumn NonText
+hi! def link LineNr NonText
 
 "hi NonText      guifg=#808080 guibg=#303030 gui=none
 "hi StatusLine   guifg=#d3d3d5 guibg=#444444 gui=italic
@@ -57,7 +58,9 @@ if version >= 700
   hi Pmenu          guifg=#FFFFFF guibg=#3F5A6F
   hi PmenuSel       guifg=#000000 guibg=#7E8AA2
 endif
-
+if version >= 800
+  hi EndOfBuffer    guifg=BG      guibg=NONE
+endif
 
 " Language-specific colors
 hi! def link cIncluded Special
