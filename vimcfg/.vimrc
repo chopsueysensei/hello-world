@@ -759,6 +759,17 @@ nnoremap <leader>pb :CtrlPBuffer<CR>
 " CtrlP in tags mode (this would need a ctags compatible command from GNU Global!)
 nnoremap <leader>pt :CtrlPTag<CR>
 
+" Replace-paste over words or visual selections
+nnoremap <leader>pw "_ciw<C-R>"<ESC>
+nnoremap <leader>pW "_ciW<C-R>"<ESC>
+nnoremap <leader>pl "_ddP
+"vnoremap <leader>pv "_c<C-R>"<ESC>
+" Replace-paste inside
+nnoremap <leader>pi" "_ci"<C-R>"<ESC>
+nnoremap <leader>pi' "_ci'<C-R>"<ESC>
+nnoremap <leader>pi( "_ci(<C-R>"<ESC>
+nnoremap <leader>pi{ "_ci{<C-R>"<ESC>
+
 " Navigate quickfix and location results
 nnoremap <leader>qn :cn<CR>
 nnoremap <leader>qp :cp<CR>
@@ -780,11 +791,6 @@ vnoremap <leader>ri :call PromptReplace("visual")<CR>
 " Quickly substitute pointer dereferences
 nnoremap <leader>r- yiw:.,$s/<C-R>0\./<C-R>0->/gc<CR>
 nnoremap <leader>r. yiw:.,$s/<C-R>0->/<C-R>0./gc<CR>
-" Replace-paste over words or visual selections
-nnoremap <leader>rw "_ciw<C-R>"<ESC>
-nnoremap <leader>rW "_ciW<C-R>"<ESC>
-nnoremap <leader>rl "_ddP
-vnoremap <leader>rp "_c<C-R>"<ESC>
 
 " Toggle NERDTree (current path not working it seems)
 nnoremap <leader>t :NERDTreeToggle %<CR>
