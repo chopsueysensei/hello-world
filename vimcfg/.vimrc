@@ -74,7 +74,7 @@ if executable('rg')
     " vim-ripgrep
     let g:rg_binary = 'rg'
     " Search for literal string
-    let g:rg_command = g:rg_binary . ' --vimgrep -F ' . g:rg_filetype_flags
+    let g:rg_command = g:rg_binary . ' --vimgrep ' . g:rg_filetype_flags
     let g:rg_highlight = 1
     let g:rg_derive_root = 1
     let g:rg_root_types = ['.git', '.svn', '.p4ignore', 'p4config.txt', 'project.plik']
@@ -250,7 +250,7 @@ set cpoptions+={
 set wildignorecase
 
 " Sane default tags location
-set tags=./tags;
+set tags=~/.tags;
 " Use cscope db when searching for a tag, and other things
 set cscopetag
 set cscopeverbose
@@ -383,7 +383,11 @@ set sessionoptions-=options
 " Highlight ocurrences of word under cursor
 command! HLcword let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>' | set hls
 " Highlight ocurrences of visual selection (yanked in the 'v' register)
-command! HLcsel let @/ = '\V\<'.escape(@v, '/\').'\>' | set hls
+command! HLcsel let @/ = '\V'.escape(@v, '/\') | set hls
+
+command! TODO :Rg "\s+TODO\s+"
+command! HACK :Rg "\s+HACK\s+"
+command! FIXME :Rg "\s+FIXME\s+"
 
 " Hide ^M line endings in mixed-mode files
 command! HideCR match Ignore /\r$/
@@ -409,9 +413,9 @@ augroup END
 augroup vimrc_todo
     au!
     au Syntax * syn match MyTodo "\v<(FIXME|NOTE|TODO|HACK)"
-          \ containedin=.*Comment.*
+          \ containedin=.*Comment.* contained
     au Syntax * syn match Bookmark "\v\@\w+"
-          \ containedin=.*Comment.*
+          \ containedin=.*Comment.* contained
 augroup END
 hi def link MyTodo Todo
 hi def link Bookmark Todo
@@ -461,7 +465,7 @@ function! PromptReplaceCurrent(sourceMode, ...) range
     elseif a:sourceMode == "search"
         let l:source = @/
     elseif a:sourceMode == "visual"
-        let l:source = @"
+        let l:source = @v
     endif
     
     if empty(l:source)
@@ -622,10 +626,6 @@ vnoremap <silent> <C-h> :call WinMoveOrSplit('h')<cr>
 vnoremap <silent> <C-j> :call WinMoveOrSplit('j')<cr>
 vnoremap <silent> <C-k> :call WinMoveOrSplit('k')<cr>
 vnoremap <silent> <C-l> :call WinMoveOrSplit('l')<cr>
-"nnoremap <C-h> <C-W><C-H>
-"nnoremap <C-j> <C-W><C-J>
-"nnoremap <C-k> <C-W><C-K>
-"nnoremap <C-l> <C-W><C-L>
 
 " Resize current split
 " ### NOTE Ctrl and Ctrl-Shift send the same keystroke! ###
@@ -718,7 +718,9 @@ nnoremap <leader>es :Vex<CR>
 " Find in files using ripgrep
 nnoremap <leader>f :Rg<space>
 nnoremap <leader>ff :HLcword<CR>:Rg<CR>
-vnoremap <leader>ff y:HLcword<CR>:Rg <C-R>"<CR>
+" NOTE Even though the documentation states literal strings should be surrounded by single quotes,
+" it seems _double_ quotes are needed in Windows!
+vnoremap <leader>ff "vy:HLcsel<CR>:Rg -F "<C-R>v"<CR>
 " Find current word, then replace across all locations
 nnoremap <leader>fr :call PromptReplaceCurrent("word", "quickfix")<CR>
 
@@ -785,7 +787,7 @@ nnoremap <leader>rr :call PromptReplaceCurrent("word")<CR>
 " Interactively replace last searched term
 nnoremap <leader>rs :call PromptReplaceCurrent("search")<CR>
 " Interactively replace currently selected text (in visual mode)
-vnoremap <leader>rv y:call PromptReplaceCurrent("visual")<CR>
+vnoremap <leader>rv "vy:call PromptReplaceCurrent("visual")<CR>
 " Replace _inside_ a visual selection
 vnoremap <leader>ri :call PromptReplace("visual")<CR>
 " Quickly substitute pointer dereferences
