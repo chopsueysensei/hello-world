@@ -46,6 +46,7 @@ call refreshenv.cmd
 ::
 :: Check for cmder on the command line
 ::
+:: FIXME Also check for a registry key or something, for manually installed Cmder
 where cmder >nul 2>&1
 if %errorlevel% == 0 goto haveCmder
 
@@ -68,8 +69,11 @@ call refreshenv.cmd
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: ViM
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-call vim --version >nul 2>&1
-if %errorlevel% == 0 goto haveVim
+::
+:: FIXME Cmder now has command line vim in its git-for-windows stuff, make sure to discard that!
+:: TODO Look for it only among the chocolatey installed packages
+::call vim --version >nul 2>&1
+::if %errorlevel% == 0 goto haveVim
 
 echo.
 echo.
@@ -87,7 +91,7 @@ choco install vim-tux -y -r
 echo.
 echo.
 echo.
-echo We need some paths & plugins
+echo We need some paths and plugins
 pause
 
 set HOME=%USERPROFILE%
@@ -174,6 +178,7 @@ for /F %%i in ('dir /b "%VIMDIR%\bundle\Vundle.vim\*.*" 2^>NUL') do (
   goto :skipMods
 )
 
+:setupModsForce
 echo.
 echo.
 echo.

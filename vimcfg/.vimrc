@@ -204,7 +204,7 @@ set splitright
 "set linespace=0     "continuous line
 set fillchars+=vert:│
 " Show < or > when characters are not displayed on the left or right.
-set list listchars=precedes:<,extends:>
+set list listchars=precedes:<,extends:>,tab:\ \ 
 
 " Timeout for commands, leader key, etc.
 set timeoutlen=750
